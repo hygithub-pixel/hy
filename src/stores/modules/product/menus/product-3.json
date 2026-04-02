@@ -1,0 +1,153 @@
+{
+  "id": "product-3",
+  "path": "/inventory",
+  "title": "库存管理",
+  "icon": "Box",
+  "api": {
+    "query": "product-3-query"
+  },
+  "formConfig": {
+    "items": [
+      {
+        "type": "component",
+        "label": "商品名称",
+        "field": "productName",
+        "placeholder": "请输入商品名称",
+        "rules": [
+          {
+            "required": true,
+            "message": "请输入商品名称",
+            "trigger": "blur"
+          }
+        ],
+        "component": "el-input"
+      },
+      {
+        "type": "component",
+        "label": "库存数量",
+        "field": "quantity",
+        "placeholder": "请输入库存数量",
+        "rules": [
+          {
+            "required": true,
+            "message": "请输入库存数量",
+            "trigger": "blur"
+          },
+          {
+            "pattern": "^\\d+$",
+            "message": "请输入正确的数量格式",
+            "trigger": "blur"
+          }
+        ],
+        "component": "el-input"
+      },
+      {
+        "type": "component",
+        "label": "仓库",
+        "field": "warehouse",
+        "placeholder": "请选择仓库",
+        "options": [
+          {
+            "label": "主仓库",
+            "value": "main"
+          },
+          {
+            "label": "分仓库A",
+            "value": "warehouseA"
+          },
+          {
+            "label": "分仓库B",
+            "value": "warehouseB"
+          }
+        ],
+        "rules": [
+          {
+            "required": true,
+            "message": "请选择仓库",
+            "trigger": "change"
+          }
+        ],
+        "component": "el-select"
+      },
+      {
+        "type": "component",
+        "label": "入库日期",
+        "field": "entryDate",
+        "placeholder": "选择入库日期",
+        "rules": [
+          {
+            "required": true,
+            "message": "请选择入库日期",
+            "trigger": "change"
+          }
+        ],
+        "component": "el-date-picker",
+        "props": {
+          "type": "date"
+        }
+      }
+    ]
+  },
+  "tableConfig": {
+    "columns": [
+      {
+        "type": "index",
+        "prop": "index",
+        "label": "序号",
+        "width": 80
+      },
+      {
+        "type": "text",
+        "prop": "productName",
+        "label": "商品名称",
+        "width": 180
+      },
+      {
+        "type": "text",
+        "prop": "quantity",
+        "label": "库存数量",
+        "width": 120
+      },
+      {
+        "type": "text",
+        "prop": "warehouse",
+        "label": "仓库",
+        "width": 120
+      },
+      {
+        "type": "component",
+        "prop": "entryDate",
+        "label": "入库日期",
+        "width": 180,
+        "component": "el-date-picker"
+      },
+      {
+        "type": "actions",
+        "prop": "actions",
+        "label": "操作",
+        "width": 180,
+        "actions": [
+          {
+            "label": "编辑",
+            "type": "primary",
+            "handler": "() => {}"
+          },
+          {
+            "label": "删除",
+            "type": "danger",
+            "handler": "() => {}"
+          }
+        ]
+      }
+    ],
+    "pagination": {
+      "currentPage": 1,
+      "pageSize": 10,
+      "pageSizes": [
+        10,
+        20,
+        50
+      ]
+    }
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "id": "order-2",
+  "path": "/order-stats",
+  "title": "订单统计",
+  "icon": "TrendCharts",
+  "api": {
+    "query": "order-2-query"
+  },
+  "formConfig": {
+    "items": [
+      {
+        "type": "component",
+        "label": "开始日期",
+        "field": "startDate",
+        "placeholder": "选择开始日期",
+        "rules": [
+          {
+            "required": true,
+            "message": "请选择开始日期",
+            "trigger": "change"
+          }
+        ],
+        "component": "el-date-picker",
+        "props": {
+          "type": "date"
+        }
+      },
+      {
+        "type": "component",
+        "label": "结束日期",
+        "field": "endDate",
+        "placeholder": "选择结束日期",
+        "rules": [
+          {
+            "required": true,
+            "message": "请选择结束日期",
+            "trigger": "change"
+          }
+        ],
+        "component": "el-date-picker",
+        "props": {
+          "type": "date"
+        }
+      },
+      {
+        "type": "component",
+        "label": "统计类型",
+        "field": "statType",
+        "placeholder": "请选择统计类型",
+        "options": [
+          {
+            "label": "订单数量",
+            "value": "orderCount"
+          },
+          {
+            "label": "销售金额",
+            "value": "salesAmount"
+          },
+          {
+            "label": "平均金额",
+            "value": "avgAmount"
+          }
+        ],
+        "rules": [
+          {
+            "required": true,
+            "message": "请选择统计类型",
+            "trigger": "change"
+          }
+        ],
+        "component": "el-select"
+      }
+    ]
+  },
+  "tableConfig": {
+    "columns": [
+      {
+        "type": "index",
+        "prop": "index",
+        "label": "序号",
+        "width": 80
+      },
+      {
+        "type": "text",
+        "prop": "date",
+        "label": "日期",
+        "width": 140
+      },
+      {
+        "type": "text",
+        "prop": "orderCount",
+        "label": "订单数量",
+        "width": 120
+      },
+      {
+        "type": "text",
+        "prop": "salesAmount",
+        "label": "销售金额",
+        "width": 140
+      },
+      {
+        "type": "text",
+        "prop": "avgAmount",
+        "label": "平均金额",
+        "width": 140
+      },
+      {
+        "type": "actions",
+        "prop": "actions",
+        "label": "操作",
+        "width": 180,
+        "actions": [
+          {
+            "label": "查看详情",
+            "type": "primary",
+            "handler": "() => {}"
+          }
+        ]
+      }
+    ],
+    "pagination": {
+      "currentPage": 1,
+      "pageSize": 10,
+      "pageSizes": [
+        10,
+        20,
+        50
+      ]
+    }
+  }
+}

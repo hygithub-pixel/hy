@@ -1,0 +1,229 @@
+// 响应式断点 CSS 变量
+:root {
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  
+  // 响应式字体大小
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  
+  // 侧边栏宽度
+  --sidebar-width-expanded: 260px;
+  --sidebar-width-collapsed: 80px;
+}
+
+// 基础重置样式
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', var(--font);
+  font-size: var(--font-size-sm);
+  color: var(--text);
+  background-color: var(--bg);
+}
+
+// 滚动条样式
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-muted);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+// 选择文本样式
+::selection {
+  background-color: rgba(99, 102, 241, 0.2);
+  color: var(--text);
+}
+
+// 触摸交互优化
+* {
+  // 防止双击缩放延迟
+  touch-action: manipulation;
+  // 移除点击高亮
+  -webkit-tap-highlight-color: transparent;
+  // 防止文本选择干扰
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+// 允许文本输入区域选择
+input, textarea, [contenteditable] {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+// 模态框和抽屉的滚动行为
+.modal, .drawer, .el-dialog {
+  overscroll-behavior: contain;
+}
+
+// 页面滚动行为
+body {
+  overscroll-behavior: none;
+}
+
+// 通用布局工具类
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.flex-start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.flex-end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+// 通用间距工具类
+.space-y-2 > * + * {
+  margin-top: var(--space-sm);
+}
+
+// 通用响应式工具类
+@media (max-width: 768px) {
+  .md\:hidden {
+    display: none;
+  }
+  
+  .mx-6 {
+    margin-left: var(--space-md);
+    margin-right: var(--space-md);
+  }
+  
+  .max-w-400px {
+    max-width: 400px;
+  }
+}
+
+// 通用间距工具类
+.gap-2 > * + * {
+  margin-left: var(--space-sm);
+}
+.mb-4 {
+  margin-bottom: var(--space-md);
+}
+.p-4 {
+  padding: var(--space-md);
+}
+
+// 通用颜色工具类
+.text-yellow-600 {
+  color: var(--warning-text);
+}
+.text-yellow-800 {
+  color: var(--warning-text-dark);
+}
+.bg-yellow-50 {
+  background-color: var(--warning-light);
+}
+.border-yellow-200 {
+  border-color: var(--warning-border);
+}
+
+// 通用圆角工具类
+.rounded-lg {
+  border-radius: var(--radius-md);
+}
+
+// 焦点样式
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+// 按钮焦点样式
+button:focus-visible,
+el-button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+// 输入框焦点样式
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+el-input:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+// 响应式断点
+// 超小屏幕 (手机)
+@media (max-width: var(--breakpoint-xs)) {
+  :root {
+    --font-size-sm: 12px;
+    --space-md: 12px;
+  }
+}
+
+// 小屏幕 (平板)
+@media (max-width: var(--breakpoint-sm)) {
+  :root {
+    --font-size-sm: 13px;
+    --space-md: 14px;
+  }
+}
+
+// 中等屏幕
+@media (max-width: var(--breakpoint-md)) {
+  :root {
+    --font-size-sm: 14px;
+    --space-md: 16px;
+  }
+}
+
+// 大屏幕
+@media (min-width: var(--breakpoint-lg)) {
+  :root {
+    --font-size-sm: 15px;
+    --space-md: 18px;
+  }
+}
+
+// 超大屏幕
+@media (min-width: var(--breakpoint-xl)) {
+  :root {
+    --font-size-sm: 16px;
+    --space-md: 20px;
+  }
+}
+
+// 特超大屏幕
+@media (min-width: var(--breakpoint-2xl)) {
+  :root {
+    --font-size-sm: 17px;
+    --space-md: 24px;
+  }
+}

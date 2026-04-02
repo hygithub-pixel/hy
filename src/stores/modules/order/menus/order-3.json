@@ -1,0 +1,153 @@
+{
+  "id": "order-3",
+  "path": "/refunds",
+  "title": "退款管理",
+  "icon": "Refresh",
+  "api": {
+    "query": "order-3-query"
+  },
+  "formConfig": {
+    "items": [
+      {
+        "type": "component",
+        "label": "退款编号",
+        "field": "refundNo",
+        "placeholder": "请输入退款编号",
+        "rules": [
+          {
+            "required": true,
+            "message": "请输入退款编号",
+            "trigger": "blur"
+          }
+        ],
+        "component": "el-input"
+      },
+      {
+        "type": "component",
+        "label": "退款状态",
+        "field": "status",
+        "placeholder": "请选择退款状态",
+        "options": [
+          {
+            "label": "待处理",
+            "value": "pending"
+          },
+          {
+            "label": "处理中",
+            "value": "processing"
+          },
+          {
+            "label": "已完成",
+            "value": "completed"
+          },
+          {
+            "label": "已拒绝",
+            "value": "rejected"
+          }
+        ],
+        "rules": [
+          {
+            "required": true,
+            "message": "请选择退款状态",
+            "trigger": "change"
+          }
+        ],
+        "component": "el-select"
+      },
+      {
+        "type": "component",
+        "label": "退款原因",
+        "field": "reason",
+        "placeholder": "请输入退款原因",
+        "rules": [
+          {
+            "required": true,
+            "message": "请输入退款原因",
+            "trigger": "blur"
+          }
+        ],
+        "component": "el-input"
+      },
+      {
+        "type": "component",
+        "label": "退款金额",
+        "field": "amount",
+        "placeholder": "请输入退款金额",
+        "rules": [
+          {
+            "required": true,
+            "message": "请输入退款金额",
+            "trigger": "blur"
+          },
+          {
+            "pattern": "^\\d+(\\.\\d{1,2})?$",
+            "message": "请输入正确的金额格式",
+            "trigger": "blur"
+          }
+        ],
+        "component": "el-input"
+      }
+    ]
+  },
+  "tableConfig": {
+    "columns": [
+      {
+        "type": "index",
+        "prop": "index",
+        "label": "序号",
+        "width": 80
+      },
+      {
+        "type": "text",
+        "prop": "refundNo",
+        "label": "退款编号",
+        "width": 180
+      },
+      {
+        "type": "text",
+        "prop": "status",
+        "label": "退款状态",
+        "width": 120
+      },
+      {
+        "type": "text",
+        "prop": "reason",
+        "label": "退款原因",
+        "minWidth": 200
+      },
+      {
+        "type": "text",
+        "prop": "amount",
+        "label": "退款金额",
+        "width": 140
+      },
+      {
+        "type": "actions",
+        "prop": "actions",
+        "label": "操作",
+        "width": 180,
+        "actions": [
+          {
+            "label": "处理",
+            "type": "primary",
+            "handler": "() => {}"
+          },
+          {
+            "label": "删除",
+            "type": "danger",
+            "handler": "() => {}"
+          }
+        ]
+      }
+    ],
+    "pagination": {
+      "currentPage": 1,
+      "pageSize": 10,
+      "pageSizes": [
+        10,
+        20,
+        50
+      ]
+    }
+  }
+}
