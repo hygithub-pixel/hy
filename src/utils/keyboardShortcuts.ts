@@ -1,27 +1,62 @@
-// 键盘快捷键管理工具
+import { performanceMonitor } from './performance';
 
+/**
+ * 快捷键动作接口
+ */
 interface ShortcutAction {
+  /** 快捷键组合 */
   key: string;
+  /** 快捷键描述 */
   description: string;
+  /** 执行动作 */
   action: () => void;
+  /** 是否全局生效 */
   global?: boolean;
 }
 
+/**
+ * 键盘快捷键管理类
+ * @example
+ * ```typescript
+ * import { keyboardShortcuts } from './keyboardShortcuts';
+ * 
+ * // 注册快捷键
+ * keyboardShortcuts.register('ctrl+s', '保存', () => {
+ *   console.log('保存操作');
+ * });
+ * 
+ * // 开始监听
+ * keyboardShortcuts.startListening();
+ * ```
+ */
 class KeyboardShortcuts {
+  /** 快捷键映射 */
   private shortcuts: Map<string, ShortcutAction> = new Map();
+  /** 是否正在监听 */
   private isListening: boolean = false;
 
-  // 注册快捷键
+  /**
+   * 注册快捷键
+   * @param key - 快捷键组合
+   * @param description - 快捷键描述
+   * @param action - 执行动作
+   * @param global - 是否全局生效，默认为true
+   */
   register(key: string, description: string, action: () => void, global: boolean = true) {
     this.shortcuts.set(key.toLowerCase(), { key, description, action, global });
   }
 
-  // 注销快捷键
+  /**
+   * 取消注册快捷键
+   * @param key - 快捷键组合
+   */
   unregister(key: string) {
     this.shortcuts.delete(key.toLowerCase());
   }
 
-  // 开始监听键盘事件
+  /**
+   * 开始监听键盘事件
+   */
   startListening() {
     if (this.isListening) return;
 
@@ -29,7 +64,9 @@ class KeyboardShortcuts {
     this.isListening = true;
   }
 
-  // 停止监听键盘事件
+  /**
+   * 停止监听键盘事件
+   */
   stopListening() {
     if (!this.isListening) return;
 
@@ -37,25 +74,27 @@ class KeyboardShortcuts {
     this.isListening = false;
   }
 
-  // 处理键盘事件
+  /**
+   * 处理键盘按下事件
+   * @param event - 键盘事件
+   */
   private handleKeydown(event: KeyboardEvent) {
-    // 忽略在输入框、文本区域等输入元素中的按键
     const target = event.target as HTMLElement;
-    if (target.isContentEditable || 
-        target.tagName === 'INPUT' || 
-        target.tagName === 'TEXTAREA' || 
-        target.tagName === 'SELECT') {
+    if (
+      target.isContentEditable ||
+      target.tagName === 'INPUT' ||
+      target.tagName === 'TEXTAREA' ||
+      target.tagName === 'SELECT'
+    ) {
       return;
     }
 
-    // 构建按键组合字符串
     let keyCombination = '';
     if (event.ctrlKey || event.metaKey) keyCombination += 'ctrl+';
     if (event.altKey) keyCombination += 'alt+';
     if (event.shiftKey) keyCombination += 'shift+';
     keyCombination += event.key.toLowerCase();
 
-    // 查找并执行对应的操作
     const shortcut = this.shortcuts.get(keyCombination);
     if (shortcut) {
       event.preventDefault();
@@ -63,56 +102,62 @@ class KeyboardShortcuts {
     }
   }
 
-  // 获取所有注册的快捷键
+  /**
+   * 获取所有快捷键
+   * @returns 快捷键数组
+   */
   getShortcuts() {
     return Array.from(this.shortcuts.values());
   }
 
-  // 清除所有快捷键
+  /**
+   * 清除所有快捷键
+   */
   clear() {
     this.shortcuts.clear();
   }
 }
 
-// 导出单例实例
+/**
+ * 键盘快捷键实例
+ */
 export const keyboardShortcuts = new KeyboardShortcuts();
 
-// 常用快捷键注册函数
+/**
+ * 注册常用快捷键
+ * @example
+ * ```typescript
+ * import { registerCommonShortcuts } from './keyboardShortcuts';
+ * 
+ * // 注册常用快捷键
+ * registerCommonShortcuts();
+ * ```
+ */
 export const registerCommonShortcuts = () => {
-  // 保存操作
-  keyboardShortcuts.register('ctrl+s', '保存', () => {
-    console.log('保存操作');
-    // 这里可以触发保存逻辑
-  });
-
-  // 撤销操作
-  keyboardShortcuts.register('ctrl+z', '撤销', () => {
-    console.log('撤销操作');
-    // 这里可以触发撤销逻辑
-  });
-
-  // 重做操作
-  keyboardShortcuts.register('ctrl+y', '重做', () => {
-    console.log('重做操作');
-    // 这里可以触发重做逻辑
-  });
-
-  // 刷新页面
-  keyboardShortcuts.register('f5', '刷新页面', () => {
-    console.log('刷新页面');
-    window.location.reload();
-  });
-
-  // 打开搜索
-  keyboardShortcuts.register('ctrl+f', '打开搜索', () => {
-    console.log('打开搜索');
-    // 这里可以触发搜索逻辑
-  });
-
-  // 切换侧边栏
+  /** 注册切换侧边栏快捷键 */
   keyboardShortcuts.register('ctrl+b', '切换侧边栏', () => {
-    console.log('切换侧边栏');
-    // 这里可以触发侧边栏切换逻辑
+    const sidebarState = (window as any).__SIDEBAR_STATE__;
+    if (sidebarState?.toggleSidebar) {
+      sidebarState.toggleSidebar();
+    }
+  });
+
+  /** 注册显示快捷键帮助快捷键 */
+  keyboardShortcuts.register('ctrl+/', '显示快捷键帮助', () => {
+    const shortcuts = keyboardShortcuts.getShortcuts();
+    console.group('⌨️ 键盘快捷键');
+    console.table(
+      shortcuts.map(s => ({
+        快捷键: s.key,
+        描述: s.description,
+      }))
+    );
+    console.groupEnd();
+  });
+
+  /** 注册显示性能报告快捷键 */
+  keyboardShortcuts.register('ctrl+shift+p', '显示性能报告', () => {
+    performanceMonitor.logReport();
   });
 
   // 开始监听

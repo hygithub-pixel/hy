@@ -1,21 +1,24 @@
 <template>
-  <a href="#main-content" class="skip-link">
+  <a
+    href="#main-content"
+    class="skip-link absolute top-[-40px] left-0 bg-primary text-white px-4 py-2 z-10 transition-all duration-300 text-decoration-none font-medium rounded-md"
+  >
     跳过导航，直接访问主要内容
   </a>
-  <el-container class="h-screen">
-    <el-aside 
-      :width="collapsed ? '80px' : '260px'" 
-      class="transition-all duration-250"
+  <div class="flex h-screen overflow-hidden">
+    <aside
+      class="flex-shrink-0 transition-all duration-300 overflow-hidden"
+      :class="collapsed ? 'w-20' : 'w-64'"
     >
       <Sidebar />
-    </el-aside>
-    
-    <el-container class="h-screen flex flex-col">
-      <el-header class="p-0 h-auto flex-shrink-0">
+    </aside>
+
+    <div class="flex flex-col flex-1 min-w-0 overflow-hidden">
+      <header class="flex-shrink-0">
         <TopNav />
-      </el-header>
-      
-      <el-main id="main-content" class="bg-slate-50 flex-1 overflow-y-auto" tabindex="-1">
+      </header>
+
+      <main id="main-content" class="flex-1 overflow-y-auto bg-bg-page p-6 sm:p-8" tabindex="-1">
         <router-view v-slot="{ Component, route }">
           <transition name="page-fade" mode="out-in">
             <keep-alive :include="cachedRoutes">
@@ -23,15 +26,18 @@
             </keep-alive>
           </transition>
         </router-view>
-      </el-main>
-    </el-container>
-  </el-container>
+      </main>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import Sidebar from './Sidebar.vue';
 import TopNav from './TopNav.vue';
-import { routeCache } from '../../router';
+import { useRouteCacheStore } from '../../stores/routeCacheStore';
+import { throttle } from '../../utils/debounceThrottle';
+
+const routeCacheStore = useRouteCacheStore();
 
 const collapsed = ref(false);
 
@@ -39,39 +45,35 @@ const toggleSidebar = () => {
   collapsed.value = !collapsed.value;
 };
 
-// 提供侧边栏状态和切换方法
 const sidebarState = reactive({
   get collapsed() {
     return collapsed.value;
   },
-  toggleSidebar
+  toggleSidebar,
 });
 
 provide('sidebarState', sidebarState);
 
-// 计算缓存的路由列表
 const cachedRoutes = computed(() => {
-  return Object.keys(routeCache).filter(path => routeCache[path]);
+  return routeCacheStore.getCachedRoutes();
 });
 
-// 响应式处理
-const handleResize = () => {
+const handleResize = throttle(() => {
   const width = window.innerWidth;
   if (width < 768) {
     collapsed.value = true;
   }
-};
+}, 100);
 
 onMounted(() => {
-  // 初始化时检查屏幕宽度
   handleResize();
-  // 添加 resize 事件监听器
   window.addEventListener('resize', handleResize);
+  (window as any).__SIDEBAR_STATE__ = sidebarState;
 });
 
 onUnmounted(() => {
-  // 移除 resize 事件监听器
   window.removeEventListener('resize', handleResize);
+  delete (window as any).__SIDEBAR_STATE__;
 });
 </script>
 
@@ -85,19 +87,6 @@ onUnmounted(() => {
 }
 
 /* Skip Link */
-.skip-link {
-  position: absolute;
-  top: calc(-40px + var(--safe-area-inset-top));
-  left: var(--safe-area-inset-left);
-  background: #6366f1;
-  color: white;
-  padding: 8px 16px;
-  z-index: 100;
-  transition: top 0.3s;
-  text-decoration: none;
-  font-weight: 500;
-}
-
 .skip-link:focus {
   top: var(--safe-area-inset-top);
   outline: 2px solid #fff;
@@ -108,13 +97,15 @@ onUnmounted(() => {
 @media (prefers-reduced-motion: no-preference) {
   .page-fade-enter-active,
   .page-fade-leave-active {
-    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    transition:
+      opacity var(--transition-slow),
+      transform var(--transition-slow);
   }
-  
+
   .page-fade-enter-from,
   .page-fade-leave-to {
     opacity: 0;
-    transform: translateY(10px) scale(0.98);
+    transform: translateY(10px);
   }
 }
 
@@ -123,7 +114,7 @@ onUnmounted(() => {
   .page-fade-leave-active {
     transition: none;
   }
-  
+
   .page-fade-enter-from,
   .page-fade-leave-to {
     opacity: 1;
@@ -146,5 +137,23 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   padding: 40px 0;
+}
+
+/* 滚动条样式 */
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.main-content::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 9999px;
+}
+
+.main-content::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-light);
 }
 </style>

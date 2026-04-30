@@ -13,7 +13,7 @@ export default {
     success: 'Success',
     error: 'Error',
     warning: 'Warning',
-    info: 'Info'
+    info: 'Info',
   },
   login: {
     title: 'User Login',
@@ -26,7 +26,7 @@ export default {
     usernamePlaceholder: 'Please enter username',
     passwordPlaceholder: 'Please enter password',
     loginSuccess: 'Login successful',
-    loginError: 'Invalid username or password'
+    loginError: 'Invalid username or password',
   },
   dashboard: {
     title: 'Dashboard',
@@ -39,7 +39,7 @@ export default {
     totalRevenue: 'Total Revenue',
     newUsers: 'New Users',
     orderCount: 'Order Count',
-    productCount: 'Product Count'
+    productCount: 'Product Count',
   },
   sidebar: {
     dashboard: 'Dashboard',
@@ -47,7 +47,7 @@ export default {
     products: 'Product Management',
     orders: 'Order Management',
     content: 'Content Management',
-    finance: 'Finance Management'
+    finance: 'Finance Management',
   },
   table: {
     export: 'Export',
@@ -61,7 +61,7 @@ export default {
     page: 'Page',
     perPage: 'Per page',
     total: 'Total',
-    items: 'items'
+    items: 'items',
   },
   form: {
     draftSaved: 'Draft saved',
@@ -73,7 +73,7 @@ export default {
     required: 'This field is required',
     minLength: 'Length must be at least {min} characters',
     maxLength: 'Length must be at most {max} characters',
-    pattern: 'Invalid format'
+    pattern: 'Invalid format',
   },
   user: {
     userList: 'User List',
@@ -87,7 +87,7 @@ export default {
     disabled: 'Disabled',
     superAdmin: 'Super Admin',
     admin: 'Admin',
-    user: 'User'
+    user: 'User',
   },
   product: {
     productList: 'Product List',
@@ -107,7 +107,7 @@ export default {
     entryDate: 'Entry Date',
     mainWarehouse: 'Main Warehouse',
     warehouseA: 'Warehouse A',
-    warehouseB: 'Warehouse B'
+    warehouseB: 'Warehouse B',
   },
   order: {
     orderList: 'Order List',
@@ -122,7 +122,7 @@ export default {
     processing: 'Processing',
     completed: 'Completed',
     cancelled: 'Cancelled',
-    refunded: 'Refunded'
+    refunded: 'Refunded',
   },
   content: {
     articleList: 'Article Management',
@@ -141,7 +141,7 @@ export default {
     adLink: 'Ad Link',
     commenter: 'Commenter',
     commentContent: 'Comment Content',
-    commentTime: 'Comment Time'
+    commentTime: 'Comment Time',
   },
   finance: {
     revenueList: 'Revenue Statistics',
@@ -156,7 +156,7 @@ export default {
     paymentMethod: 'Payment Method',
     cash: 'Cash',
     bank: 'Bank Transfer',
-    online: 'Online Payment'
+    online: 'Online Payment',
   },
   error: {
     404: 'Page not found',
@@ -165,6 +165,6 @@ export default {
     network: 'Network error',
     unknown: 'Unknown error',
     backHome: 'Back to home',
-    refresh: 'Refresh page'
-  }
-}
+    refresh: 'Refresh page',
+  },
+};

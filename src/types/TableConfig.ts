@@ -3,22 +3,49 @@ export interface TableRowData {
   [key: string]: unknown;
 }
 
+export interface TableAction {
+  id: string;
+  label: string;
+  type?: 'primary' | 'success' | 'warning' | 'danger' | 'info';
+  icon?: string;
+  component?: string;
+  componentProps?: Record<string, any>;
+  handler?: (row: TableRowData, action: TableAction) => void;
+  visible?: (row: TableRowData) => boolean;
+  disabled?: (row: TableRowData) => boolean;
+}
+
 export interface TableColumn {
-  type: 'index' | 'selection' | 'expand' | 'text' | 'image' | 'richText' | 'date' | 'datetime' | 'switch' | 'badge' | 'actions';
+  type:
+    | 'index'
+    | 'selection'
+    | 'expand'
+    | 'text'
+    | 'image'
+    | 'richText'
+    | 'date'
+    | 'datetime'
+    | 'switch'
+    | 'badge'
+    | 'actions';
   prop: string;
   label: string;
   width?: string | number;
   minWidth?: string | number;
   align?: 'left' | 'center' | 'right';
-  formatter?: (row: TableRowData, column: TableColumn, cellValue: unknown, index: number) => string | number;
+  formatter?: (
+    row: TableRowData,
+    column: TableColumn,
+    cellValue: unknown,
+    index: number
+  ) => string | number;
   fixed?: 'left' | 'right';
   showOverflowTooltip?: boolean;
-  props?: Record<string, unknown>;
-  actions?: {
-    label: string;
-    type: 'primary' | 'success' | 'warning' | 'danger' | 'info';
-    handler: (row: TableRowData) => void;
-  }[];
+  props?: {
+    type?: 'primary' | 'success' | 'warning' | 'info' | 'danger';
+    [key: string]: unknown;
+  };
+  actions?: TableAction[];
 }
 
 export interface TablePagination {

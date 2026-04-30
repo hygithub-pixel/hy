@@ -2,14 +2,14 @@
   "id": "content-3",
   "path": "/ads",
   "title": "广告管理",
-  "icon": "Picture",
+  "icon": "PictureOutlined",
   "api": {
     "query": "content-3-query"
   },
   "formConfig": {
     "items": [
       {
-        "type": "component",
+        "type": "input",
         "label": "广告标题",
         "field": "title",
         "placeholder": "请输入广告标题",
@@ -19,8 +19,7 @@
             "message": "请输入广告标题",
             "trigger": "blur"
           }
-        ],
-        "component": "el-input"
+        ]
       },
       {
         "type": "upload",
@@ -36,18 +35,16 @@
         ]
       },
       {
-        "type": "component",
+        "type": "input",
         "label": "跳转链接",
         "field": "link",
-        "placeholder": "请输入跳转链接",
-        "component": "el-input"
+        "placeholder": "请输入跳转链接"
       },
       {
-        "type": "component",
+        "type": "switch",
         "label": "启用",
         "field": "enabled",
-        "value": true,
-        "component": "el-switch"
+        "value": true
       }
     ]
   },
@@ -56,20 +53,17 @@
       {
         "type": "index",
         "prop": "index",
-        "label": "序号",
-        "width": 80
+        "label": "序号"
       },
       {
         "type": "text",
         "prop": "title",
-        "label": "广告标题",
-        "width": 180
+        "label": "广告标题"
       },
       {
         "type": "image",
         "prop": "image",
-        "label": "广告图片",
-        "width": 120
+        "label": "广告图片"
       },
       {
         "type": "text",
@@ -78,27 +72,24 @@
         "minWidth": 200
       },
       {
-        "type": "component",
+        "type": "switch",
         "prop": "enabled",
-        "label": "状态",
-        "width": 100,
-        "component": "el-switch"
+        "label": "状态"
       },
       {
         "type": "actions",
         "prop": "actions",
         "label": "操作",
-        "width": 180,
         "actions": [
           {
             "label": "编辑",
             "type": "primary",
-            "handler": "() => {}"
+            "id": "edit"
           },
           {
             "label": "删除",
             "type": "danger",
-            "handler": "() => {}"
+            "id": "delete"
           }
         ]
       }

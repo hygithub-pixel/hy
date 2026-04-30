@@ -33,3 +33,15 @@ dist-ssr
 # Auto-import generated files
 src/auto-imports.d.ts
 src/components.d.ts
+
+# SSL certificates
+ssl/
+
+# Temporary test files
+*.test.py
+comprehensive_test.py
+quick_test.py
+test_*.py
+
+# Performance reports
+performance-reports/

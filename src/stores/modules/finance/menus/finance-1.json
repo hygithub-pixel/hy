@@ -2,14 +2,14 @@
   "id": "finance-1",
   "path": "/revenue",
   "title": "收入统计",
-  "icon": "Money",
+  "icon": "DollarOutlined",
   "api": {
     "query": "finance-1-query"
   },
   "formConfig": {
     "items": [
       {
-        "type": "component",
+        "type": "date",
         "label": "统计日期",
         "field": "date",
         "placeholder": "选择统计日期",
@@ -19,14 +19,10 @@
             "message": "请选择统计日期",
             "trigger": "change"
           }
-        ],
-        "component": "el-date-picker",
-        "props": {
-          "type": "date"
-        }
+        ]
       },
       {
-        "type": "component",
+        "type": "select",
         "label": "统计类型",
         "field": "type",
         "placeholder": "请选择统计类型",
@@ -50,11 +46,10 @@
             "message": "请选择统计类型",
             "trigger": "change"
           }
-        ],
-        "component": "el-select"
+        ]
       },
       {
-        "type": "component",
+        "type": "input",
         "label": "收入金额",
         "field": "amount",
         "placeholder": "请输入收入金额",
@@ -69,15 +64,13 @@
             "message": "请输入正确的金额格式",
             "trigger": "blur"
           }
-        ],
-        "component": "el-input"
+        ]
       },
       {
-        "type": "component",
+        "type": "input",
         "label": "备注",
         "field": "remark",
-        "placeholder": "请输入备注",
-        "component": "el-input"
+        "placeholder": "请输入备注"
       }
     ]
   },
@@ -86,27 +79,22 @@
       {
         "type": "index",
         "prop": "index",
-        "label": "序号",
-        "width": 80
+        "label": "序号"
       },
       {
-        "type": "component",
+        "type": "date",
         "prop": "date",
-        "label": "统计日期",
-        "width": 140,
-        "component": "el-date-picker"
+        "label": "统计日期"
       },
       {
         "type": "text",
         "prop": "type",
-        "label": "统计类型",
-        "width": 120
+        "label": "统计类型"
       },
       {
         "type": "text",
         "prop": "amount",
-        "label": "收入金额",
-        "width": 140
+        "label": "收入金额"
       },
       {
         "type": "text",
@@ -118,17 +106,16 @@
         "type": "actions",
         "prop": "actions",
         "label": "操作",
-        "width": 180,
         "actions": [
           {
             "label": "编辑",
             "type": "primary",
-            "handler": "() => {}"
+            "id": "edit"
           },
           {
             "label": "删除",
             "type": "danger",
-            "handler": "() => {}"
+            "id": "delete"
           }
         ]
       }

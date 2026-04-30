@@ -1,115 +1,112 @@
 <template>
   <div>
-    <el-row :gutter="20" class="mb-6">
-      <el-col :span="24">
+    <a-row :gutter="20" class="mb-6">
+      <a-col :span="24">
         <div class="mb-5">
           <h1 class="m-0 mb-2 text-[28px] font-semibold text-gray-800">仪表盘</h1>
           <p class="m-0 text-gray-500 text-base">系统运行状态概览</p>
         </div>
-      </el-col>
-    </el-row>
+      </a-col>
+    </a-row>
 
-    <el-row :gutter="20" class="mb-6">
-      <el-col :xs="24" :sm="12" :md="6" v-for="(metric, index) in metrics" :key="index">
-        <el-card shadow="hover" class="stat-card">
-          <el-statistic
-            :title="metric.title"
-            :value="metric.value"
-            :prefix="metric.prefix"
-            :suffix="metric.suffix"
-            class="numeric"
-          >
-            <template #prefix>
-              <el-icon :color="metric.iconColor" class="mr-2">
-                <component :is="metric.icon" />
-              </el-icon>
-            </template>
-            <template #suffix>
-              <span v-if="metric.trend" :class="[metric.trend > 0 ? 'text-green-500' : 'text-red-500', 'ml-2', 'text-sm']">
-                <el-icon v-if="metric.trend > 0"><Top /></el-icon>
-                <el-icon v-else><Bottom /></el-icon>
+    <a-row :gutter="20" class="mb-6">
+      <a-col :xs="24" :sm="12" :md="6" v-for="(metric, index) in metrics" :key="index">
+        <a-card hoverable class="stat-card">
+          <div class="flex items-center">
+            <div class="flex items-center justify-center w-12 h-12 rounded-lg mr-4" :style="{ backgroundColor: metric.iconColor + '15' }">
+              <component :is="metric.icon" :style="{ color: metric.iconColor, fontSize: '24px' }" />
+            </div>
+            <div class="flex-1">
+              <p class="text-sm text-gray-500 mb-1">{{ metric.title }}</p>
+              <p class="text-2xl font-bold text-gray-800 m-0">
+                <span v-if="metric.prefix">{{ metric.prefix }}</span>
+                {{ metric.value }}
+                <span v-if="metric.suffix">{{ metric.suffix }}</span>
+              </p>
+              <p v-if="metric.trend" class="text-sm mt-1" :class="metric.trend > 0 ? 'text-green-500' : 'text-red-500'">
+                <component :is="metric.trend > 0 ? CaretUpOutlined : CaretDownOutlined" />
                 {{ Math.abs(metric.trend) }}%
-              </span>
-            </template>
-          </el-statistic>
-        </el-card>
-      </el-col>
-    </el-row>
+              </p>
+            </div>
+          </div>
+        </a-card>
+      </a-col>
+    </a-row>
 
-    <el-row :gutter="20" class="mb-6">
-      <el-col :xs="24" :md="12">
-        <el-card shadow="hover">
-          <template #header>
+    <a-row :gutter="20" class="mb-6">
+      <a-col :xs="24" :md="12">
+        <a-card hoverable>
+          <template #title>
             <div class="flex justify-between items-center">
               <span class="text-lg font-semibold">销售额趋势</span>
-              <el-select v-model="timeRange" size="small" class="w-32">
-                <el-option label="近7天" value="7" />
-                <el-option label="近30天" value="30" />
-                <el-option label="近90天" value="90" />
-              </el-select>
+              <a-select v-model:value="timeRange" size="small" style="width: 120px">
+                <a-select-option value="7">近7天</a-select-option>
+                <a-select-option value="30">近30天</a-select-option>
+                <a-select-option value="90">近90天</a-select-option>
+              </a-select>
             </div>
           </template>
           <div ref="salesChartRef" class="chart-container"></div>
-        </el-card>
-      </el-col>
-      <el-col :xs="24" :md="12">
-        <el-card shadow="hover">
-          <template #header>
+        </a-card>
+      </a-col>
+      <a-col :xs="24" :md="12">
+        <a-card hoverable>
+          <template #title>
             <div class="flex justify-between items-center">
               <span class="text-lg font-semibold">订单状态分布</span>
-              <el-button type="primary" text>查看详情</el-button>
+              <a-button type="link" class="p-0">查看详情</a-button>
             </div>
           </template>
           <div ref="orderStatusChartRef" class="chart-container"></div>
-        </el-card>
-      </el-col>
-    </el-row>
+        </a-card>
+      </a-col>
+    </a-row>
 
-    <el-row :gutter="20" class="mb-6">
-      <el-col :span="24">
-        <el-card shadow="hover">
-          <template #header>
+    <a-row :gutter="20" class="mb-6">
+      <a-col :span="24">
+        <a-card hoverable>
+          <template #title>
             <div class="flex justify-between items-center">
               <span class="text-lg font-semibold">用户增长趋势</span>
-              <el-button type="primary" text>查看详情</el-button>
+              <a-button type="link" class="p-0">查看详情</a-button>
             </div>
           </template>
           <div ref="userGrowthChartRef" class="chart-container"></div>
-        </el-card>
-      </el-col>
-    </el-row>
+        </a-card>
+      </a-col>
+    </a-row>
 
-    <el-row :gutter="20">
-      <el-col :span="24">
-        <el-card shadow="hover">
-          <template #header>
+    <a-row :gutter="20">
+      <a-col :span="24">
+        <a-card hoverable>
+          <template #title>
             <div class="flex justify-between items-center">
               <span class="text-lg font-semibold">最近订单</span>
-              <el-button type="primary" text>查看全部</el-button>
+              <a-button type="link" class="p-0">查看全部</a-button>
             </div>
           </template>
-          <el-table :data="orders" class="w-full">
-            <el-table-column prop="id" label="订单号" width="180" />
-            <el-table-column prop="customer" label="客户" width="180" />
-            <el-table-column prop="status" label="状态" width="120">
-              <template #default="{ row }">
-                <el-tag :type="getTagType(row.status)">{{ row.status }}</el-tag>
+          <a-table :dataSource="orders" class="w-full" :pagination="false">
+            <a-table-column key="id" title="订单号" dataIndex="id" width="180" />
+            <a-table-column key="customer" title="客户" dataIndex="customer" width="180" />
+            <a-table-column key="status" title="状态" dataIndex="status" width="120">
+              <template #default="{ record }">
+                <a-tag :color="getTagColor(record.status)">{{ record.status }}</a-tag>
               </template>
-            </el-table-column>
-            <el-table-column prop="amount" label="金额" align="right">
-              <template #default="{ row }">
-                <span class="font-semibold numeric">¥{{ row.amount.toFixed(2) }}</span>
+            </a-table-column>
+            <a-table-column key="amount" title="金额" dataIndex="amount" align="right">
+              <template #default="{ record }">
+                <span class="font-semibold numeric">¥{{ record.amount.toFixed(2) }}</span>
               </template>
-            </el-table-column>
-          </el-table>
-        </el-card>
-      </el-col>
-    </el-row>
+            </a-table-column>
+          </a-table>
+        </a-card>
+      </a-col>
+    </a-row>
   </div>
 </template>
 
 <script setup lang="ts">
-import { User, Goods, ShoppingCart, Money, Top, Bottom } from '@element-plus/icons-vue';
+import { UserOutlined, ShoppingOutlined, ShoppingCartOutlined, DollarOutlined, CaretUpOutlined, CaretDownOutlined } from '@ant-design/icons-vue';
 import { loadECharts } from '../utils/lazyLoad';
 
 let echarts: any = null;
@@ -119,11 +116,10 @@ const orderStatusChartRef = ref<HTMLElement | null>(null);
 const userGrowthChartRef = ref<HTMLElement | null>(null);
 const timeRange = ref('7');
 
-let salesChart: echarts.ECharts | null = null;
-let orderStatusChart: echarts.ECharts | null = null;
-let userGrowthChart: echarts.ECharts | null = null;
+let salesChart: any = null;
+let orderStatusChart: any = null;
+let userGrowthChart: any = null;
 
-// 检测用户的动画偏好
 const prefersReducedMotion = () => {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 };
@@ -134,7 +130,7 @@ const metrics = [
     value: 2345,
     prefix: '',
     suffix: '',
-    icon: User,
+    icon: UserOutlined,
     iconColor: '#3b82f6',
     trend: 12
   },
@@ -143,7 +139,7 @@ const metrics = [
     value: 1280,
     prefix: '',
     suffix: '',
-    icon: Goods,
+    icon: ShoppingOutlined,
     iconColor: '#10b981',
     trend: 8
   },
@@ -152,7 +148,7 @@ const metrics = [
     value: 5678,
     prefix: '',
     suffix: '',
-    icon: ShoppingCart,
+    icon: ShoppingCartOutlined,
     iconColor: '#f59e0b',
     trend: 15
   },
@@ -161,7 +157,7 @@ const metrics = [
     value: 128900,
     prefix: '¥',
     suffix: '',
-    icon: Money,
+    icon: DollarOutlined,
     iconColor: '#ef4444',
     trend: 20
   }
@@ -175,14 +171,14 @@ const orders = [
   { id: '#ORD-1005', customer: '客户 5', status: '进行中', amount: Math.random() * 1000 }
 ];
 
-const getTagType = (status: string) => {
-  const typeMap: Record<string, any> = {
-    '进行中': 'primary',
-    '已完成': 'success',
-    '待处理': 'warning',
-    '已取消': 'danger'
+const getTagColor = (status: string) => {
+  const colorMap: Record<string, string> = {
+    '进行中': 'blue',
+    '已完成': 'green',
+    '待处理': 'orange',
+    '已取消': 'red'
   };
-  return typeMap[status] || '';
+  return colorMap[status] || 'default';
 };
 
 const initSalesChart = async () => {
@@ -431,7 +427,6 @@ onUnmounted(() => {
   height: 300px;
 }
 
-/* 数字对齐 */
 .numeric {
   font-variant-numeric: tabular-nums;
 }

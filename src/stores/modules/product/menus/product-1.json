@@ -2,7 +2,7 @@
   "id": "product-1",
   "path": "/products",
   "title": "商品列表",
-  "icon": "Goods",
+  "icon": "ShoppingOutlined",
   "api": {
     "list": "/api/products",
     "create": "/api/products",
@@ -13,7 +13,7 @@
   "formConfig": {
     "items": [
       {
-        "type": "component",
+        "type": "input",
         "label": "商品名称",
         "field": "name",
         "placeholder": "请输入商品名称",
@@ -23,11 +23,10 @@
             "message": "请输入商品名称",
             "trigger": "blur"
           }
-        ],
-        "component": "el-input"
+        ]
       },
       {
-        "type": "component",
+        "type": "input",
         "label": "商品价格",
         "field": "price",
         "placeholder": "请输入商品价格",
@@ -42,8 +41,7 @@
             "message": "请输入正确的价格格式",
             "trigger": "blur"
           }
-        ],
-        "component": "el-input"
+        ]
       },
       {
         "type": "upload",
@@ -59,7 +57,7 @@
         ]
       },
       {
-        "type": "component",
+        "type": "select",
         "label": "商品分类",
         "field": "category",
         "placeholder": "请选择商品分类",
@@ -87,21 +85,19 @@
             "message": "请选择商品分类",
             "trigger": "change"
           }
-        ],
-        "component": "el-select"
+        ]
       },
       {
-        "type": "richText",
+        "type": "textarea",
         "label": "商品描述",
         "field": "description",
         "placeholder": "请输入商品描述"
       },
       {
-        "type": "component",
+        "type": "switch",
         "label": "上架",
         "field": "onSale",
-        "value": true,
-        "component": "el-switch"
+        "value": true
       }
     ]
   },
@@ -110,56 +106,48 @@
       {
         "type": "index",
         "prop": "index",
-        "label": "序号",
-        "width": 80
+        "label": "序号"
       },
       {
         "type": "text",
         "prop": "name",
-        "label": "商品名称",
-        "width": 180
+        "label": "商品名称"
       },
       {
         "type": "text",
         "prop": "price",
         "label": "价格",
-        "width": 120,
         "formatter": "(row) => `¥${row.price}`"
       },
       {
         "type": "image",
         "prop": "image",
-        "label": "图片",
-        "width": 100
+        "label": "图片"
       },
       {
         "type": "text",
         "prop": "category",
-        "label": "分类",
-        "width": 120
+        "label": "分类"
       },
       {
-        "type": "component",
+        "type": "switch",
         "prop": "onSale",
-        "label": "状态",
-        "width": 100,
-        "component": "el-switch"
+        "label": "状态"
       },
       {
         "type": "actions",
         "prop": "actions",
         "label": "操作",
-        "width": 180,
         "actions": [
           {
             "label": "编辑",
             "type": "primary",
-            "handler": "() => {}"
+            "id": "edit"
           },
           {
             "label": "删除",
             "type": "danger",
-            "handler": "() => {}"
+            "id": "delete"
           }
         ]
       }

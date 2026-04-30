@@ -1,59 +1,70 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { handleApiError, getErrorMessageByStatus, showError, showSuccess, showWarning, showInfo, handleError } from '@/utils/errorHandler';
-import { ElMessage, ElNotification } from 'element-plus';
+import { ErrorHandler, withErrorHandling, setupGlobalErrorHandler } from '@/utils/errorHandler';
 
-// 模拟Element Plus的消息组件
-vi.mock('element-plus', () => ({
-  ElMessage: {
+vi.mock('@/utils/message', () => ({
+  showMessage: {
     error: vi.fn(),
     success: vi.fn(),
     warning: vi.fn(),
-    info: vi.fn()
+    info: vi.fn(),
   },
-  ElNotification: {
-    error: vi.fn(),
-    success: vi.fn(),
-    warning: vi.fn(),
-    info: vi.fn()
-  }
 }));
 
 describe('errorHandler', () => {
   beforeEach(() => {
-    // 清空所有模拟函数的调用记录
     vi.clearAllMocks();
   });
 
-  describe('getErrorMessageByStatus', () => {
-    it('should return correct error message for status 404', () => {
-      const message = getErrorMessageByStatus(404);
-      expect(message).toBe('请求地址不存在');
+  describe('ErrorHandler.normalizeError', () => {
+    it('should normalize Error instance', () => {
+      const error = new Error('Test error');
+      const result = ErrorHandler['normalizeError'](error);
+      expect(result.message).toBe('Test error');
+      expect(result.stack).toBeDefined();
     });
 
-    it('should return correct error message for status 500', () => {
-      const message = getErrorMessageByStatus(500);
-      expect(message).toBe('服务器内部错误');
+    it('should normalize string error', () => {
+      const result = ErrorHandler['normalizeError']('String error');
+      expect(result.message).toBe('String error');
     });
 
-    it('should return default message for unknown status', () => {
-      const message = getErrorMessageByStatus(999);
-      expect(message).toBe('未知错误 (999)');
+    it('should normalize object error', () => {
+      const error = { code: 'ERR001', message: 'Object error', data: { key: 'value' } };
+      const result = ErrorHandler['normalizeError'](error);
+      expect(result.code).toBe('ERR001');
+      expect(result.message).toBe('Object error');
+      expect(result.data).toEqual({ key: 'value' });
     });
   });
 
-  describe('handleApiError', () => {
+  describe('ErrorHandler.handle', () => {
+    it('should handle error and return AppError', () => {
+      const error = new Error('Test error');
+      const result = ErrorHandler.handle(error, { showMessage: false });
+      expect(result.message).toBe('Test error');
+    });
+
+    it('should handle error with fallback', () => {
+      const error = new Error('Test error');
+      const fallback = vi.fn();
+      ErrorHandler.handle(error, { showMessage: false, fallback });
+      expect(fallback).toHaveBeenCalled();
+    });
+  });
+
+  describe('ErrorHandler.handleApiError', () => {
     it('should handle response error with status code', () => {
       const error = {
         response: {
           status: 404,
           data: {
-            message: '自定义错误消息'
-          }
-        }
+            message: '自定义错误消息',
+          },
+        },
       };
 
-      const result = handleApiError(error);
-      expect(result.code).toBe(404);
+      const result = ErrorHandler.handleApiError(error, { showMessage: false });
+      expect(result.code).toBe('404');
       expect(result.message).toBe('自定义错误消息');
     });
 
@@ -61,121 +72,78 @@ describe('errorHandler', () => {
       const error = {
         response: {
           status: 404,
-          data: {}
-        }
+          data: {},
+        },
       };
 
-      const result = handleApiError(error);
-      expect(result.code).toBe(404);
-      expect(result.message).toBe('请求地址不存在');
+      const result = ErrorHandler.handleApiError(error, { showMessage: false });
+      expect(result.code).toBe('404');
+      expect(result.message).toBe('请求失败 (404)');
     });
 
     it('should handle request error', () => {
       const error = {
-        request: {}
+        request: {},
       };
 
-      const result = handleApiError(error);
-      expect(result.code).toBe(0);
-      expect(result.message).toBe('网络错误，服务器无响应');
+      const result = ErrorHandler.handleApiError(error, { showMessage: false });
+      expect(result.message).toBe('服务器无响应，请稍后重试');
     });
 
     it('should handle other errors', () => {
       const error = {
-        message: '其他错误'
+        message: '其他错误',
       };
 
-      const result = handleApiError(error);
-      expect(result.code).toBe(0);
+      const result = ErrorHandler.handleApiError(error, { showMessage: false });
       expect(result.message).toBe('其他错误');
     });
-  });
 
-  describe('showError', () => {
-    it('should show error message', () => {
-      showError('测试错误消息');
-      expect(ElMessage.error).toHaveBeenCalledWith({
-        message: '测试错误消息',
-        duration: 3000,
-        showClose: true
-      });
-    });
-
-    it('should show error notification', () => {
-      showError('测试错误消息', {
-        type: 'notification'
-      });
-      expect(ElNotification.error).toHaveBeenCalledWith({
-        title: '错误',
-        message: '测试错误消息',
-        duration: 3000,
-        showClose: true
-      });
-    });
-  });
-
-  describe('showSuccess', () => {
-    it('should show success message', () => {
-      showSuccess('测试成功消息');
-      expect(ElMessage.success).toHaveBeenCalledWith({
-        message: '测试成功消息',
-        duration: 3000,
-        showClose: true
-      });
-    });
-  });
-
-  describe('showWarning', () => {
-    it('should show warning message', () => {
-      showWarning('测试警告消息');
-      expect(ElMessage.warning).toHaveBeenCalledWith({
-        message: '测试警告消息',
-        duration: 3000,
-        showClose: true
-      });
-    });
-  });
-
-  describe('showInfo', () => {
-    it('should show info message', () => {
-      showInfo('测试信息消息');
-      expect(ElMessage.info).toHaveBeenCalledWith({
-        message: '测试信息消息',
-        duration: 3000,
-        showClose: true
-      });
-    });
-  });
-
-  describe('handleError', () => {
-    it('should handle error and show message', () => {
+    it('should handle cancel error', () => {
       const error = {
-        response: {
-          status: 404,
-          data: {}
-        }
+        __CANCEL__: true,
+        message: '请求被取消',
       };
 
-      const result = handleError(error);
-      expect(result.code).toBe(404);
-      expect(result.message).toBe('请求地址不存在');
-      expect(ElMessage.error).toHaveBeenCalled();
+      const result = ErrorHandler.handleApiError(error, { showMessage: false });
+      expect(result.code).toBe('ERR_CANCELED');
     });
+  });
 
-    it('should handle error without showing message', () => {
-      const error = {
-        response: {
-          status: 404,
-          data: {}
-        }
+  describe('ErrorHandler.handleValidationError', () => {
+    it('should handle validation errors', () => {
+      const errors = {
+        field1: ['错误1', '错误2'],
+        field2: ['错误3'],
       };
 
-      const result = handleError(error, {
-        showError: false
-      });
-      expect(result.code).toBe(404);
-      expect(result.message).toBe('请求地址不存在');
-      expect(ElMessage.error).not.toHaveBeenCalled();
+      const result = ErrorHandler.handleValidationError(errors, { showMessage: false });
+      expect(result.message).toBe('错误1');
+      expect(result.data).toEqual(errors);
+    });
+  });
+
+  describe('withErrorHandling', async () => {
+    it('should return result on success', async () => {
+      const fn = vi.fn().mockResolvedValue('success');
+      const result = await withErrorHandling(fn, { showMessage: false });
+      expect(result).toBe('success');
+    });
+
+    it('should return null on error', async () => {
+      const fn = vi.fn().mockRejectedValue(new Error('Test error'));
+      const result = await withErrorHandling(fn, { showMessage: false });
+      expect(result).toBeNull();
+    });
+  });
+
+  describe('setupGlobalErrorHandler', () => {
+    it('should setup global error handlers', () => {
+      const addEventListenerSpy = vi.spyOn(window, 'addEventListener');
+      setupGlobalErrorHandler();
+      expect(addEventListenerSpy).toHaveBeenCalledWith('unhandledrejection', expect.any(Function));
+      expect(addEventListenerSpy).toHaveBeenCalledWith('error', expect.any(Function));
+      addEventListenerSpy.mockRestore();
     });
   });
 });

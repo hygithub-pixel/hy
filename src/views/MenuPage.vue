@@ -1,52 +1,55 @@
 <template>
   <div>
-    <el-row :gutter="20">
-      <el-col :span="24">
-        <el-card class="mb-4">
-          <template #header>
+    <a-row :gutter="20">
+      <a-col :span="24">
+        <a-card class="mb-4">
+          <template #title>
             <div class="flex justify-between items-center">
               <div>
                 <div class="text-xl font-bold">{{ currentMenu?.title || '数据管理' }}</div>
                 <div class="text-gray-500 text-sm mt-1">{{ currentMenu?.description || '管理和维护系统数据' }}</div>
               </div>
-              <el-button type="primary" :icon="Plus" @click="handleAdd">
+              <a-button type="primary" @click="handleAdd">
+                <template #icon><PlusOutlined /></template>
                 新增数据
-              </el-button>
+              </a-button>
             </div>
           </template>
-        </el-card>
-      </el-col>
-    </el-row>
+        </a-card>
+      </a-col>
+    </a-row>
 
-    <el-row :gutter="20">
-      <el-col :span="24">
-        <el-card>
+    <a-row :gutter="20">
+      <a-col :span="24">
+        <a-card>
           <template v-if="currentMenu?.tableConfig">
             <TableComponent 
               :config="currentMenu.tableConfig"
-              :data="table.tableData.value"
-              :loading="table.loading.value"
+              :data="tableData"
+              :loading="tableLoading"
               @edit="handleEdit"
               @delete="handleDelete"
               @page-change="handlePageChange"
             />
           </template>
           <template v-else>
-            <el-empty description="暂无数据">
-              <el-button type="primary" :icon="Plus" @click="handleAdd">
+            <a-empty description="暂无数据">
+              <a-button type="primary" @click="handleAdd">
+                <template #icon><PlusOutlined /></template>
                 开始添加
-              </el-button>
-            </el-empty>
+              </a-button>
+            </a-empty>
           </template>
-        </el-card>
-      </el-col>
-    </el-row>
+        </a-card>
+      </a-col>
+    </a-row>
 
-    <el-dialog
-      v-model="dialogVisible"
+    <a-modal
+      v-model:open="dialogVisible"
       :title="dialogType === 'add' ? '新增数据' : '编辑数据'"
       width="600px"
-      :close-on-click-modal="false"
+      :maskClosable="false"
+      @ok="handleFormSubmit"
     >
       <template v-if="currentMenu?.formConfig">
         <FormComponent 
@@ -56,38 +59,36 @@
         />
       </template>
       <template #footer>
-        <span class="flex justify-end gap-3">
-          <el-button @click="dialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="handleFormSubmit">确定</el-button>
-        </span>
+        <a-button @click="dialogVisible = false">取消</a-button>
+        <a-button type="primary" @click="handleFormSubmit">确定</a-button>
       </template>
-    </el-dialog>
+    </a-modal>
 
-    <el-dialog
-      v-model="deleteDialogVisible"
+    <a-modal
+      v-model:open="deleteDialogVisible"
       title="确认删除"
       width="400px"
-      :close-on-click-modal="false"
+      :maskClosable="false"
+      @ok="handleDeleteConfirm"
     >
-      <el-alert
-        title="确定要删除此数据吗？此操作无法撤销。"
-        type="warning"
-        :closable="false"
-        show-icon
-      />
+      <div class="py-4">
+        <a-alert
+          message="确定要删除此数据吗？此操作无法撤销。"
+          type="warning"
+          show-icon
+        />
+      </div>
       <template #footer>
-        <span class="flex justify-end gap-3">
-          <el-button @click="deleteDialogVisible = false">取消</el-button>
-          <el-button type="danger" @click="handleDeleteConfirm">删除</el-button>
-        </span>
+        <a-button @click="deleteDialogVisible = false">取消</a-button>
+        <a-button danger type="primary" @click="handleDeleteConfirm">删除</a-button>
       </template>
-    </el-dialog>
+    </a-modal>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ElMessage } from 'element-plus';
-import { Plus } from '@element-plus/icons-vue';
+import { message } from 'ant-design-vue';
+import { PlusOutlined } from '@ant-design/icons-vue';
 import { useMenuStore } from '../stores/menuStore';
 import { useTableStore } from '../stores/tableStore';
 import { useTable } from '../composables/useTable';
@@ -112,15 +113,16 @@ const table = useTable({
   autoLoad: false
 });
 
+const tableData = computed(() => table.tableData.value);
+const tableLoading = computed(() => table.loading.value);
+
 const loadMenuData = async () => {
   try {
     await menuStore.initMenuConfig();
     
-    // 根据当前路由路径查找菜单
     const currentPath = route.path;
     console.log('当前路由路径:', currentPath);
     
-    // 查找菜单的函数
     const findMenuByPath = (menus: any[]): any => {
       for (const menu of menus) {
         if (menu.path === currentPath) {
@@ -136,13 +138,10 @@ const loadMenuData = async () => {
       return null;
     };
     
-    // 从所有菜单中查找
     const allMenus = menuStore.getAllMenus;
     let menu = findMenuByPath(allMenus);
     
-    // 如果没找到，尝试从子模块中查找
     if (!menu) {
-      // 简单的路径映射
       const pathToMenuId: Record<string, string> = {
         '/users': 'user-1',
         '/roles': 'user-2',
@@ -168,7 +167,7 @@ const loadMenuData = async () => {
     }
     
     if (!menu) {
-      ElMessage.error('菜单不存在');
+      message.error('菜单不存在');
       router.push('/dashboard');
       return;
     }
@@ -180,7 +179,7 @@ const loadMenuData = async () => {
     console.log('表格数据:', table.tableData);
   } catch (error) {
     console.error('加载菜单数据失败:', error);
-    ElMessage.error('加载菜单数据失败');
+    message.error('加载菜单数据失败');
   }
 };
 
@@ -237,7 +236,7 @@ const handleFormSubmit = async () => {
     dialogVisible.value = false;
   } catch (error) {
     console.error('提交失败:', error);
-    ElMessage.error('操作失败，请重试');
+    message.error('操作失败，请重试');
   }
 };
 
@@ -260,7 +259,7 @@ const handleDeleteConfirm = async () => {
     deleteDialogVisible.value = false;
   } catch (error) {
     console.error('删除失败:', error);
-    ElMessage.error('删除失败，请重试');
+    message.error('删除失败，请重试');
   }
 };
 

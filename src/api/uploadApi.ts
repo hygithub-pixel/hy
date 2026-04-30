@@ -12,25 +12,25 @@ export const uploadApi = {
     return commonRequestDo<UploadResponse>({
       tradeName: 'upload',
       file,
-      params
+      params,
     });
   },
-  
+
   uploadFiles: (files: File[], params?: Record<string, any>) => {
     return commonRequestDo<UploadResponse[]>({
       tradeName: 'upload/batch',
       file: files,
-      params
+      params,
     });
   },
-  
+
   deleteFile: (fileUrl: string) => {
     return commonRequest<{ success: boolean }>({
       tradeName: 'upload/delete',
-      params: { url: fileUrl }
+      params: { url: fileUrl },
     });
   },
-  
+
   getFileList: (params?: { page?: number; pageSize?: number; type?: string }) => {
     return commonRequest<{
       data: UploadResponse[];
@@ -38,10 +38,10 @@ export const uploadApi = {
         currentPage: number;
         pageSize: number;
         total: number;
-      }
+      };
     }>({
       tradeName: 'upload/list',
-      params
+      params,
     });
-  }
+  },
 };

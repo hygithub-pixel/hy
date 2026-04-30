@@ -1,11 +1,16 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError, CancelTokenSource } from 'axios';
-import { showLoading, hideLoading } from '@/utils/loading';
-import { ElMessage } from 'element-plus';
+import axios, {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  AxiosError,
+  CancelTokenSource,
+} from 'axios';
+import { showMessage } from '@/utils/message';
 import { apiCache, cacheUtils } from '@/utils/cache';
 import { debounce, throttle } from '@/utils/debounceThrottle';
+import { performanceMonitor } from '@/utils/performance';
 
 interface RequestConfig extends AxiosRequestConfig {
-  showLoading?: boolean;
   retryCount?: number;
   retryDelay?: number;
   __retryCount?: number;
@@ -24,7 +29,6 @@ interface RequestExecutor<T> {
 interface CommonRequestParams {
   tradeName: string;
   params?: Record<string, any>;
-  showLoading?: boolean;
   debounce?: number;
   throttle?: number;
   cache?: boolean;
@@ -42,8 +46,8 @@ const instance: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
   timeout: 10000,
   headers: {
-    'Content-Type': 'application/json'
-  }
+    'Content-Type': 'application/json',
+  },
 });
 
 const generateRequestKey = (config: RequestConfig): string => {
@@ -91,25 +95,22 @@ const retryRequest = (error: AxiosError) => {
 };
 
 instance.interceptors.request.use(
-  (config) => {
+  config => {
     const requestConfig = config as RequestConfig;
-    
+
     removePendingRequest(requestConfig);
     addPendingRequest(requestConfig);
-
-    if (requestConfig.showLoading !== false) {
-      showLoading();
-    }
 
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
 
+    performanceMonitor.startMeasure(`api-${config.url}`);
+
     return config;
   },
   (error: AxiosError) => {
-    hideLoading();
     return Promise.reject(error);
   }
 );
@@ -118,14 +119,12 @@ instance.interceptors.response.use(
   (response: AxiosResponse) => {
     const config = response.config as RequestConfig;
     removePendingRequest(config);
-    
-    if (config.showLoading !== false) {
-      hideLoading();
-    }
+
+    performanceMonitor.endMeasure(`api-${config.url}`);
 
     const data = response.data as ApiResponse;
     if (data.code !== 0) {
-      ElMessage.error(data.message || '请求失败');
+      showMessage.error(data.message || '请求失败');
       return Promise.reject(new Error(data.message || '请求失败'));
     }
     return response;
@@ -134,9 +133,7 @@ instance.interceptors.response.use(
     const config = error.config as RequestConfig;
     if (config) {
       removePendingRequest(config);
-      if (config.showLoading !== false) {
-        hideLoading();
-      }
+      performanceMonitor.endMeasure(`api-${config.url}`);
     }
 
     if (axios.isCancel(error)) {
@@ -144,27 +141,27 @@ instance.interceptors.response.use(
     }
 
     if (error.message.includes('timeout')) {
-      ElMessage.error('请求超时，请稍后再试');
+      showMessage.error('请求超时，请稍后再试');
     } else if (error.response) {
       const status = error.response.status;
       switch (status) {
         case 401:
-          ElMessage.error('未授权，请重新登录');
+          showMessage.error('未授权，请重新登录');
           break;
         case 403:
-          ElMessage.error('拒绝访问');
+          showMessage.error('拒绝访问');
           break;
         case 404:
-          ElMessage.error('请求地址不存在');
+          showMessage.error('请求地址不存在');
           break;
         case 500:
-          ElMessage.error('服务器内部错误');
+          showMessage.error('服务器内部错误');
           break;
         default:
-          ElMessage.error(`请求失败: ${error.message}`);
+          showMessage.error(`请求失败: ${error.message}`);
       }
     } else {
-      ElMessage.error('网络错误，请检查网络连接');
+      showMessage.error('网络错误，请检查网络连接');
     }
 
     return retryRequest(error);
@@ -210,12 +207,21 @@ const executeRequest = <T>(
   return executor();
 };
 
-export const commonRequest = async <T = any>(params: CommonRequestParams): Promise<ApiResponse<T>> => {
-  const { tradeName, params: requestParams, showLoading = true, debounce, throttle, cache = false, cacheExpiry } = params;
+export const commonRequest = async <T = any>(
+  params: CommonRequestParams
+): Promise<ApiResponse<T>> => {
+  const {
+    tradeName,
+    params: requestParams,
+    debounce,
+    throttle,
+    cache = false,
+    cacheExpiry,
+  } = params;
   const requestKey = cacheUtils.generateKey(tradeName, requestParams);
-  
+
   const requestExecutor: RequestExecutor<ApiResponse<T>> = async () => {
-    const response = await instance.post<ApiResponse<T>>(tradeName, requestParams, { showLoading } as RequestConfig);
+    const response = await instance.post<ApiResponse<T>>(tradeName, requestParams);
     return response.data;
   };
 
@@ -224,27 +230,36 @@ export const commonRequest = async <T = any>(params: CommonRequestParams): Promi
     const cachedData = apiCache.get(requestKey);
     if (cachedData) {
       // 如果从缓存获取，需要手动关闭loading
-      if (showLoading) {
-        hideLoading();
-      }
+
       return cachedData;
     }
-    
+
     // 从数据源获取
     return executeRequest(requestKey, requestExecutor, debounce, throttle).then(data => {
       apiCache.set(requestKey, data, cacheExpiry ? { expiry: cacheExpiry } : undefined);
       return data;
     });
   }
-  
+
   return executeRequest(requestKey, requestExecutor, debounce, throttle);
 };
 
-export const commonRequestDo = async <T = any>(params: CommonRequestDoParams): Promise<ApiResponse<T>> => {
-  const { tradeName, params: requestParams, file, fileFieldName = 'file', showLoading = true, debounce, throttle, cache = false, cacheExpiry } = params;
-  
+export const commonRequestDo = async <T = any>(
+  params: CommonRequestDoParams
+): Promise<ApiResponse<T>> => {
+  const {
+    tradeName,
+    params: requestParams,
+    file,
+    fileFieldName = 'file',
+    debounce,
+    throttle,
+    cache = false,
+    cacheExpiry,
+  } = params;
+
   const formData = new FormData();
-  
+
   if (Array.isArray(file)) {
     file.forEach((f, index) => {
       formData.append(`${fileFieldName}${index}`, f);
@@ -252,22 +267,25 @@ export const commonRequestDo = async <T = any>(params: CommonRequestDoParams): P
   } else {
     formData.append(fileFieldName, file);
   }
-  
+
   if (requestParams) {
     Object.entries(requestParams).forEach(([key, value]) => {
       formData.append(key, String(value));
     });
   }
-  
-  const requestKey = cacheUtils.generateKey(tradeName, requestParams, Array.isArray(file) ? file.length : 1);
-  
+
+  const requestKey = cacheUtils.generateKey(
+    tradeName,
+    requestParams,
+    Array.isArray(file) ? file.length : 1
+  );
+
   const requestExecutor: RequestExecutor<ApiResponse<T>> = async () => {
     const response = await instance.post<ApiResponse<T>>(tradeName, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data'
+        'Content-Type': 'multipart/form-data',
       },
-      showLoading
-    } as RequestConfig);
+    });
     return response.data;
   };
 
@@ -276,19 +294,17 @@ export const commonRequestDo = async <T = any>(params: CommonRequestDoParams): P
     const cachedData = apiCache.get(requestKey);
     if (cachedData) {
       // 如果从缓存获取，需要手动关闭loading
-      if (showLoading) {
-        hideLoading();
-      }
+
       return cachedData;
     }
-    
+
     // 从数据源获取
     return executeRequest(requestKey, requestExecutor, debounce, throttle).then(data => {
       apiCache.set(requestKey, data, cacheExpiry ? { expiry: cacheExpiry } : undefined);
       return data;
     });
   }
-  
+
   return executeRequest(requestKey, requestExecutor, debounce, throttle);
 };
 
@@ -307,7 +323,7 @@ export const request = {
   },
   patch<T = any>(url: string, data?: any, config?: RequestConfig): Promise<ApiResponse<T>> {
     return instance.patch(url, data, config).then(response => response.data);
-  }
+  },
 };
 
 export default request;

@@ -19,43 +19,43 @@ export interface TableDataResponse {
 }
 
 export const menuApi = {
-  getMenuConfig: () => 
+  getMenuConfig: () =>
     commonRequest<MenuListResponse>({
-      tradeName: 'menu/config'
+      tradeName: 'menu/config',
     }),
-  
-  getMenuByPath: (path: string) => 
+
+  getMenuByPath: (path: string) =>
     commonRequest<MenuDetailResponse>({
       tradeName: 'menu/detail',
-      params: { path }
+      params: { path },
     }),
-  
-  getMenuById: (id: string) => 
+
+  getMenuById: (id: string) =>
     commonRequest<MenuDetailResponse>({
-      tradeName: `menu/${id}`
+      tradeName: `menu/${id}`,
     }),
-  
-  getTableData: (menuId: string, params?: { page?: number; pageSize?: number }) => 
+
+  getTableData: (menuId: string, params?: { page?: number; pageSize?: number }) =>
     commonRequest<TableDataResponse>({
       tradeName: `menu/${menuId}/data`,
-      params
+      params,
     }),
-  
-  createData: (menuId: string, data: any) => 
+
+  createData: (menuId: string, data: any) =>
     commonRequest<{ id: string }>({
       tradeName: `menu/${menuId}/data`,
-      params: data
+      params: data,
     }),
-  
-  updateData: (menuId: string, id: string, data: any) => 
+
+  updateData: (menuId: string, id: string, data: any) =>
     commonRequest<{ success: boolean }>({
       tradeName: `menu/${menuId}/data/update`,
-      params: { id, ...data }
+      params: { id, ...data },
     }),
-  
-  deleteData: (menuId: string, id: string) => 
+
+  deleteData: (menuId: string, id: string) =>
     commonRequest<{ success: boolean }>({
       tradeName: `menu/${menuId}/data/delete`,
-      params: { id }
-    })
+      params: { id },
+    }),
 };

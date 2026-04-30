@@ -2,14 +2,14 @@
   "id": "product-2",
   "path": "/categories",
   "title": "分类管理",
-  "icon": "CollectionTag",
+  "icon": "TagOutlined",
   "api": {
     "query": "product-2-query"
   },
   "formConfig": {
     "items": [
       {
-        "type": "component",
+        "type": "input",
         "label": "分类名称",
         "field": "name",
         "placeholder": "请输入分类名称",
@@ -19,22 +19,19 @@
             "message": "请输入分类名称",
             "trigger": "blur"
           }
-        ],
-        "component": "el-input"
+        ]
       },
       {
-        "type": "component",
+        "type": "input",
         "label": "分类描述",
         "field": "description",
-        "placeholder": "请输入分类描述",
-        "component": "el-input"
+        "placeholder": "请输入分类描述"
       },
       {
-        "type": "component",
+        "type": "switch",
         "label": "启用",
         "field": "enabled",
-        "value": true,
-        "component": "el-switch"
+        "value": true
       }
     ]
   },
@@ -43,14 +40,12 @@
       {
         "type": "index",
         "prop": "index",
-        "label": "序号",
-        "width": 80
+        "label": "序号"
       },
       {
         "type": "text",
         "prop": "name",
-        "label": "分类名称",
-        "width": 180
+        "label": "分类名称"
       },
       {
         "type": "text",
@@ -59,27 +54,24 @@
         "minWidth": 200
       },
       {
-        "type": "component",
+        "type": "switch",
         "prop": "enabled",
-        "label": "状态",
-        "width": 100,
-        "component": "el-switch"
+        "label": "状态"
       },
       {
         "type": "actions",
         "prop": "actions",
         "label": "操作",
-        "width": 180,
         "actions": [
           {
             "label": "编辑",
             "type": "primary",
-            "handler": "() => {}"
+            "id": "edit"
           },
           {
             "label": "删除",
             "type": "danger",
-            "handler": "() => {}"
+            "id": "delete"
           }
         ]
       }

@@ -2,14 +2,14 @@
   "id": "order-1",
   "path": "/orders",
   "title": "订单列表",
-  "icon": "Document",
+  "icon": "FileTextOutlined",
   "api": {
     "query": "order-1-query"
   },
   "formConfig": {
     "items": [
       {
-        "type": "component",
+        "type": "input",
         "label": "订单编号",
         "field": "orderNo",
         "placeholder": "请输入订单编号",
@@ -19,11 +19,10 @@
             "message": "请输入订单编号",
             "trigger": "blur"
           }
-        ],
-        "component": "el-input"
+        ]
       },
       {
-        "type": "component",
+        "type": "select",
         "label": "订单状态",
         "field": "status",
         "placeholder": "请选择订单状态",
@@ -55,11 +54,10 @@
             "message": "请选择订单状态",
             "trigger": "change"
           }
-        ],
-        "component": "el-select"
+        ]
       },
       {
-        "type": "component",
+        "type": "input",
         "label": "收货人",
         "field": "receiver",
         "placeholder": "请输入收货人",
@@ -69,11 +67,10 @@
             "message": "请输入收货人",
             "trigger": "blur"
           }
-        ],
-        "component": "el-input"
+        ]
       },
       {
-        "type": "component",
+        "type": "input",
         "label": "联系电话",
         "field": "phone",
         "placeholder": "请输入联系电话",
@@ -83,11 +80,10 @@
             "message": "请输入联系电话",
             "trigger": "blur"
           }
-        ],
-        "component": "el-input"
+        ]
       },
       {
-        "type": "component",
+        "type": "date",
         "label": "下单时间",
         "field": "orderTime",
         "placeholder": "选择下单时间",
@@ -98,7 +94,6 @@
             "trigger": "change"
           }
         ],
-        "component": "el-date-picker",
         "props": {
           "type": "datetime"
         }
@@ -110,55 +105,47 @@
       {
         "type": "index",
         "prop": "index",
-        "label": "序号",
-        "width": 80
+        "label": "序号"
       },
       {
         "type": "text",
         "prop": "orderNo",
-        "label": "订单编号",
-        "width": 180
+        "label": "订单编号"
       },
       {
         "type": "text",
         "prop": "status",
-        "label": "订单状态",
-        "width": 120
+        "label": "订单状态"
       },
       {
         "type": "text",
         "prop": "receiver",
-        "label": "收货人",
-        "width": 120
+        "label": "收货人"
       },
       {
         "type": "text",
         "prop": "phone",
-        "label": "联系电话",
-        "width": 140
+        "label": "联系电话"
       },
       {
-        "type": "component",
+        "type": "date",
         "prop": "orderTime",
-        "label": "下单时间",
-        "width": 180,
-        "component": "el-date-picker"
+        "label": "下单时间"
       },
       {
         "type": "actions",
         "prop": "actions",
         "label": "操作",
-        "width": 180,
         "actions": [
           {
             "label": "编辑",
             "type": "primary",
-            "handler": "() => {}"
+            "id": "edit"
           },
           {
             "label": "删除",
             "type": "danger",
-            "handler": "() => {}"
+            "id": "delete"
           }
         ]
       }

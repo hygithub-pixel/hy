@@ -2,14 +2,14 @@
   "id": "content-1",
   "path": "/articles",
   "title": "文章管理",
-  "icon": "Document",
+  "icon": "FileTextOutlined",
   "api": {
     "query": "content-1-query"
   },
   "formConfig": {
     "items": [
       {
-        "type": "component",
+        "type": "input",
         "label": "文章标题",
         "field": "title",
         "placeholder": "请输入文章标题",
@@ -19,11 +19,10 @@
             "message": "请输入文章标题",
             "trigger": "blur"
           }
-        ],
-        "component": "el-input"
+        ]
       },
       {
-        "type": "component",
+        "type": "select",
         "label": "文章分类",
         "field": "category",
         "placeholder": "请选择文章分类",
@@ -51,11 +50,10 @@
             "message": "请选择文章分类",
             "trigger": "change"
           }
-        ],
-        "component": "el-select"
+        ]
       },
       {
-        "type": "richText",
+        "type": "textarea",
         "label": "文章内容",
         "field": "content",
         "placeholder": "请输入文章内容",
@@ -68,11 +66,10 @@
         ]
       },
       {
-        "type": "component",
+        "type": "switch",
         "label": "发布",
         "field": "published",
-        "value": true,
-        "component": "el-switch"
+        "value": true
       }
     ]
   },
@@ -81,49 +78,43 @@
       {
         "type": "index",
         "prop": "index",
-        "label": "序号",
-        "width": 80
+        "label": "序号"
       },
       {
         "type": "text",
         "prop": "title",
-        "label": "文章标题",
-        "width": 200
+        "label": "文章标题"
       },
       {
         "type": "text",
         "prop": "category",
-        "label": "文章分类",
-        "width": 120
+        "label": "文章分类"
       },
       {
-        "type": "richText",
+        "type": "text",
         "prop": "content",
         "label": "文章内容",
         "minWidth": 250
       },
       {
-        "type": "component",
+        "type": "switch",
         "prop": "published",
-        "label": "发布状态",
-        "width": 100,
-        "component": "el-switch"
+        "label": "发布状态"
       },
       {
         "type": "actions",
         "prop": "actions",
         "label": "操作",
-        "width": 180,
         "actions": [
           {
             "label": "编辑",
             "type": "primary",
-            "handler": "() => {}"
+            "id": "edit"
           },
           {
             "label": "删除",
             "type": "danger",
-            "handler": "() => {}"
+            "id": "delete"
           }
         ]
       }

@@ -2,14 +2,14 @@
   "id": "finance-3",
   "path": "/finance-reports",
   "title": "财务报表",
-  "icon": "DataLine",
+  "icon": "LineChartOutlined",
   "api": {
     "query": "finance-3-query"
   },
   "formConfig": {
     "items": [
       {
-        "type": "component",
+        "type": "date",
         "label": "开始日期",
         "field": "startDate",
         "placeholder": "选择开始日期",
@@ -19,14 +19,10 @@
             "message": "请选择开始日期",
             "trigger": "change"
           }
-        ],
-        "component": "el-date-picker",
-        "props": {
-          "type": "date"
-        }
+        ]
       },
       {
-        "type": "component",
+        "type": "date",
         "label": "结束日期",
         "field": "endDate",
         "placeholder": "选择结束日期",
@@ -36,14 +32,10 @@
             "message": "请选择结束日期",
             "trigger": "change"
           }
-        ],
-        "component": "el-date-picker",
-        "props": {
-          "type": "date"
-        }
+        ]
       },
       {
-        "type": "component",
+        "type": "select",
         "label": "报表类型",
         "field": "type",
         "placeholder": "请选择报表类型",
@@ -67,8 +59,7 @@
             "message": "请选择报表类型",
             "trigger": "change"
           }
-        ],
-        "component": "el-select"
+        ]
       }
     ]
   },
@@ -77,62 +68,52 @@
       {
         "type": "index",
         "prop": "index",
-        "label": "序号",
-        "width": 80
+        "label": "序号"
       },
       {
-        "type": "component",
+        "type": "date",
         "prop": "startDate",
-        "label": "开始日期",
-        "width": 140,
-        "component": "el-date-picker"
+        "label": "开始日期"
       },
       {
-        "type": "component",
+        "type": "date",
         "prop": "endDate",
-        "label": "结束日期",
-        "width": 140,
-        "component": "el-date-picker"
+        "label": "结束日期"
       },
       {
         "type": "text",
         "prop": "type",
-        "label": "报表类型",
-        "width": 140
+        "label": "报表类型"
       },
       {
         "type": "text",
         "prop": "revenue",
-        "label": "总收入",
-        "width": 140
+        "label": "总收入"
       },
       {
         "type": "text",
         "prop": "expense",
-        "label": "总支出",
-        "width": 140
+        "label": "总支出"
       },
       {
         "type": "text",
         "prop": "profit",
-        "label": "净利润",
-        "width": 140
+        "label": "净利润"
       },
       {
         "type": "actions",
         "prop": "actions",
         "label": "操作",
-        "width": 180,
         "actions": [
           {
             "label": "查看",
             "type": "primary",
-            "handler": "() => {}"
+            "id": "edit"
           },
           {
             "label": "导出",
-            "type": "success",
-            "handler": "() => {}"
+            "type": "default",
+            "id": "export"
           }
         ]
       }

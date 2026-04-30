@@ -13,7 +13,7 @@ export default {
     success: '成功',
     error: '错误',
     warning: '警告',
-    info: '信息'
+    info: '信息',
   },
   login: {
     title: '用户登录',
@@ -26,7 +26,7 @@ export default {
     usernamePlaceholder: '请输入用户名',
     passwordPlaceholder: '请输入密码',
     loginSuccess: '登录成功',
-    loginError: '用户名或密码错误'
+    loginError: '用户名或密码错误',
   },
   dashboard: {
     title: '仪表盘',
@@ -39,7 +39,7 @@ export default {
     totalRevenue: '总收入',
     newUsers: '新增用户',
     orderCount: '订单数',
-    productCount: '商品数'
+    productCount: '商品数',
   },
   sidebar: {
     dashboard: '仪表盘',
@@ -47,7 +47,7 @@ export default {
     products: '商品管理',
     orders: '订单管理',
     content: '内容管理',
-    finance: '财务管理'
+    finance: '财务管理',
   },
   table: {
     export: '导出',
@@ -61,7 +61,7 @@ export default {
     page: '页',
     perPage: '每页',
     total: '共',
-    items: '条'
+    items: '条',
   },
   form: {
     draftSaved: '草稿已保存',
@@ -73,7 +73,7 @@ export default {
     required: '此项为必填项',
     minLength: '长度不能小于{min}个字符',
     maxLength: '长度不能超过{max}个字符',
-    pattern: '格式不正确'
+    pattern: '格式不正确',
   },
   user: {
     userList: '用户列表',
@@ -87,7 +87,7 @@ export default {
     disabled: '禁用',
     superAdmin: '超级管理员',
     admin: '管理员',
-    user: '普通用户'
+    user: '普通用户',
   },
   product: {
     productList: '商品列表',
@@ -107,7 +107,7 @@ export default {
     entryDate: '入库日期',
     mainWarehouse: '主仓库',
     warehouseA: '分仓库A',
-    warehouseB: '分仓库B'
+    warehouseB: '分仓库B',
   },
   order: {
     orderList: '订单列表',
@@ -122,7 +122,7 @@ export default {
     processing: '处理中',
     completed: '已完成',
     cancelled: '已取消',
-    refunded: '已退款'
+    refunded: '已退款',
   },
   content: {
     articleList: '文章管理',
@@ -141,7 +141,7 @@ export default {
     adLink: '广告链接',
     commenter: '评论者',
     commentContent: '评论内容',
-    commentTime: '评论时间'
+    commentTime: '评论时间',
   },
   finance: {
     revenueList: '收入统计',
@@ -156,7 +156,7 @@ export default {
     paymentMethod: '支付方式',
     cash: '现金',
     bank: '银行转账',
-    online: '在线支付'
+    online: '在线支付',
   },
   error: {
     404: '页面不存在',
@@ -165,6 +165,6 @@ export default {
     network: '网络错误',
     unknown: '未知错误',
     backHome: '返回首页',
-    refresh: '刷新页面'
-  }
-}
+    refresh: '刷新页面',
+  },
+};

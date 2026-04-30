@@ -1,5 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { debounce, throttle, debounceWithCancel, throttleWithCancel } from '../../src/utils/debounceThrottle';
+import {
+  debounce,
+  throttle,
+  debounceWithCancel,
+  throttleWithCancel,
+} from '../../src/utils/debounceThrottle';
 
 describe('debounceThrottle', () => {
   beforeEach(() => {

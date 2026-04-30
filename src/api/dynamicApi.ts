@@ -33,7 +33,24 @@ export const dynamicApi = {
     const tradeName = getTradeNameFromUrl(url);
     return commonRequest<TableDataResponse>({
       tradeName,
-      params
+      params,
+    });
+  },
+
+  list: (apiConfig: ApiConfig, params?: { page?: number; pageSize?: number }) => {
+    const url = apiConfig.list || '';
+    const tradeName = getTradeNameFromUrl(url);
+    return commonRequest<TableDataResponse>({
+      tradeName,
+      params,
+    });
+  },
+
+  query: (apiConfig: ApiConfig, params?: { page?: number; pageSize?: number }) => {
+    const tradeName = apiConfig.query || getTradeNameFromUrl(apiConfig.list || '');
+    return commonRequest<TableDataResponse>({
+      tradeName,
+      params,
     });
   },
 
@@ -42,7 +59,7 @@ export const dynamicApi = {
     const tradeName = getTradeNameFromUrl(url);
     return commonRequest<CreateDataResponse>({
       tradeName,
-      params: data
+      params: data,
     });
   },
 
@@ -51,7 +68,7 @@ export const dynamicApi = {
     const tradeName = getTradeNameFromUrl(url).replace('/:id', '/update');
     return commonRequest<UpdateDataResponse>({
       tradeName,
-      params: { id, ...data }
+      params: { id, ...data },
     });
   },
 
@@ -60,7 +77,7 @@ export const dynamicApi = {
     const tradeName = getTradeNameFromUrl(url).replace('/:id', '/delete');
     return commonRequest<DeleteDataResponse>({
       tradeName,
-      params: { id }
+      params: { id },
     });
   },
 
@@ -68,6 +85,6 @@ export const dynamicApi = {
     list: `/menu/${menuId}/data`,
     create: `/menu/${menuId}/data`,
     update: `/menu/${menuId}/data`,
-    delete: `/menu/${menuId}/data`
-  })
+    delete: `/menu/${menuId}/data`,
+  }),
 };

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
 import { MenuItem, MenuConfig } from '../types/MenuConfig';
-import { menuApi } from '../api/menu';
+import { apiService } from '../services/apiService';
 import { ErrorHandler } from '../utils/errorHandler';
 
 const findMenuBy = (menus: MenuItem[], predicate: (menu: MenuItem) => boolean): MenuItem | null => {
@@ -14,83 +15,81 @@ const findMenuBy = (menus: MenuItem[], predicate: (menu: MenuItem) => boolean): 
   return null;
 };
 
-export const useMenuStore = defineStore('menu', {
-  state: () => ({
-    menuConfig: { items: [] } as MenuConfig,
-    currentMenu: null as MenuItem | null,
-    loading: false,
-    error: null as string | null,
-    initialized: false
-  }),
-  getters: {
-    getMenuById: (state) => {
+export const useMenuStore = defineStore(
+  'menu',
+  () => {
+    const menuConfig = ref<MenuConfig>({ items: [] });
+    const currentMenu = ref<MenuItem | null>(null);
+    const loading = ref(false);
+    const error = ref<string | null>(null);
+    const initialized = ref(false);
+
+    const getMenuById = computed(() => {
       return (id: string): MenuItem | null => {
-        return findMenuBy(state.menuConfig.items, (menu) => menu.id === id);
+        return findMenuBy(menuConfig.value.items, menu => menu.id === id);
       };
-    },
-    getAllMenus: (state) => {
-      return state.menuConfig.items;
-    }
-  },
-  actions: {
-    async initMenuConfig() {
-      if (this.initialized) return;
-      this.$patch((state) => {
-        state.loading = true;
-        state.error = null;
-      });
+    });
+
+    const getAllMenus = computed(() => {
+      return menuConfig.value.items;
+    });
+
+    async function initMenuConfig() {
+      if (initialized.value) return;
+      loading.value = true;
+      error.value = null;
       try {
-        const res = await menuApi.getMenuConfig();
-        this.$patch((state) => {
-          state.menuConfig = res.data || { items: [] };
-          state.initialized = true;
-        });
-      } catch (error) {
+        const res = await apiService.get('menu/config');
+        menuConfig.value = res.data || { items: [] };
+        initialized.value = true;
+      } catch (err) {
         const errorMessage = '初始化菜单配置失败';
-        this.$patch((state) => {
-          state.error = errorMessage;
-        });
-        ErrorHandler.handleApiError(error, { showMessage: true, logError: true });
+        error.value = errorMessage;
+        ErrorHandler.handleApiError(err, { showMessage: true, logError: true });
       } finally {
-        this.$patch((state) => {
-          state.loading = false;
-        });
+        loading.value = false;
       }
-    },
-    async fetchMenuByPath(path: string) {
-      this.$patch((state) => {
-        state.loading = true;
-        state.error = null;
-      });
+    }
+
+    async function fetchMenuByPath(path: string) {
+      loading.value = true;
+      error.value = null;
       try {
-        const res = await menuApi.getMenuByPath(path);
+        const res = await apiService.get('menu/detail', { path });
         const menu = res.data.menu;
         if (menu && menu.tableConfig && !menu.tableConfig.data) {
           menu.tableConfig = {
             ...menu.tableConfig,
-            data: []
+            data: [],
           };
         }
-        this.$patch((state) => {
-          state.currentMenu = menu;
-        });
-      } catch (error) {
+        currentMenu.value = menu;
+      } catch (err) {
         const errorMessage = '获取菜单数据失败';
-        this.$patch((state) => {
-          state.error = errorMessage;
-        });
-        ErrorHandler.handleApiError(error, { showMessage: true, logError: true });
+        error.value = errorMessage;
+        ErrorHandler.handleApiError(err, { showMessage: true, logError: true });
       } finally {
-        this.$patch((state) => {
-          state.loading = false;
-        });
+        loading.value = false;
       }
-    },
+    }
 
+    return {
+      menuConfig,
+      currentMenu,
+      loading,
+      error,
+      initialized,
+      getMenuById,
+      getAllMenus,
+      initMenuConfig,
+      fetchMenuByPath,
+    };
   },
-  persist: {
-    key: 'menu-store',
-    storage: localStorage,
-    paths: ['menuConfig']
+  {
+    persist: {
+      key: 'menu-store',
+      storage: localStorage,
+      paths: ['menuConfig'],
+    },
   }
-});
+);

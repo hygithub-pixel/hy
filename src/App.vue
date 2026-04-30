@@ -1,5 +1,5 @@
 <template>
-  <div aria-live="polite" class="sr-only-live-region" id="live-region"></div>
+  <div id="live-region" aria-live="polite" class="sr-only-live-region"></div>
   <router-view v-slot="{ Component }">
     <component :is="Component" />
   </router-view>

@@ -45,8 +45,15 @@ export interface FormComponent {
   vIf?: string;
 }
 
+export interface FormDataProcessing {
+  input?: Record<string, any>;
+  output?: Record<string, any>;
+}
+
+export type FormItemType = 'input' | 'textarea' | 'select' | 'date' | 'switch' | 'upload' | 'richText' | 'component' | 'radio' | 'checkbox' | 'number' | 'password' | 'text';
+
 export interface FormItem {
-  type: 'upload' | 'richText' | 'component';
+  type: FormItemType;
   label: string;
   field: string;
   value?: unknown;
@@ -59,6 +66,7 @@ export interface FormItem {
   vShow?: string;
   vIf?: string;
   children?: FormItem[];
+  dataProcessing?: FormDataProcessing;
 }
 
 export interface FormConfig {
@@ -69,5 +77,14 @@ export interface FormConfig {
   size?: 'large' | 'default' | 'small';
 }
 
-export type FormFieldValue = string | number | boolean | Date | string[] | number[] | File | null | undefined;
+export type FormFieldValue =
+  | string
+  | number
+  | boolean
+  | Date
+  | string[]
+  | number[]
+  | File
+  | null
+  | undefined;
 export type FormData = Record<string, FormFieldValue>;

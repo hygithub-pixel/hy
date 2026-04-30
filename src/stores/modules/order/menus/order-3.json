@@ -2,14 +2,14 @@
   "id": "order-3",
   "path": "/refunds",
   "title": "退款管理",
-  "icon": "Refresh",
+  "icon": "SyncOutlined",
   "api": {
     "query": "order-3-query"
   },
   "formConfig": {
     "items": [
       {
-        "type": "component",
+        "type": "input",
         "label": "退款编号",
         "field": "refundNo",
         "placeholder": "请输入退款编号",
@@ -19,11 +19,10 @@
             "message": "请输入退款编号",
             "trigger": "blur"
           }
-        ],
-        "component": "el-input"
+        ]
       },
       {
-        "type": "component",
+        "type": "select",
         "label": "退款状态",
         "field": "status",
         "placeholder": "请选择退款状态",
@@ -51,11 +50,10 @@
             "message": "请选择退款状态",
             "trigger": "change"
           }
-        ],
-        "component": "el-select"
+        ]
       },
       {
-        "type": "component",
+        "type": "input",
         "label": "退款原因",
         "field": "reason",
         "placeholder": "请输入退款原因",
@@ -65,11 +63,10 @@
             "message": "请输入退款原因",
             "trigger": "blur"
           }
-        ],
-        "component": "el-input"
+        ]
       },
       {
-        "type": "component",
+        "type": "input",
         "label": "退款金额",
         "field": "amount",
         "placeholder": "请输入退款金额",
@@ -84,8 +81,7 @@
             "message": "请输入正确的金额格式",
             "trigger": "blur"
           }
-        ],
-        "component": "el-input"
+        ]
       }
     ]
   },
@@ -94,20 +90,17 @@
       {
         "type": "index",
         "prop": "index",
-        "label": "序号",
-        "width": 80
+        "label": "序号"
       },
       {
         "type": "text",
         "prop": "refundNo",
-        "label": "退款编号",
-        "width": 180
+        "label": "退款编号"
       },
       {
         "type": "text",
         "prop": "status",
-        "label": "退款状态",
-        "width": 120
+        "label": "退款状态"
       },
       {
         "type": "text",
@@ -118,24 +111,22 @@
       {
         "type": "text",
         "prop": "amount",
-        "label": "退款金额",
-        "width": 140
+        "label": "退款金额"
       },
       {
         "type": "actions",
         "prop": "actions",
         "label": "操作",
-        "width": 180,
         "actions": [
           {
             "label": "处理",
             "type": "primary",
-            "handler": "() => {}"
+            "id": "edit"
           },
           {
             "label": "删除",
             "type": "danger",
-            "handler": "() => {}"
+            "id": "delete"
           }
         ]
       }

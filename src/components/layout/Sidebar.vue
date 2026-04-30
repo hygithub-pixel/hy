@@ -1,52 +1,51 @@
 <template>
-  <div class="w-full h-screen bg-white flex flex-col border-r border-slate-200">
-    <div class="h-18 border-b border-slate-200 flex-shrink-0">
-      <div class="flex items-center h-full" :class="sidebarState.collapsed ? 'px-2.5' : 'px-5'">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-500 text-white flex-center flex-shrink-0">
-            <el-icon :size="24">
-              <House />
-            </el-icon>
-          </div>
-          <span v-if="!sidebarState.collapsed" class="text-slate-800 text-lg font-bold">Vue3 Admin</span>
+  <div class="flex flex-col h-screen w-full bg-bg-surface border-r border-border">
+    <div class="flex-shrink-0 h-18 border-b border-border">
+      <div
+        class="flex items-center h-full gap-4 transition-all duration-300"
+        :class="sidebarState.collapsed ? 'px-2 justify-center' : 'px-6'"
+      >
+        <div
+          class="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-primary to-primary-light rounded-md text-white flex-shrink-0"
+        >
+          <HomeOutlined :style="{ fontSize: '24px' }" />
         </div>
+        <span
+          v-if="!sidebarState.collapsed"
+          class="text-lg font-bold text-text-primary whitespace-nowrap"
+          >Vue3 Admin</span
+        >
       </div>
     </div>
 
-    <div class="flex-1 overflow-y-auto" :key="menuKey">
-      <el-menu
-        ref="menuRef"
-        :default-active="activeMenu"
-        :default-openeds="openedMenus"
-        :collapse="sidebarState.collapsed"
-        :unique-opened="true"
-        router
-        background-color="transparent"
-        text-color="#475569"
-        active-text-color="#6366f1"
+    <div :key="menuKey" class="flex-1 overflow-y-auto overflow-x-hidden p-2">
+      <a-menu
+        mode="inline"
+        :selected-keys="[activeMenu]"
+        :open-keys="openedMenus"
+        :inline-collapsed="sidebarState.collapsed"
+        :trigger-subMenuAction="'click'"
       >
-        <el-menu-item index="/dashboard">
-          <el-icon aria-hidden="true"><House /></el-icon>
-          <template #title>仪表盘</template>
-        </el-menu-item>
+        <a-menu-item key="/dashboard">
+          <template #icon><HomeOutlined /></template>
+          <router-link to="/dashboard">仪表盘</router-link>
+        </a-menu-item>
 
         <template v-for="menu in menuStore.getAllMenus" :key="menu.id">
-          <el-sub-menu v-if="menu.children && menu.children.length > 0" :index="menu.path">
-            <template #title>
-              <el-icon aria-hidden="true"><component :is="getIconComponent(menu.icon)" /></el-icon>
-              <span>{{ menu.title }}</span>
-            </template>
-            <el-menu-item v-for="child in menu.children" :key="child.id" :index="child.path">
-              <el-icon aria-hidden="true"><component :is="getIconComponent(child.icon)" /></el-icon>
-              <template #title>{{ child.title }}</template>
-            </el-menu-item>
-          </el-sub-menu>
-          <el-menu-item v-else :index="menu.path">
-            <el-icon aria-hidden="true"><component :is="getIconComponent(menu.icon)" /></el-icon>
+          <a-sub-menu v-if="menu.children && menu.children.length > 0" :key="menu.path">
+            <template #icon><component :is="getIconComponent(menu.icon)" /></template>
             <template #title>{{ menu.title }}</template>
-          </el-menu-item>
+            <a-menu-item v-for="child in menu.children" :key="child.id">
+              <template #icon><component :is="getIconComponent(child.icon)" /></template>
+              <router-link :to="child.path">{{ child.title }}</router-link>
+            </a-menu-item>
+          </a-sub-menu>
+          <a-menu-item v-else :key="menu.path">
+            <template #icon><component :is="getIconComponent(menu.icon)" /></template>
+            <router-link :to="menu.path">{{ menu.title }}</router-link>
+          </a-menu-item>
         </template>
-      </el-menu>
+      </a-menu>
     </div>
   </div>
 </template>
@@ -54,14 +53,26 @@
 <script setup lang="ts">
 import { useMenuStore } from '../../stores/menuStore';
 import {
-  House, UserFilled, Goods, List, CollectionTag,
-  Document, Money, Wallet, TrendCharts, Refresh, FolderOpened,
-  Picture, ChatDotRound, DataLine, Box, Menu
-} from '@element-plus/icons-vue';
+  HomeOutlined,
+  UserOutlined,
+  ShoppingOutlined,
+  UnorderedListOutlined,
+  TagOutlined,
+  FileTextOutlined,
+  DollarOutlined,
+  WalletOutlined,
+  LineChartOutlined,
+  SyncOutlined,
+  FolderOpenOutlined,
+  PictureOutlined,
+  MessageOutlined,
+  DotChartOutlined,
+  AppstoreOutlined,
+  MenuOutlined,
+} from '@ant-design/icons-vue';
 
 const sidebarState = inject('sidebarState', { collapsed: false, toggleSidebar: () => {} });
 
-const menuRef = ref();
 const route = useRoute();
 const menuStore = useMenuStore();
 const openedMenus = ref<string[]>([]);
@@ -71,11 +82,32 @@ const activeMenu = computed(() => route.path);
 
 const getIconComponent = (iconName?: string) => {
   const iconMap: Record<string, any> = {
-    Menu, UserFilled, Goods, List, CollectionTag,
-    Document, Money, Wallet, TrendCharts, Refresh, FolderOpened,
-    Picture, ChatDotRound, DataLine, Box, House
+    MenuOutlined,
+    UserOutlined,
+    ShoppingOutlined,
+    UnorderedListOutlined,
+    TagOutlined,
+    FileTextOutlined,
+    DollarOutlined,
+    WalletOutlined,
+    LineChartOutlined,
+    SyncOutlined,
+    FolderOpenOutlined,
+    PictureOutlined,
+    MessageOutlined,
+    DotChartOutlined,
+    AppstoreOutlined,
+    HomeOutlined,
   };
-  return iconName ? iconMap[iconName] || Menu : Menu;
+
+  if (!iconName) return MenuOutlined;
+
+  const normalizedName = iconName
+    .replace(/Outlined$/, 'Outlined')
+    .replace(/Filled$/, 'Filled')
+    .replace(/TwoTone$/, 'TwoTone');
+
+  return iconMap[normalizedName] || iconMap[iconName] || MenuOutlined;
 };
 
 onMounted(async () => {
@@ -89,32 +121,3 @@ watch(
   }
 );
 </script>
-
-<style scoped>
-/* 触摸交互优化 */
-.el-menu {
-  touch-action: manipulation;
-}
-
-.el-menu-item {
-  touch-action: manipulation;
-}
-
-.el-sub-menu {
-  touch-action: manipulation;
-}
-
-/* 焦点状态样式 */
-.el-menu-item:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
-}
-
-.el-sub-menu:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
-}
-
-</style>

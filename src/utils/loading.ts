@@ -1,32 +1,25 @@
-import { ElLoading } from 'element-plus';
-import type { LoadingInstance } from 'element-plus/es/components/loading/src/loading';
+import { Spin } from 'ant-design-vue';
 
-let loadingInstance: LoadingInstance | null = null;
+let loadingInstance: any = null;
 let loadingCount = 0;
 
-export const showLoading = (text = '加载中...') => {
+export const showLoading = () => {
   loadingCount++;
   if (!loadingInstance) {
-    loadingInstance = ElLoading.service({
-      lock: true,
-      text,
-      background: 'rgba(0, 0, 0, 0.7)'
+    loadingInstance = Spin.setDefaultIndicator({
+      indicator: () => {
+        return 'loading...';
+      },
     });
   }
 };
 
 export const hideLoading = () => {
   loadingCount--;
-  if (loadingCount <= 0 && loadingInstance) {
-    try {
-      loadingInstance.close();
-    } catch (error) {
-      console.error('关闭 loading 失败:', error);
-    }
+  if (loadingCount <= 0) {
     loadingInstance = null;
     loadingCount = 0;
   }
-  // 确保 loadingCount 不会为负数
   if (loadingCount < 0) {
     loadingCount = 0;
   }

@@ -2,14 +2,14 @@
   "id": "product-3",
   "path": "/inventory",
   "title": "库存管理",
-  "icon": "Box",
+  "icon": "AppstoreOutlined",
   "api": {
     "query": "product-3-query"
   },
   "formConfig": {
     "items": [
       {
-        "type": "component",
+        "type": "input",
         "label": "商品名称",
         "field": "productName",
         "placeholder": "请输入商品名称",
@@ -19,11 +19,10 @@
             "message": "请输入商品名称",
             "trigger": "blur"
           }
-        ],
-        "component": "el-input"
+        ]
       },
       {
-        "type": "component",
+        "type": "input",
         "label": "库存数量",
         "field": "quantity",
         "placeholder": "请输入库存数量",
@@ -38,11 +37,10 @@
             "message": "请输入正确的数量格式",
             "trigger": "blur"
           }
-        ],
-        "component": "el-input"
+        ]
       },
       {
-        "type": "component",
+        "type": "select",
         "label": "仓库",
         "field": "warehouse",
         "placeholder": "请选择仓库",
@@ -66,11 +64,10 @@
             "message": "请选择仓库",
             "trigger": "change"
           }
-        ],
-        "component": "el-select"
+        ]
       },
       {
-        "type": "component",
+        "type": "date",
         "label": "入库日期",
         "field": "entryDate",
         "placeholder": "选择入库日期",
@@ -80,11 +77,7 @@
             "message": "请选择入库日期",
             "trigger": "change"
           }
-        ],
-        "component": "el-date-picker",
-        "props": {
-          "type": "date"
-        }
+        ]
       }
     ]
   },
@@ -93,49 +86,42 @@
       {
         "type": "index",
         "prop": "index",
-        "label": "序号",
-        "width": 80
+        "label": "序号"
       },
       {
         "type": "text",
         "prop": "productName",
-        "label": "商品名称",
-        "width": 180
+        "label": "商品名称"
       },
       {
         "type": "text",
         "prop": "quantity",
-        "label": "库存数量",
-        "width": 120
+        "label": "库存数量"
       },
       {
         "type": "text",
         "prop": "warehouse",
-        "label": "仓库",
-        "width": 120
+        "label": "仓库"
       },
       {
-        "type": "component",
+        "type": "date",
         "prop": "entryDate",
-        "label": "入库日期",
-        "width": 180,
-        "component": "el-date-picker"
+        "label": "入库日期"
       },
       {
         "type": "actions",
         "prop": "actions",
         "label": "操作",
-        "width": 180,
         "actions": [
           {
             "label": "编辑",
             "type": "primary",
-            "handler": "() => {}"
+            "id": "edit"
           },
           {
             "label": "删除",
             "type": "danger",
-            "handler": "() => {}"
+            "id": "delete"
           }
         ]
       }

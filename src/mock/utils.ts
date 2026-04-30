@@ -10,7 +10,7 @@ export const successResponse = <T>(data: T, message = '操作成功') => {
   return {
     code: 0,
     data,
-    message
+    message,
   };
 };
 
@@ -18,7 +18,7 @@ export const errorResponse = (message = '操作失败', code = 500) => {
   return {
     code,
     data: null,
-    message
+    message,
   };
 };
 

@@ -2,8 +2,8 @@
 
 // 按需加载富文本编辑器
 export const loadWangEditor = async () => {
-  const { createEditor } = await import('@wangeditor/editor') as any;
-  const { Editor, Toolbar } = await import('@wangeditor/editor-for-vue') as any;
+  const { createEditor } = (await import('@wangeditor/editor')) as any;
+  const { Editor, Toolbar } = (await import('@wangeditor/editor-for-vue')) as any;
   return { createEditor, Editor, Toolbar };
 };
 
@@ -11,12 +11,6 @@ export const loadWangEditor = async () => {
 export const loadXLSX = async () => {
   const XLSX = await import('xlsx');
   return XLSX;
-};
-
-// 按需加载Element Plus组件（如果需要）
-export const loadElementPlus = async () => {
-  const ElementPlus = await import('element-plus');
-  return ElementPlus;
 };
 
 // 按需加载大组件

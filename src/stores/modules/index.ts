@@ -11,7 +11,7 @@ export {
   financeModuleMenus,
   orderModuleMenus,
   productModuleMenus,
-  userModuleMenus
+  userModuleMenus,
 };
 
 // 导出所有菜单的集合（可选，方便统一使用）
@@ -20,5 +20,5 @@ export const allModuleMenus = [
   ...financeModuleMenus,
   ...orderModuleMenus,
   ...productModuleMenus,
-  ...userModuleMenus
+  ...userModuleMenus,
 ];

@@ -1,36 +1,40 @@
-import { ElMessageBox, ElMessage } from 'element-plus';
+import { message, Modal } from 'ant-design-vue';
 
 export const showMessage = {
-  success: (message: string) => {
-    ElMessage.success(message);
+  success: (msg: string) => {
+    message.success(msg);
   },
-  error: (message: string) => {
-    ElMessage.error(message);
+  error: (msg: string) => {
+    message.error(msg);
   },
-  warning: (message: string) => {
-    ElMessage.warning(message);
+  warning: (msg: string) => {
+    message.warning(msg);
   },
-  info: (message: string) => {
-    ElMessage.info(message);
-  }
+  info: (msg: string) => {
+    message.info(msg);
+  },
 };
 
 export const showConfirm = async (
-  message: string,
+  msg: string,
   title: string = '提示',
   confirmText: string = '确定',
   cancelText: string = '取消'
 ): Promise<boolean> => {
-  try {
-    await ElMessageBox.confirm(message, title, {
-      confirmButtonText: confirmText,
-      cancelButtonText: cancelText,
-      type: 'warning'
+  return new Promise((resolve) => {
+    Modal.confirm({
+      title: title,
+      content: msg,
+      okText: confirmText,
+      cancelText: cancelText,
+      onOk() {
+        resolve(true);
+      },
+      onCancel() {
+        resolve(false);
+      },
     });
-    return true;
-  } catch {
-    return false;
-  }
+  });
 };
 
 export default showMessage;
