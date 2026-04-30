@@ -1,101 +1,98 @@
 <template>
-  <div class="form-wrapper">
-    <div v-if="hasDraft && !isRestored" class="draft-notice mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-      <div class="flex-between">
-        <div class="flex-start gap-2">
-          <el-icon class="text-yellow-600"><Warning /></el-icon>
-          <span class="text-yellow-800">检测到未保存的草稿（{{ formatDraftTime(draftSavedAt) }}）</span>
+  <div>
+    <div
+      v-if="hasDraft && !isRestored"
+      class="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg"
+    >
+      <div class="flex justify-between items-center">
+        <div class="flex items-center gap-2">
+          <WarningOutlined class="text-yellow-600" />
+          <span class="text-yellow-800"
+            >检测到未保存的草稿（{{ formatDraftTime(draftSavedAt) }}）</span
+          >
         </div>
-        <div class="flex-end gap-2">
-          <el-button size="small" @click="restoreDraft">恢复草稿</el-button>
-          <el-button size="small" type="danger" @click="clearDraft">丢弃草稿</el-button>
+        <div class="flex items-center gap-2">
+          <a-button size="small" @click="restoreDraft">恢复草稿</a-button>
+          <a-button size="small" danger @click="clearDraft">丢弃草稿</a-button>
         </div>
       </div>
     </div>
 
-    <el-form
+    <a-form
       ref="formRef"
       :model="formData"
       :rules="formRules"
-      :label-position="config.labelPosition || 'top'"
-      :size="config.size || 'large'"
-      :validate-on-rule-change="false"
-      @validate="handleValidation"
+      :label-col="{ span: config.labelPosition === 'left' ? 6 : 24 }"
+      :wrapper-col="{ span: config.labelPosition === 'left' ? 18 : 24 }"
+      class="w-full"
     >
       <template v-for="item in config.items" :key="item.field">
-        <el-form-item
-          v-if="shouldShowFormItem(item) && !item.children"
-          :label="item.label"
-          :prop="item.field"
-          :rules="getItemRules(item)"
-          v-show="evaluateExpression(item.vShow)"
-          :validate-event="true"
-        >
-          <component
-            :is="getComponentName(item)"
-            v-bind="getComponentProps(item)"
-            v-model="formData[item.field]"
-            v-show="evaluateExpression(item.vShow)"
-            v-if="evaluateExpression(item.vIf)"
-            :aria-label="item.label"
+        <template v-if="shouldShowFormItem(item) && !item.children">
+          <a-form-item
+            :label="item.label"
+            :name="item.field"
+            :rules="getItemRules(item)"
           >
-            <template v-if="item.type === 'upload'" #default>
-              <el-icon class="el-icon--upload"><Upload /></el-icon>
-              <div class="el-upload__text">
-                将文件拖到此处，或<em>点击上传</em>
-              </div>
-            </template>
-          </component>
-        </el-form-item>
-        
-        <div
-          v-else-if="item.children && shouldShowFormItem(item)"
-          v-show="evaluateExpression(item.vShow)"
-          v-if="evaluateExpression(item.vIf)"
-          class="nested-form-item"
-        >
-          <div class="text-lg font-medium mb-2">{{ item.label }}</div>
-          <div class="pl-4 border-l-2 border-gray-200">
-            <template v-for="subItem in item.children" :key="subItem.field">
-              <el-form-item
-                v-show="shouldShowFormItem(subItem) && evaluateExpression(subItem.vShow)"
-                v-if="evaluateExpression(subItem.vIf)"
-                :label="subItem.label"
-                :prop="subItem.field"
-                :rules="getItemRules(subItem)"
-                :validate-event="true"
-              >
-                <component
-                  :is="getComponentName(subItem)"
-                  v-bind="getComponentProps(subItem)"
-                  v-model="formData[subItem.field]"
-                  v-show="evaluateExpression(subItem.vShow)"
-                  v-if="evaluateExpression(subItem.vIf)"
-                  :aria-label="subItem.label"
+            <component
+              :is="getComponent(item)"
+              v-model:value="formData[item.field]"
+              v-bind="getComponentProps(item)"
+            >
+              <template v-if="item.type === 'select' && item.options">
+                <a-select-option
+                  v-for="option in item.options"
+                  :key="String(option.value)"
+                  :value="option.value"
                 >
-                  <template v-if="subItem.type === 'upload'" #default>
-                    <el-icon class="el-icon--upload"><Upload /></el-icon>
-                    <div class="el-upload__text">
-                      将文件拖到此处，或<em>点击上传</em>
-                    </div>
-                  </template>
-                </component>
-              </el-form-item>
-            </template>
+                  {{ option.label }}
+                </a-select-option>
+              </template>
+            </component>
+          </a-form-item>
+        </template>
+
+        <template v-else-if="item.children && shouldShowFormItem(item)">
+          <div class="my-5 p-4 bg-slate-50 rounded-lg border border-slate-200">
+            <div class="text-lg font-medium mb-2">{{ item.label }}</div>
+            <div class="pl-4 border-l-2 border-gray-200">
+              <template v-for="subItem in item.children" :key="subItem.field">
+                <a-form-item
+                  v-show="shouldShowFormItem(subItem)"
+                  :label="subItem.label"
+                  :name="subItem.field"
+                  :rules="getItemRules(subItem)"
+                >
+                  <component
+                    :is="getComponent(subItem)"
+                    v-model:value="formData[subItem.field]"
+                    v-bind="getComponentProps(subItem)"
+                  >
+                    <template v-if="subItem.type === 'select' && subItem.options">
+                      <a-select-option
+                        v-for="option in subItem.options"
+                        :key="String(option.value)"
+                        :value="option.value"
+                      >
+                        {{ option.label }}
+                      </a-select-option>
+                    </template>
+                  </component>
+                </a-form-item>
+              </template>
+            </div>
           </div>
-        </div>
+        </template>
       </template>
-    </el-form>
+    </a-form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Upload, Warning } from '@element-plus/icons-vue';
+import { WarningOutlined } from '@ant-design/icons-vue';
 import { FormConfig, FormData, FormItem, FormFieldValue } from '../../types/FormConfig';
-import { uploadApi } from '../../api/uploadApi';
 import { debounceWithCancel } from '../../utils/debounceThrottle';
 import { buildValidationRule } from '../../utils/validationRules';
-import type { FormInstance, FormRules, FormItemProp } from 'element-plus';
+import type { Rule } from 'ant-design-vue/lib/form';
 
 const props = defineProps<{
   config: FormConfig;
@@ -109,23 +106,72 @@ const emit = defineEmits<{
   (e: 'draft-saved', data: FormData): void;
 }>();
 
-const formRef = ref<FormInstance | null>(null);
-const formData = ref<FormData>({});
+const formRef = ref();
+const formData = ref<Record<string, any>>({});
 const draftData = ref<FormData | null>(null);
 const draftSavedAt = ref<number | null>(null);
 const isRestored = ref(false);
+const isMounted = ref(false);
 
-const draftKey = computed(() => props.draftKey || `form-draft-${props.config.items.map(i => i.field).join('-')}`);
+const draftKey = computed(
+  () => props.draftKey || `form-draft-${props.config.items.map(i => i.field).join('-')}`
+);
 const hasDraft = computed(() => draftData.value !== null);
+
+const componentMap: Record<string, string> = {
+  // 文本输入类
+  input: 'a-input',
+  text: 'a-input',
+  password: 'a-input-password',
+  number: 'a-input-number',
+  email: 'a-input',
+  tel: 'a-input',
+  url: 'a-input',
+  
+  // 文本域类
+  textarea: 'a-textarea',
+  
+  // 选择类
+  select: 'a-select',
+  multiSelect: 'a-select',
+  radio: 'a-radio-group',
+  checkbox: 'a-checkbox-group',
+  switch: 'a-switch',
+  
+  // 日期时间类
+  date: 'a-date-picker',
+  datetime: 'a-date-picker',
+  dateTime: 'a-date-picker',
+  time: 'a-time-picker',
+  dateRange: 'a-range-picker',
+  
+  // 文件上传类
+  upload: 'a-upload',
+  image: 'a-upload',
+  imageUpload: 'a-upload',
+  
+  // 特殊组件
+  cascader: 'a-cascader',
+  treeSelect: 'a-tree-select',
+  slider: 'a-slider',
+  rate: 'a-rate',
+  autoComplete: 'a-auto-complete',
+};
 
 const initializeFormData = (items: FormItem[], initialData: FormData) => {
   items.forEach(item => {
     if (item.value !== undefined) {
       initialData[item.field] = item.value as FormFieldValue;
-    } else if (!initialData[item.field]) {
-      initialData[item.field] = '';
+    } else if (initialData[item.field] === undefined) {
+      if (item.type === 'switch') {
+        initialData[item.field] = false;
+      } else if (item.type === 'select' && item.options && item.options.length > 0) {
+        initialData[item.field] = item.options[0].value;
+      } else {
+        initialData[item.field] = '';
+      }
     }
-    
+
     if (item.children) {
       initializeFormData(item.children, initialData);
     }
@@ -139,10 +185,10 @@ const createInitialFormData = () => {
 };
 
 const formRules = computed(() => {
-  const rules: FormRules = {};
+  const rules: Record<string, Rule[]> = {};
   props.config.items.forEach(item => {
     if (item.rules) {
-      rules[item.field] = item.rules;
+      rules[item.field] = item.rules.map(rule => buildValidationRule(rule) as Rule);
     }
   });
   return rules;
@@ -150,14 +196,14 @@ const formRules = computed(() => {
 
 const getItemRules = (item: FormItem) => {
   if (!item.rules) return undefined;
-  return item.rules.map(rule => buildValidationRule(rule));
+  return item.rules.map(rule => buildValidationRule(rule) as Rule);
 };
 
 const shouldShowFormItem = (item: FormItem): boolean => {
   if (!item.dependencies || item.dependencies.length === 0) {
     return true;
   }
-  
+
   return item.dependencies.some(dep => {
     const fieldValue = formData.value[dep.field] as string | number | undefined;
     if (dep.condition === 'equal') {
@@ -165,94 +211,92 @@ const shouldShowFormItem = (item: FormItem): boolean => {
     } else if (dep.condition === 'notEqual') {
       return fieldValue !== dep.values[0];
     } else if (dep.condition === 'contains') {
-      return Array.isArray(dep.values) && fieldValue !== undefined && dep.values.includes(fieldValue as string | number);
-    } else if (dep.condition === 'notContains') {
-      return Array.isArray(dep.values) && fieldValue !== undefined && !dep.values.includes(fieldValue as string | number);
+      return (
+        Array.isArray(dep.values) &&
+        fieldValue !== undefined &&
+        dep.values.includes(fieldValue as string | number)
+      );
     }
     return true;
   });
 };
 
-const evaluateExpression = (expression?: string): boolean => {
-  if (!expression) return true;
-  try {
-    return new Function('formData', `return (${expression})`)(formData.value);
-  } catch (error) {
-    console.error('表达式评估错误:', error);
-    return true;
-  }
-};
-
-const getComponentName = (item: FormItem): string => {
+const getComponent = (item: FormItem) => {
   if (item.type === 'component' && item.component) {
     if (typeof item.component === 'string') {
-      return props.config.components?.[item.component] || item.component;
-    } else {
-      return props.config.components?.[item.component.type] || item.component.type;
+      return item.component;
     }
+    return item.component.type;
   }
-  if (item.type === 'upload') {
-    return 'el-upload';
-  } else if (item.type === 'richText') {
-    return 'el-input';
-  }
-  return 'el-input';
+  return componentMap[item.type] || 'a-input';
 };
 
 const getComponentProps = (item: FormItem): Record<string, any> => {
-  const props: Record<string, any> = { ...(item.props || {}) };
-  
+  const baseProps: Record<string, any> = {
+    placeholder: item.placeholder,
+  };
+
   if (item.type === 'upload') {
     return {
-      ...props,
-      action: '',
-      'http-request': (params: any) => handleUpload(params, item.field),
-      multiple: props.multiple || false,
-      limit: props.maxCount || 1,
-      'show-file-list': props.showFileList !== false,
-      'auto-upload': props.autoUpload !== false,
-      drag: true
+      ...baseProps,
+      'max-count': 1,
+      'show-upload-list': true,
     };
-  } else if (item.type === 'richText') {
+  } else if (item.type === 'textarea') {
     return {
-      ...props,
-      placeholder: item.placeholder,
-      type: 'textarea',
-      rows: 4
+      ...baseProps,
+      rows: 4,
     };
-  } else if (item.type === 'component' && item.component && typeof item.component !== 'string' && item.component.props) {
-    return { ...item.component.props };
+  } else if (item.type === 'date') {
+    return {
+      ...baseProps,
+      class: 'w-full',
+    };
   }
-  
-  return props;
+
+  return baseProps;
 };
 
-const formatDraftTime = (timestamp: number | null) => {
+const formatDraftTime = (timestamp: number | null): string => {
   if (!timestamp) return '';
   const date = new Date(timestamp);
-  return date.toLocaleString('zh-CN');
+  if (isNaN(date.getTime())) return '';
+  return new Intl.DateTimeFormat('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  }).format(date);
 };
 
 const saveDraft = debounceWithCancel(() => {
-  if (!props.enableAutoSave) return;
-  localStorage.setItem(draftKey.value, JSON.stringify({
-    data: formData.value,
-    savedAt: Date.now()
-  }));
-  draftSavedAt.value = Date.now();
-  emit('draft-saved', formData.value);
+  if (!props.enableAutoSave || !isMounted.value) return;
+  try {
+    localStorage.setItem(
+      draftKey.value,
+      JSON.stringify({
+        data: formData.value,
+        savedAt: Date.now(),
+      })
+    );
+    draftSavedAt.value = Date.now();
+    emit('draft-saved', formData.value);
+  } catch (error) {
+    console.warn('保存草稿失败:', error);
+  }
 }, 2000);
 
 const loadDraft = () => {
-  const saved = localStorage.getItem(draftKey.value);
-  if (saved) {
-    try {
+  try {
+    const saved = localStorage.getItem(draftKey.value);
+    if (saved) {
       const parsed = JSON.parse(saved);
       draftData.value = parsed.data;
       draftSavedAt.value = parsed.savedAt;
-    } catch {
-      clearDraft();
     }
+  } catch {
+    clearDraft();
   }
 };
 
@@ -260,115 +304,74 @@ const restoreDraft = () => {
   if (draftData.value) {
     formData.value = { ...draftData.value };
     isRestored.value = true;
-    ElMessage.success('草稿已恢复');
   }
 };
 
 const clearDraft = () => {
-  localStorage.removeItem(draftKey.value);
+  try {
+    localStorage.removeItem(draftKey.value);
+  } catch {
+    // ignore
+  }
   draftData.value = null;
   draftSavedAt.value = null;
-  ElMessage.info('草稿已丢弃');
 };
 
 const validateForm = async (): Promise<boolean> => {
-  if (formRef.value) {
-    try {
-      await formRef.value.validate();
-      return true;
-    } catch (error) {
-      return false;
+  if (!formRef.value) return false;
+  try {
+    await formRef.value.validate();
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+watch(
+  formData,
+  () => {
+    if (props.enableAutoSave && isMounted.value) {
+      saveDraft();
+    }
+  },
+  { deep: true }
+);
+
+watch(
+  () => props.initialData,
+  newData => {
+    if (newData) {
+      initializeFormData(props.config.items, newData);
+      formData.value = newData;
     }
   }
-  return false;
-};
-
-const handleUpload = async (params: any, field: string) => {
-  const file = params.file;
-  try {
-    const response = await uploadApi.uploadFile(file);
-    formData.value[field] = response.data.url;
-    params.onSuccess(response);
-    ElMessage.success('文件上传成功');
-  } catch (error) {
-    console.error('文件上传失败:', error);
-    params.onError(error);
-    ElMessage.error('文件上传失败');
-  }
-};
-
-const handleValidation = (prop: FormItemProp, isValid: boolean, message: string) => {
-  if (isValid) {
-    console.log(`Field ${prop} is valid`);
-  } else {
-    console.log(`Field ${prop} is invalid: ${message}`);
-  }
-};
-
-watch(formData, () => {
-  if (props.enableAutoSave) {
-    saveDraft();
-  }
-}, { deep: true });
-
-watch(() => props.initialData, (newData) => {
-  if (newData) {
-    const updatedData: FormData = { ...newData };
-    initializeFormData(props.config.items, updatedData);
-    formData.value = updatedData;
-  }
-});
-
-defineExpose({
-  validateForm,
-  formData,
-  clearDraft
-});
+);
 
 onMounted(() => {
+  isMounted.value = true;
+  
   if (props.initialData) {
-    const updatedData: FormData = { ...props.initialData };
-    initializeFormData(props.config.items, updatedData);
-    formData.value = updatedData;
+    initializeFormData(props.config.items, props.initialData);
+    formData.value = props.initialData;
   } else {
     formData.value = createInitialFormData();
   }
+  
   if (props.enableAutoSave) {
     loadDraft();
   }
 });
 
 onBeforeUnmount(() => {
-  saveDraft.flush();
+  isMounted.value = false;
+  if (saveDraft.flush) {
+    saveDraft.flush();
+  }
+});
+
+defineExpose({
+  validateForm,
+  formData,
+  clearDraft,
 });
 </script>
-
-<style scoped>
-.nested-form-item {
-  margin: 20px 0;
-  padding: var(--space-md);
-  background-color: var(--bg-muted);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-}
-
-.nested-form-item .nested-form-item {
-  margin: 12px 0;
-  padding: 12px;
-  background-color: var(--bg-muted);
-}
-
-@media (max-width: 768px) {
-  .form-wrapper {
-    padding: 0 12px;
-  }
-  
-  .nested-form-item {
-    padding: 12px;
-  }
-  
-  .nested-form-item .nested-form-item {
-    padding: 8px;
-  }
-}
-</style>
