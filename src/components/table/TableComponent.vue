@@ -41,7 +41,7 @@
 
     <div v-if="props.loading" class="py-10" aria-live="polite">
       <div class="flex flex-col items-center justify-center gap-4">
-        <LoadingOutlined style="font-size: 32px; color: #4f46e5;" spin aria-hidden="true" />
+        <LoadingOutlined style="font-size: 32px; color: var(--ant-primary-color);" spin aria-hidden="true" />
         <span class="text-slate-600">加载中...</span>
         <a-skeleton :rows="5" active class="w-full max-w-2xl" />
       </div>

@@ -20,10 +20,20 @@ const prefersReducedMotion = () => {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 };
 
+const getCSSVariable = (name: string): string => {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+};
+
+const getChartColors = () => {
+  return {
+    primary: getCSSVariable('--ant-primary-color'),
+    success: getCSSVariable('--ant-success-color'),
+  };
+};
+
 const initChart = async () => {
   if (!chartRef.value) return;
 
-  // 确保DOM元素有实际大小
   if (chartRef.value.clientWidth === 0 || chartRef.value.clientHeight === 0) {
     return;
   }
@@ -37,6 +47,8 @@ const initChart = async () => {
   }
 
   chart = echarts.init(chartRef.value);
+
+  const colors = getChartColors();
 
   const months = ['1月', '2月', '3月', '4月', '5月', '6月'];
   const newUsers = [120, 190, 300, 450, 620, 880];
@@ -76,7 +88,7 @@ const initChart = async () => {
         },
         data: newUsers,
         itemStyle: {
-          color: '#5e6ad2',
+          color: colors.primary,
           borderRadius: [4, 4, 0, 0],
         },
       },
@@ -89,7 +101,7 @@ const initChart = async () => {
         },
         data: activeUsers,
         itemStyle: {
-          color: '#10b981',
+          color: colors.success,
           borderRadius: [4, 4, 0, 0],
         },
       },
@@ -106,10 +118,8 @@ const handleResize = () => {
 };
 
 onMounted(async () => {
-  // 尝试初始化图表
   await initChart();
 
-  // 如果图表未初始化（元素尺寸为0），使用ResizeObserver监听尺寸变化
   if (!chart && chartRef.value) {
     const resizeObserver = new ResizeObserver(() => {
       if (chartRef.value && (chartRef.value.clientWidth > 0 || chartRef.value.clientHeight > 0)) {

@@ -93,7 +93,7 @@ onUnmounted(() => {
 /* Skip Link */
 .skip-link:focus {
   top: var(--safe-area-inset-top);
-  outline: 2px solid #fff;
+  outline: 2px solid var(--ant-primary-color);
   outline-offset: 2px;
 }
 

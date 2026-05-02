@@ -20,10 +20,23 @@ const prefersReducedMotion = () => {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 };
 
+const getCSSVariable = (name: string): string => {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+};
+
+const getChartColors = () => {
+  return {
+    primary: getCSSVariable('--ant-primary-color'),
+    success: getCSSVariable('--ant-success-color'),
+    warning: getCSSVariable('--ant-warning-color'),
+    error: getCSSVariable('--ant-error-color'),
+    bgContainer: getCSSVariable('--ant-bg-color-container'),
+  };
+};
+
 const initChart = async () => {
   if (!chartRef.value) return;
 
-  // 确保DOM元素有实际大小
   if (chartRef.value.clientWidth === 0 || chartRef.value.clientHeight === 0) {
     return;
   }
@@ -37,6 +50,8 @@ const initChart = async () => {
   }
 
   chart = echarts.init(chartRef.value);
+
+  const colors = getChartColors();
 
   const option = {
     animation: !prefersReducedMotion(),
@@ -55,7 +70,7 @@ const initChart = async () => {
         avoidLabelOverlap: false,
         itemStyle: {
           borderRadius: 10,
-          borderColor: '#fff',
+          borderColor: colors.bgContainer,
           borderWidth: 2,
         },
         label: {
@@ -73,10 +88,10 @@ const initChart = async () => {
           show: false,
         },
         data: [
-          { value: 35, name: '进行中', itemStyle: { color: '#5e6ad2' } },
-          { value: 45, name: '已完成', itemStyle: { color: '#10b981' } },
-          { value: 15, name: '待处理', itemStyle: { color: '#f59e0b' } },
-          { value: 5, name: '已取消', itemStyle: { color: '#ef4444' } },
+          { value: 35, name: '进行中', itemStyle: { color: colors.primary } },
+          { value: 45, name: '已完成', itemStyle: { color: colors.success } },
+          { value: 15, name: '待处理', itemStyle: { color: colors.warning } },
+          { value: 5, name: '已取消', itemStyle: { color: colors.error } },
         ],
       },
     ],
@@ -92,10 +107,8 @@ const handleResize = () => {
 };
 
 onMounted(async () => {
-  // 尝试初始化图表
   await initChart();
 
-  // 如果图表未初始化（元素尺寸为0），使用ResizeObserver监听尺寸变化
   if (!chart && chartRef.value) {
     const resizeObserver = new ResizeObserver(() => {
       if (chartRef.value && (chartRef.value.clientWidth > 0 || chartRef.value.clientHeight > 0)) {

@@ -24,10 +24,26 @@ const prefersReducedMotion = () => {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 };
 
+const getCSSVariable = (name: string): string => {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+};
+
+const getChartColors = () => {
+  const primary = getCSSVariable('--ant-primary-color');
+  const textSecondary = getCSSVariable('--ant-text-color-secondary');
+  const borderColor = getCSSVariable('--ant-border-color');
+  return {
+    primary,
+    textSecondary,
+    borderColor,
+    primaryAlpha: primary + '80',
+    primaryAlphaLight: primary + '1a',
+  };
+};
+
 const initChart = async () => {
   if (!chartRef.value) return;
 
-  // 确保DOM元素有实际大小
   if (chartRef.value.clientWidth === 0 || chartRef.value.clientHeight === 0) {
     return;
   }
@@ -42,6 +58,7 @@ const initChart = async () => {
 
   chart = echarts.init(chartRef.value);
 
+  const colors = getChartColors();
   const days = parseInt(timeRange.value);
   const dates = [];
   const sales = [];
@@ -60,7 +77,7 @@ const initChart = async () => {
       axisPointer: {
         type: 'cross',
         label: {
-          backgroundColor: '#6a7985',
+          backgroundColor: colors.textSecondary,
         },
       },
     },
@@ -94,20 +111,20 @@ const initChart = async () => {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             {
               offset: 0,
-              color: 'rgba(94, 106, 210, 0.5)',
+              color: colors.primaryAlpha,
             },
             {
               offset: 1,
-              color: 'rgba(94, 106, 210, 0.1)',
+              color: colors.primaryAlphaLight,
             },
           ]),
         },
         lineStyle: {
-          color: '#5e6ad2',
+          color: colors.primary,
           width: 2,
         },
         itemStyle: {
-          color: '#5e6ad2',
+          color: colors.primary,
         },
         emphasis: {
           focus: 'series',
@@ -131,10 +148,8 @@ watch(timeRange, async () => {
 });
 
 onMounted(async () => {
-  // 尝试初始化图表
   await initChart();
 
-  // 如果图表未初始化（元素尺寸为0），使用ResizeObserver监听尺寸变化
   if (!chart && chartRef.value) {
     const resizeObserver = new ResizeObserver(() => {
       if (chartRef.value && (chartRef.value.clientWidth > 0 || chartRef.value.clientHeight > 0)) {

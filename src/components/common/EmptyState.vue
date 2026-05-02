@@ -1,10 +1,10 @@
 <template>
   <div class="flex flex-col items-center justify-center py-12 px-4 text-center">
-    <div class="w-24 h-24 mb-4 flex items-center justify-center rounded-full bg-gray-100">
-      <FileTextOutlined :style="{ fontSize: '48px', color: '#9ca3af' }" />
+    <div class="w-24 h-24 mb-4 flex items-center justify-center rounded-full bg-elevated">
+      <FileTextOutlined style="font-size: 48px; color: var(--ant-text-color-secondary);" />
     </div>
-    <h3 class="text-lg font-semibold text-text-primary mb-2">{{ title }}</h3>
-    <p class="text-text-secondary mb-6 max-w-md">{{ description }}</p>
+    <h3 class="text-lg font-semibold text-base-color mb-2">{{ title }}</h3>
+    <p class="text-secondary mb-6 max-w-md">{{ description }}</p>
     <slot name="actions"></slot>
   </div>
 </template>

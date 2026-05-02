@@ -1,19 +1,19 @@
 <template>
-  <div class="bg-white rounded-lg shadow-md p-4 transition-all hover:shadow-lg">
+  <div class="bg-container rounded-lg p-4 transition-all hover:shadow-lg border border-main">
     <div class="flex items-start gap-4">
       <div
         class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center"
-        :style="{ background: iconBg }"
+        :style="{ background: 'var(--ant-primary-color-outline)' }"
       >
-        <component :is="icon" :style="{ fontSize: '24px', color: iconColor }" />
+        <component :is="icon" :style="{ fontSize: '24px', color: 'var(--ant-primary-color)' }" />
       </div>
       <div class="flex-1">
-        <div class="text-sm text-text-secondary mb-1">{{ title }}</div>
-        <div class="text-2xl font-bold text-text-primary mb-2">
+        <div class="text-sm text-secondary mb-1">{{ title }}</div>
+        <div class="text-2xl font-bold text-base-color mb-2">
           <span v-if="prefix">{{ prefix }}</span>
           {{ value }}
         </div>
-        <div v-if="trend !== undefined" class="flex items-center gap-1 text-sm" :class="trendClass">
+        <div v-if="trend !== undefined" class="flex items-center gap-1 text-sm" :style="{ color: trend > 0 ? 'var(--ant-success-color)' : 'var(--ant-error-color)' }">
           <RiseOutlined />
           {{ Math.abs(trend) }}%
         </div>
@@ -31,19 +31,10 @@ interface StatCardProps {
   value: string | number;
   prefix?: string;
   icon: string | Component;
-  iconBg?: string;
-  iconColor?: string;
   trend?: number;
 }
 
-const props = withDefaults(defineProps<StatCardProps>(), {
+withDefaults(defineProps<StatCardProps>(), {
   prefix: '',
-  iconBg: '#f3f4f6',
-  iconColor: '#6b7280',
-});
-
-const trendClass = computed(() => {
-  if (props.trend === undefined) return '';
-  return props.trend > 0 ? 'text-green-500' : 'text-red-500';
 });
 </script>
