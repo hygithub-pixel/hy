@@ -81,7 +81,7 @@
 
       <a-dropdown :trigger="['click']">
         <button class="flex items-center gap-2 px-2 py-1 rounded-md cursor-pointer transition-all duration-150" aria-label="用户菜单">
-          <a-avatar :size="36" :src="userAvatar">
+          <a-avatar :size="36" :src="userAvatar" class="bg-elevated text-base-color">
             <template #icon><UserOutlined /></template>
           </a-avatar>
           <span class="text-sm font-medium hidden sm:inline text-base-color">{{ userName }}</span>
