@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-between h-16 px-6 border-b">
+  <div class="flex items-center justify-between h-16 px-6 border-b border-main bg-container">
     <div class="flex items-center gap-4 flex-1 min-w-0">
       <a-button
         :type="sidebarState.collapsed ? 'default' : 'text'"
@@ -17,7 +17,7 @@
       </a-breadcrumb>
     </div>
 
-    <div class="hidden lg:block flex-0 w-80 max-w-[400px]">
+    <div class="hidden lg:block flex-0 w-80 max-w-400px">
       <a-input
         v-model:value="searchQuery"
         placeholder="搜索..."
@@ -46,7 +46,7 @@
               </div>
               <div class="flex-1 min-w-0">
                 <div class="text-sm leading-relaxed">任务完成</div>
-                <div class="text-xs text-gray-500 dark:text-gray-400">5分钟前</div>
+                <div class="text-xs text-secondary">5分钟前</div>
               </div>
             </a-menu-item>
             <a-menu-item key="2" class="flex justify-center p-2 font-medium" style="color: var(--ant-primary-color)">
@@ -84,8 +84,8 @@
           <a-avatar :size="36" :src="userAvatar">
             <template #icon><UserOutlined /></template>
           </a-avatar>
-          <span class="text-sm font-medium hidden sm:inline">{{ userName }}</span>
-          <DownOutlined class="text-sm" />
+          <span class="text-sm font-medium hidden sm:inline text-base-color">{{ userName }}</span>
+          <DownOutlined class="text-sm text-secondary" />
         </button>
         <template #overlay>
           <a-menu class="p-1">

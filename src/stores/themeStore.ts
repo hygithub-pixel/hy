@@ -9,8 +9,8 @@ export const useThemeStore = defineStore('theme', () => {
 
   const isDark = computed(() => mode.value === 'dark');
 
-  const antTheme = computed(() => ({
-    token: {
+  const antTheme = computed(() => {
+    const lightToken = {
       colorPrimary: '#5e6ad2',
       colorSuccess: '#10b981',
       colorWarning: '#f59e0b',
@@ -18,10 +18,37 @@ export const useThemeStore = defineStore('theme', () => {
       colorInfo: '#5e6ad2',
       colorTextBase: '#1e293b',
       colorBgBase: '#ffffff',
+      colorBgContainer: '#ffffff',
+      colorBgElevated: '#ffffff',
+      colorBgLayout: '#f8fafc',
+      colorBgPage: '#f8fafc',
+      colorBorder: '#e2e8f0',
+      colorBorderSecondary: '#f1f5f9',
       borderRadius: 6,
-    },
-    algorithm: isDark.value ? theme.darkAlgorithm : undefined,
-  }));
+    };
+
+    const darkToken = {
+      colorPrimary: '#818cf8',
+      colorSuccess: '#34d399',
+      colorWarning: '#fbbf24',
+      colorError: '#f87171',
+      colorInfo: '#818cf8',
+      colorTextBase: '#f1f5f9',
+      colorBgBase: '#1e293b',
+      colorBgContainer: '#1e293b',
+      colorBgElevated: '#334155',
+      colorBgLayout: '#0f172a',
+      colorBgPage: '#0f172a',
+      colorBorder: '#475569',
+      colorBorderSecondary: '#334155',
+      borderRadius: 6,
+    };
+
+    return {
+      token: isDark.value ? darkToken : lightToken,
+      algorithm: isDark.value ? theme.darkAlgorithm : theme.defaultAlgorithm,
+    };
+  });
 
   const toggle = () => {
     mode.value = isDark.value ? 'light' : 'dark';
@@ -45,7 +72,9 @@ export const useThemeStore = defineStore('theme', () => {
   const applyTheme = () => {
     if (isDark.value) {
       document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
     } else {
+      document.documentElement.classList.add('light');
       document.documentElement.classList.remove('dark');
     }
     localStorage.setItem('theme-mode', mode.value);

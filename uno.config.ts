@@ -27,5 +27,11 @@ export default defineConfig({
     ['font-tabular-nums', { 'font-variant-numeric': 'tabular-nums' }],
     ['scrollbar-hide', { 'scrollbar-width': 'none', '-ms-overflow-style': 'none' }],
     ['scrollbar-hide::-webkit-scrollbar', { display: 'none' }],
+    ['bg-page', { 'background-color': 'var(--ant-bg-color-page)' }],
+    ['bg-container', { 'background-color': 'var(--ant-bg-color-container)' }],
+    ['bg-elevated', { 'background-color': 'var(--ant-bg-color-elevated)' }],
+    ['text-base-color', { color: 'var(--ant-text-color)' }],
+    ['text-secondary', { color: 'var(--ant-text-color-secondary)' }],
+    ['border-main', { 'border-color': 'var(--ant-border-color)' }],
   ],
 });

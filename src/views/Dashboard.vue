@@ -1,10 +1,10 @@
 <template>
-  <div class="p-6">
+  <div class="p-6 bg-page min-h-full">
     <a-row :gutter="20" class="mb-6">
       <a-col :span="24">
         <div class="mb-5">
-          <h1 class="m-0 mb-2 text-[28px] font-semibold">仪表盘</h1>
-          <p class="m-0 text-base text-gray-500 dark:text-gray-400">系统运行状态概览</p>
+          <h1 class="m-0 mb-2 text-[28px] font-semibold text-base-color">仪表盘</h1>
+          <p class="m-0 text-base text-secondary">系统运行状态概览</p>
         </div>
       </a-col>
     </a-row>
@@ -17,8 +17,8 @@
               <component :is="metric.icon" style="color: var(--ant-primary-color); font-size: 24px" />
             </div>
             <div class="flex-1">
-              <p class="text-sm mb-1 text-gray-500 dark:text-gray-400">{{ metric.title }}</p>
-              <p class="text-2xl font-bold m-0">
+              <p class="text-sm mb-1 text-secondary">{{ metric.title }}</p>
+              <p class="text-2xl font-bold m-0 text-base-color">
                 <span v-if="metric.prefix">{{ metric.prefix }}</span>
                 {{ metric.value }}
                 <span v-if="metric.suffix">{{ metric.suffix }}</span>
@@ -38,7 +38,7 @@
         <a-card hoverable>
           <template #title>
             <div class="flex justify-between items-center">
-              <span class="text-lg font-semibold">销售额趋势</span>
+              <span class="text-lg font-semibold text-base-color">销售额趋势</span>
               <a-select v-model:value="timeRange" size="small" style="width: 120px">
                 <a-select-option value="7">近7天</a-select-option>
                 <a-select-option value="30">近30天</a-select-option>
@@ -53,7 +53,7 @@
         <a-card hoverable>
           <template #title>
             <div class="flex justify-between items-center">
-              <span class="text-lg font-semibold">订单状态分布</span>
+              <span class="text-lg font-semibold text-base-color">订单状态分布</span>
               <a-button type="link" class="p-0">查看详情</a-button>
             </div>
           </template>
@@ -67,7 +67,7 @@
         <a-card hoverable>
           <template #title>
             <div class="flex justify-between items-center">
-              <span class="text-lg font-semibold">用户增长趋势</span>
+              <span class="text-lg font-semibold text-base-color">用户增长趋势</span>
               <a-button type="link" class="p-0">查看详情</a-button>
             </div>
           </template>
@@ -81,7 +81,7 @@
         <a-card hoverable>
           <template #title>
             <div class="flex justify-between items-center">
-              <span class="text-lg font-semibold">最近订单</span>
+              <span class="text-lg font-semibold text-base-color">最近订单</span>
               <a-button type="link" class="p-0">查看全部</a-button>
             </div>
           </template>
@@ -95,7 +95,7 @@
             </a-table-column>
             <a-table-column key="amount" title="金额" dataIndex="amount" align="right">
               <template #default="{ record }">
-                <span class="font-semibold numeric">¥{{ record.amount.toFixed(2) }}</span>
+                <span class="font-semibold numeric text-base-color">¥{{ record.amount.toFixed(2) }}</span>
               </template>
             </a-table-column>
           </a-table>

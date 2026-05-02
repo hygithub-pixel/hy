@@ -20,8 +20,7 @@
 
       <main
         id="main-content"
-        class="flex-1 overflow-y-auto p-6 sm:p-8"
-        :style="{ backgroundColor: 'var(--ant-bg-color-page)' }"
+        class="flex-1 overflow-y-auto p-6 sm:p-8 bg-page"
         tabindex="-1"
       >
         <router-view v-slot="{ Component, route }">
@@ -142,23 +141,5 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   padding: 40px 0;
-}
-
-/* 滚动条样式 */
-.main-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.main-content::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.main-content::-webkit-scrollbar-thumb {
-  background: var(--ant-border-color);
-  border-radius: 9999px;
-}
-
-.main-content::-webkit-scrollbar-thumb:hover {
-  background: var(--ant-text-color-secondary);
 }
 </style>

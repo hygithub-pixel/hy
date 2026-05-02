@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col h-screen w-full border-r">
-    <div class="flex-shrink-0 h-18 border-b">
+  <div class="flex flex-col h-screen w-full border-r border-main bg-container">
+    <div class="flex-shrink-0 h-18 border-b border-main">
       <div
         class="flex items-center h-full gap-4 transition-all duration-300"
         :class="sidebarState.collapsed ? 'px-2 justify-center' : 'px-6'"
@@ -11,7 +11,7 @@
         >
           <HomeOutlined style="font-size: 24px" />
         </div>
-        <span v-if="!sidebarState.collapsed" class="text-lg font-bold whitespace-nowrap">
+        <span v-if="!sidebarState.collapsed" class="text-lg font-bold whitespace-nowrap text-base-color">
           Vue3 Admin
         </span>
       </div>
