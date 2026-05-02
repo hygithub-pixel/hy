@@ -7,11 +7,14 @@
       >
         <component :is="icon" :style="{ fontSize: '24px', color: 'var(--ant-primary-color)' }" />
       </div>
-      <div class="flex-1">
-        <div class="text-sm text-secondary mb-1">{{ title }}</div>
-        <div class="text-2xl font-bold text-base-color mb-2">
-          <span v-if="prefix">{{ prefix }}</span>
-          {{ value }}
+      <div class="flex-1 min-w-0">
+        <div class="text-sm text-secondary mb-1 truncate">{{ title }}</div>
+        <div class="mb-2">
+          <span v-if="prefix" class="text-secondary">{{ prefix }}</span>
+          <span
+            class="font-bold text-base-color font-tabular-nums"
+            :style="{ fontSize: `${valueFontSize}px` }"
+          >{{ formattedValue }}</span>
         </div>
         <div v-if="trend !== undefined" class="flex items-center gap-1 text-sm" :style="{ color: trend > 0 ? 'var(--ant-success-color)' : 'var(--ant-error-color)' }">
           <RiseOutlined />
@@ -34,7 +37,25 @@ interface StatCardProps {
   trend?: number;
 }
 
-withDefaults(defineProps<StatCardProps>(), {
+const props = withDefaults(defineProps<StatCardProps>(), {
   prefix: '',
+});
+
+const valueLength = computed(() => {
+  const str = String(props.value);
+  return str.length + (props.prefix ? props.prefix.length : 0);
+});
+
+const valueFontSize = computed(() => {
+  const length = valueLength.value;
+  if (length <= 6) return 24;
+  if (length <= 8) return 20;
+  if (length <= 10) return 16;
+  if (length <= 12) return 14;
+  return 12;
+});
+
+const formattedValue = computed(() => {
+  return String(props.value);
 });
 </script>

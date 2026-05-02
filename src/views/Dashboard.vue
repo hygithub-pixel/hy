@@ -11,25 +11,13 @@
 
     <a-row :gutter="20" class="mb-6">
       <a-col :xs="24" :sm="12" :md="6" v-for="(metric, index) in metrics" :key="index">
-        <a-card hoverable>
-          <div class="flex items-center">
-            <div class="flex items-center justify-center w-12 h-12 rounded-lg mr-4" style="background-color: var(--ant-primary-color-outline)">
-              <component :is="metric.icon" style="color: var(--ant-primary-color); font-size: 24px" />
-            </div>
-            <div class="flex-1">
-              <p class="text-sm mb-1 text-secondary">{{ metric.title }}</p>
-              <p class="text-2xl font-bold m-0 text-base-color">
-                <span v-if="metric.prefix">{{ metric.prefix }}</span>
-                {{ metric.value }}
-                <span v-if="metric.suffix">{{ metric.suffix }}</span>
-              </p>
-              <p v-if="metric.trend" class="text-sm mt-1" :style="{ color: metric.trend > 0 ? 'var(--ant-success-color)' : 'var(--ant-error-color)' }">
-                <component :is="metric.trend > 0 ? CaretUpOutlined : CaretDownOutlined" />
-                {{ Math.abs(metric.trend) }}%
-              </p>
-            </div>
-          </div>
-        </a-card>
+        <StatCard
+          :title="metric.title"
+          :value="metric.value"
+          :prefix="metric.prefix"
+          :icon="metric.icon"
+          :trend="metric.trend"
+        />
       </a-col>
     </a-row>
 
@@ -106,9 +94,10 @@
 </template>
 
 <script setup lang="ts">
-import { UserOutlined, ShoppingOutlined, ShoppingCartOutlined, DollarOutlined, CaretUpOutlined, CaretDownOutlined } from '@ant-design/icons-vue';
+import { UserOutlined, ShoppingOutlined, ShoppingCartOutlined, DollarOutlined } from '@ant-design/icons-vue';
 import { loadECharts } from '../utils/lazyLoad';
 import { useThemeStore } from '../stores/themeStore';
+import StatCard from '../components/common/StatCard.vue';
 
 let echarts: any = null;
 const themeStore = useThemeStore();
