@@ -11,10 +11,10 @@
 
     <a-row :gutter="20" class="mb-6">
       <a-col :xs="24" :sm="12" :md="6" v-for="(metric, index) in metrics" :key="index">
-        <a-card hoverable class="stat-card">
+        <a-card hoverable>
           <div class="flex items-center">
-            <div class="flex items-center justify-center w-12 h-12 rounded-lg mr-4" :style="{ backgroundColor: metric.iconColor + '15' }">
-              <component :is="metric.icon" :style="{ color: metric.iconColor, fontSize: '24px' }" />
+            <div class="flex items-center justify-center w-12 h-12 rounded-lg mr-4" :style="{ backgroundColor: 'var(--ant-primary-color-outline)' }">
+              <component :is="metric.icon" :style="{ color: 'var(--ant-info-color)', fontSize: '24px' }" />
             </div>
             <div class="flex-1">
               <p class="text-sm mb-1" :style="{ color: 'var(--ant-text-color-secondary)' }">{{ metric.title }}</p>
@@ -126,43 +126,15 @@ const prefersReducedMotion = () => {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 };
 
+const getCSSVariable = (name: string): string => {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+};
+
 const metrics = [
-  {
-    title: '总用户数',
-    value: 2345,
-    prefix: '',
-    suffix: '',
-    icon: UserOutlined,
-    iconColor: 'var(--ant-info-color)',
-    trend: 12
-  },
-  {
-    title: '总商品数',
-    value: 1280,
-    prefix: '',
-    suffix: '',
-    icon: ShoppingOutlined,
-    iconColor: 'var(--ant-success-color)',
-    trend: 8
-  },
-  {
-    title: '总订单数',
-    value: 5678,
-    prefix: '',
-    suffix: '',
-    icon: ShoppingCartOutlined,
-    iconColor: 'var(--ant-warning-color)',
-    trend: 15
-  },
-  {
-    title: '总收入',
-    value: 128900,
-    prefix: '¥',
-    suffix: '',
-    icon: DollarOutlined,
-    iconColor: 'var(--ant-error-color)',
-    trend: 20
-  }
+  { title: '总用户数', value: 2345, icon: UserOutlined, trend: 12 },
+  { title: '总商品数', value: 1280, icon: ShoppingOutlined, trend: 8 },
+  { title: '总订单数', value: 5678, icon: ShoppingCartOutlined, trend: 15 },
+  { title: '总收入', value: 128900, prefix: '¥', icon: DollarOutlined, trend: 20 }
 ];
 
 const orders = [
@@ -185,15 +157,16 @@ const getTagColor = (status: string) => {
 
 const getChartColors = () => {
   return {
-    primary: themeStore.isDark ? '#818cf8' : '#5e6ad2',
-    success: themeStore.isDark ? '#34d399' : '#10b981',
-    warning: themeStore.isDark ? '#fbbf24' : '#f59e0b',
-    error: themeStore.isDark ? '#f87171' : '#ef4444',
-    info: themeStore.isDark ? '#818cf8' : '#3b82f6',
-    textColor: themeStore.isDark ? '#f1f5f9' : '#1e293b',
-    textSecondary: themeStore.isDark ? '#94a3b8' : '#64748b',
-    borderColor: themeStore.isDark ? '#475569' : '#e2e8f0',
-    bgColor: themeStore.isDark ? '#1e293b' : '#ffffff',
+    primary: getCSSVariable('--ant-primary-color'),
+    success: getCSSVariable('--ant-success-color'),
+    warning: getCSSVariable('--ant-warning-color'),
+    error: getCSSVariable('--ant-error-color'),
+    info: getCSSVariable('--ant-info-color'),
+    textColor: getCSSVariable('--ant-text-color'),
+    textSecondary: getCSSVariable('--ant-text-color-secondary'),
+    borderColor: getCSSVariable('--ant-border-color'),
+    bgColor: getCSSVariable('--ant-bg-color-container'),
+    outline: getCSSVariable('--ant-primary-color-outline'),
   };
 };
 
@@ -227,6 +200,7 @@ const initSalesChart = async () => {
       trigger: 'axis',
       backgroundColor: colors.bgColor,
       textStyle: { color: colors.textColor },
+      borderColor: colors.borderColor,
       axisPointer: {
         type: 'cross',
         label: {
@@ -267,20 +241,12 @@ const initSalesChart = async () => {
         stack: 'Total',
         areaStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {
-              offset: 0,
-              color: colors.info + '80'
-            },
-            {
-              offset: 1,
-              color: colors.info + '1a'
-            }
+            { offset: 0, color: colors.primary + '80' },
+            { offset: 1, color: colors.primary + '1a' }
           ])
         },
-        emphasis: {
-          focus: 'series'
-        },
-        itemStyle: { color: colors.info },
+        emphasis: { focus: 'series' },
+        itemStyle: { color: colors.primary },
         data: sales
       }
     ]
@@ -310,7 +276,8 @@ const initOrderStatusChart = async () => {
     tooltip: {
       trigger: 'item',
       backgroundColor: colors.bgColor,
-      textStyle: { color: colors.textColor }
+      textStyle: { color: colors.textColor },
+      borderColor: colors.borderColor
     },
     legend: {
       top: '5%',
@@ -328,22 +295,13 @@ const initOrderStatusChart = async () => {
           borderColor: colors.bgColor,
           borderWidth: 2
         },
-        label: {
-          show: false,
-          position: 'center'
-        },
+        label: { show: false, position: 'center' },
         emphasis: {
-          label: {
-            show: true,
-            fontSize: 20,
-            fontWeight: 'bold'
-          }
+          label: { show: true, fontSize: 20, fontWeight: 'bold' }
         },
-        labelLine: {
-          show: false
-        },
+        labelLine: { show: false },
         data: [
-          { value: 35, name: '进行中', itemStyle: { color: colors.info } },
+          { value: 35, name: '进行中', itemStyle: { color: colors.primary } },
           { value: 45, name: '已完成', itemStyle: { color: colors.success } },
           { value: 15, name: '待处理', itemStyle: { color: colors.warning } },
           { value: 5, name: '已取消', itemStyle: { color: colors.error } }
@@ -380,9 +338,8 @@ const initUserGrowthChart = async () => {
       trigger: 'axis',
       backgroundColor: colors.bgColor,
       textStyle: { color: colors.textColor },
-      axisPointer: {
-        type: 'shadow'
-      }
+      borderColor: colors.borderColor,
+      axisPointer: { type: 'shadow' }
     },
     legend: {
       data: ['新用户', '活跃用户'],
@@ -411,19 +368,15 @@ const initUserGrowthChart = async () => {
         name: '新用户',
         type: 'bar',
         stack: 'total',
-        emphasis: {
-          focus: 'series'
-        },
+        emphasis: { focus: 'series' },
         data: newUsers,
-        itemStyle: { color: colors.info }
+        itemStyle: { color: colors.primary }
       },
       {
         name: '活跃用户',
         type: 'bar',
         stack: 'total',
-        emphasis: {
-          focus: 'series'
-        },
+        emphasis: { focus: 'series' },
         data: activeUsers,
         itemStyle: { color: colors.success }
       }

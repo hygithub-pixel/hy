@@ -1,251 +1,86 @@
-/* Ant Design Vue Design Tokens - Light Mode */
+/* Ant Design Vue Theme Integration */
 :root {
-  /* Primary Colors */
   --ant-primary-color: #5e6ad2;
   --ant-primary-color-hover: #4c51bf;
   --ant-primary-color-active: #3730a3;
   --ant-primary-color-outline: rgba(94, 106, 210, 0.2);
-  --ant-primary-color-deprecated-bg: #f4f5f8;
-  --ant-primary-color-deprecated-border: #c8c9e0;
 
-  /* Success Colors */
   --ant-success-color: #10b981;
-  --ant-success-color-hover: #059669;
-  --ant-success-color-active: #047857;
-  --ant-success-color-outline: rgba(16, 185, 129, 0.2);
-
-  /* Warning Colors */
   --ant-warning-color: #f59e0b;
-  --ant-warning-color-hover: #d97706;
-  --ant-warning-color-active: #b45309;
-  --ant-warning-color-outline: rgba(245, 158, 11, 0.2);
-
-  /* Error Colors */
   --ant-error-color: #ef4444;
-  --ant-error-color-hover: #dc2626;
-  --ant-error-color-active: #b91c1c;
-  --ant-error-color-outline: rgba(239, 68, 68, 0.2);
-
-  /* Info Colors */
   --ant-info-color: #5e6ad2;
-  --ant-info-color-hover: #4c51bf;
-  --ant-info-color-active: #3730a3;
-  --ant-info-color-outline: rgba(94, 106, 210, 0.2);
 
-  /* Text Colors */
   --ant-text-color: #1e293b;
   --ant-text-color-secondary: #64748b;
-  --ant-text-color-tertiary: #94a3b8;
-  --ant-text-color-quaternary: #cbd5e1;
   --ant-text-color-disabled: #94a3b8;
 
-  /* Background Colors */
   --ant-bg-color: #ffffff;
   --ant-bg-color-page: #f8fafc;
   --ant-bg-color-container: #ffffff;
   --ant-bg-color-elevated: #ffffff;
   --ant-bg-color-layout: #f8fafc;
-  --ant-bg-color-spotlight: #1e293b;
-  --ant-bg-mask: rgba(0, 0, 0, 0.45);
+  --ant-item-hover-bg: #f1f5f9;
 
-  /* Border Colors */
   --ant-border-color: #e2e8f0;
   --ant-border-color-secondary: #f1f5f9;
-  --ant-border-color-split: #e2e8f0;
 
-  /* Outline Colors */
-  --ant-outline-color: rgba(94, 106, 210, 0.2);
-
-  /* Item Hover */
-  --ant-item-hover-bg: #f8fafc;
-
-  /* Shadows */
-  --ant-box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.1), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
-  --ant-box-shadow-secondary: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.1), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
-
-  /* Control Height */
-  --ant-control-height: 32px;
-  --ant-control-height-sm: 24px;
-  --ant-control-height-lg: 40px;
-
-  /* Font */
-  --ant-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --ant-font-size: 14px;
-  --ant-font-size-sm: 12px;
-  --ant-font-size-lg: 16px;
-
-  /* Border Radius */
-  --ant-border-radius: 6px;
-  --ant-border-radius-sm: 4px;
-  --ant-border-radius-lg: 8px;
-  --ant-border-radius-round: 50%;
-
-  /* Motion */
-  --ant-motion-duration-fast: 0.1s;
-  --ant-motion-duration-mid: 0.2s;
-  --ant-motion-duration-slow: 0.3s;
-
-  /* Legacy Colors - For backward compatibility */
-  --color-primary: #5e6ad2;
-  --color-primary-light: #818cf8;
-  --color-primary-dark: #4c51bf;
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-danger: #ef4444;
-  --color-bg-page: #f8fafc;
-  --color-bg-surface: #ffffff;
-  --color-bg-muted: #f1f5f9;
-  --color-text-primary: #1e293b;
-  --color-text-secondary: #64748b;
-  --color-border: #e2e8f0;
-  --color-border-light: #cbd5e1;
+  --ant-box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.1), 0 6px 16px 0 rgba(0, 0, 0, 0.08);
 }
 
-/* Ant Design Vue Design Tokens - Dark Mode */
 .dark {
-  /* Primary Colors */
   --ant-primary-color: #818cf8;
   --ant-primary-color-hover: #a5b4fc;
   --ant-primary-color-active: #6366f1;
   --ant-primary-color-outline: rgba(129, 140, 248, 0.2);
-  --ant-primary-color-deprecated-bg: #1e1b4b;
-  --ant-primary-color-deprecated-border: #4338ca;
 
-  /* Success Colors */
   --ant-success-color: #34d399;
-  --ant-success-color-hover: #6ee7b7;
-  --ant-success-color-active: #10b981;
-  --ant-success-color-outline: rgba(52, 211, 153, 0.2);
-
-  /* Warning Colors */
   --ant-warning-color: #fbbf24;
-  --ant-warning-color-hover: #fcd34d;
-  --ant-warning-color-active: #f59e0b;
-  --ant-warning-color-outline: rgba(251, 191, 36, 0.2);
-
-  /* Error Colors */
   --ant-error-color: #f87171;
-  --ant-error-color-hover: #fca5a5;
-  --ant-error-color-active: #ef4444;
-  --ant-error-color-outline: rgba(248, 113, 113, 0.2);
-
-  /* Info Colors */
   --ant-info-color: #818cf8;
-  --ant-info-color-hover: #a5b4fc;
-  --ant-info-color-active: #6366f1;
-  --ant-info-color-outline: rgba(129, 140, 248, 0.2);
 
-  /* Text Colors */
   --ant-text-color: #f1f5f9;
   --ant-text-color-secondary: #94a3b8;
-  --ant-text-color-tertiary: #64748b;
-  --ant-text-color-quaternary: #475569;
-  --ant-text-color-disabled: #475569;
+  --ant-text-color-disabled: #64748b;
 
-  /* Background Colors */
   --ant-bg-color: #1e293b;
   --ant-bg-color-page: #0f172a;
   --ant-bg-color-container: #1e293b;
   --ant-bg-color-elevated: #334155;
   --ant-bg-color-layout: #0f172a;
-  --ant-bg-color-spotlight: #f1f5f9;
-  --ant-bg-mask: rgba(0, 0, 0, 0.75);
-
-  /* Border Colors */
-  --ant-border-color: #475569;
-  --ant-border-color-secondary: #334155;
-  --ant-border-color-split: #475569;
-
-  /* Outline Colors */
-  --ant-outline-color: rgba(129, 140, 248, 0.2);
-
-  /* Item Hover */
   --ant-item-hover-bg: #334155;
 
-  /* Shadows */
-  --ant-box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.3), 0 6px 16px 0 rgba(0, 0, 0, 0.25), 0 9px 28px 8px rgba(0, 0, 0, 0.2);
-  --ant-box-shadow-secondary: 0 6px 16px 0 rgba(0, 0, 0, 0.25), 0 3px 6px -4px rgba(0, 0, 0, 0.3), 0 9px 28px 8px rgba(0, 0, 0, 0.2);
+  --ant-border-color: #475569;
+  --ant-border-color-secondary: #334155;
 
-  /* Legacy Colors - For backward compatibility */
-  --color-primary: #818cf8;
-  --color-primary-light: #a5b4fc;
-  --color-primary-dark: #6366f1;
-  --color-success: #34d399;
-  --color-warning: #fbbf24;
-  --color-danger: #f87171;
-  --color-bg-page: #0f172a;
-  --color-bg-surface: #1e293b;
-  --color-bg-muted: #334155;
-  --color-text-primary: #f1f5f9;
-  --color-text-secondary: #94a3b8;
-  --color-border: #475569;
-  --color-border-light: #64748b;
+  --ant-box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.3), 0 6px 16px 0 rgba(0, 0, 0, 0.25);
 }
 
-/* System Dark Mode Preference */
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
-    /* Primary Colors */
     --ant-primary-color: #818cf8;
     --ant-primary-color-hover: #a5b4fc;
     --ant-primary-color-active: #6366f1;
     --ant-primary-color-outline: rgba(129, 140, 248, 0.2);
 
-    /* Success Colors */
     --ant-success-color: #34d399;
-    --ant-success-color-outline: rgba(52, 211, 153, 0.2);
-
-    /* Warning Colors */
     --ant-warning-color: #fbbf24;
-    --ant-warning-color-outline: rgba(251, 191, 36, 0.2);
-
-    /* Error Colors */
     --ant-error-color: #f87171;
-    --ant-error-color-outline: rgba(248, 113, 113, 0.2);
-
-    /* Info Colors */
     --ant-info-color: #818cf8;
-    --ant-info-color-outline: rgba(129, 140, 248, 0.2);
 
-    /* Text Colors */
     --ant-text-color: #f1f5f9;
     --ant-text-color-secondary: #94a3b8;
-    --ant-text-color-tertiary: #64748b;
-    --ant-text-color-quaternary: #475569;
-    --ant-text-color-disabled: #475569;
+    --ant-text-color-disabled: #64748b;
 
-    /* Background Colors */
     --ant-bg-color: #1e293b;
     --ant-bg-color-page: #0f172a;
     --ant-bg-color-container: #1e293b;
     --ant-bg-color-elevated: #334155;
     --ant-bg-color-layout: #0f172a;
-    --ant-bg-color-spotlight: #f1f5f9;
-    --ant-bg-mask: rgba(0, 0, 0, 0.75);
+    --ant-item-hover-bg: #334155;
 
-    /* Border Colors */
     --ant-border-color: #475569;
     --ant-border-color-secondary: #334155;
 
-    /* Item Hover */
-    --ant-item-hover-bg: #334155;
-
-    /* Shadows */
-    --ant-box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.3), 0 6px 16px 0 rgba(0, 0, 0, 0.25), 0 9px 28px 8px rgba(0, 0, 0, 0.2);
-
-    /* Legacy Colors */
-    --color-primary: #818cf8;
-    --color-primary-light: #a5b4fc;
-    --color-primary-dark: #6366f1;
-    --color-success: #34d399;
-    --color-warning: #fbbf24;
-    --color-danger: #f87171;
-    --color-bg-page: #0f172a;
-    --color-bg-surface: #1e293b;
-    --color-bg-muted: #334155;
-    --color-text-primary: #f1f5f9;
-    --color-text-secondary: #94a3b8;
-    --color-border: #475569;
-    --color-border-light: #64748b;
+    --ant-box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.3), 0 6px 16px 0 rgba(0, 0, 0, 0.25);
   }
 }

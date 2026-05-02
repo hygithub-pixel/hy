@@ -1,15 +1,15 @@
 <template>
   <div
     class="flex items-center justify-between h-16 px-6 border-b"
-    :class="[
-      themeStore.isDark ? 'bg-[var(--ant-bg-color-container)] border-[var(--ant-border-color)]' : 'bg-[var(--ant-bg-color)] border-[var(--ant-border-color)]'
-    ]"
+    :style="{
+      backgroundColor: 'var(--ant-bg-color-container)',
+      borderColor: 'var(--ant-border-color)'
+    }"
   >
     <div class="flex items-center gap-4 flex-1 min-w-0">
       <a-button
         :type="sidebarState.collapsed ? 'default' : 'text'"
         class="w-10 h-10 flex items-center justify-center"
-        :class="themeStore.isDark ? 'text-[var(--ant-text-color-secondary)]' : 'text-[var(--ant-text-color-secondary)]'"
         :style="{ color: 'var(--ant-text-color-secondary)' }"
         :aria-label="sidebarState.collapsed ? '展开侧边栏' : '折叠侧边栏'"
         @click="sidebarState.toggleSidebar"
@@ -57,7 +57,7 @@
               class="flex items-start gap-2 p-2 m-1 rounded-sm"
             >
               <div class="flex items-center justify-center w-6 h-6 flex-shrink-0 mt-0.5">
-                <CheckCircleOutlined style="color: var(--ant-success-color)" />
+                <CheckCircleOutlined :style="{ color: 'var(--ant-success-color)' }" />
               </div>
               <div class="flex-1 min-w-0">
                 <div class="text-sm leading-relaxed" :style="{ color: 'var(--ant-text-color)' }">任务完成</div>
@@ -119,7 +119,6 @@
       <a-dropdown :trigger="['click']">
         <button
           class="flex items-center gap-2 px-2 py-1 rounded-md cursor-pointer transition-all duration-150"
-          :style="{ backgroundColor: 'transparent' }"
           aria-label="用户菜单"
         >
           <a-avatar :size="36" :src="userAvatar">
