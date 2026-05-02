@@ -1,10 +1,10 @@
 <template>
-  <div :style="{ backgroundColor: 'var(--ant-bg-color-page)', minHeight: '100%', padding: '24px' }">
+  <div class="p-6">
     <a-row :gutter="20" class="mb-6">
       <a-col :span="24">
         <div class="mb-5">
-          <h1 class="m-0 mb-2 text-[28px] font-semibold" :style="{ color: 'var(--ant-text-color)' }">仪表盘</h1>
-          <p class="m-0 text-base" :style="{ color: 'var(--ant-text-color-secondary)' }">系统运行状态概览</p>
+          <h1 class="m-0 mb-2 text-[28px] font-semibold">仪表盘</h1>
+          <p class="m-0 text-base text-gray-500 dark:text-gray-400">系统运行状态概览</p>
         </div>
       </a-col>
     </a-row>
@@ -13,12 +13,12 @@
       <a-col :xs="24" :sm="12" :md="6" v-for="(metric, index) in metrics" :key="index">
         <a-card hoverable>
           <div class="flex items-center">
-            <div class="flex items-center justify-center w-12 h-12 rounded-lg mr-4" :style="{ backgroundColor: 'var(--ant-primary-color-outline)' }">
-              <component :is="metric.icon" :style="{ color: 'var(--ant-info-color)', fontSize: '24px' }" />
+            <div class="flex items-center justify-center w-12 h-12 rounded-lg mr-4" style="background-color: var(--ant-primary-color-outline)">
+              <component :is="metric.icon" style="color: var(--ant-primary-color); font-size: 24px" />
             </div>
             <div class="flex-1">
-              <p class="text-sm mb-1" :style="{ color: 'var(--ant-text-color-secondary)' }">{{ metric.title }}</p>
-              <p class="text-2xl font-bold m-0" :style="{ color: 'var(--ant-text-color)' }">
+              <p class="text-sm mb-1 text-gray-500 dark:text-gray-400">{{ metric.title }}</p>
+              <p class="text-2xl font-bold m-0">
                 <span v-if="metric.prefix">{{ metric.prefix }}</span>
                 {{ metric.value }}
                 <span v-if="metric.suffix">{{ metric.suffix }}</span>
@@ -38,7 +38,7 @@
         <a-card hoverable>
           <template #title>
             <div class="flex justify-between items-center">
-              <span class="text-lg font-semibold" :style="{ color: 'var(--ant-text-color)' }">销售额趋势</span>
+              <span class="text-lg font-semibold">销售额趋势</span>
               <a-select v-model:value="timeRange" size="small" style="width: 120px">
                 <a-select-option value="7">近7天</a-select-option>
                 <a-select-option value="30">近30天</a-select-option>
@@ -53,7 +53,7 @@
         <a-card hoverable>
           <template #title>
             <div class="flex justify-between items-center">
-              <span class="text-lg font-semibold" :style="{ color: 'var(--ant-text-color)' }">订单状态分布</span>
+              <span class="text-lg font-semibold">订单状态分布</span>
               <a-button type="link" class="p-0">查看详情</a-button>
             </div>
           </template>
@@ -67,7 +67,7 @@
         <a-card hoverable>
           <template #title>
             <div class="flex justify-between items-center">
-              <span class="text-lg font-semibold" :style="{ color: 'var(--ant-text-color)' }">用户增长趋势</span>
+              <span class="text-lg font-semibold">用户增长趋势</span>
               <a-button type="link" class="p-0">查看详情</a-button>
             </div>
           </template>
@@ -81,7 +81,7 @@
         <a-card hoverable>
           <template #title>
             <div class="flex justify-between items-center">
-              <span class="text-lg font-semibold" :style="{ color: 'var(--ant-text-color)' }">最近订单</span>
+              <span class="text-lg font-semibold">最近订单</span>
               <a-button type="link" class="p-0">查看全部</a-button>
             </div>
           </template>
@@ -95,7 +95,7 @@
             </a-table-column>
             <a-table-column key="amount" title="金额" dataIndex="amount" align="right">
               <template #default="{ record }">
-                <span class="font-semibold numeric" :style="{ color: 'var(--ant-text-color)' }">¥{{ record.amount.toFixed(2) }}</span>
+                <span class="font-semibold numeric">¥{{ record.amount.toFixed(2) }}</span>
               </template>
             </a-table-column>
           </a-table>
@@ -160,13 +160,7 @@ const getChartColors = () => {
     primary: getCSSVariable('--ant-primary-color'),
     success: getCSSVariable('--ant-success-color'),
     warning: getCSSVariable('--ant-warning-color'),
-    error: getCSSVariable('--ant-error-color'),
-    info: getCSSVariable('--ant-info-color'),
-    textColor: getCSSVariable('--ant-text-color'),
-    textSecondary: getCSSVariable('--ant-text-color-secondary'),
-    borderColor: getCSSVariable('--ant-border-color'),
-    bgColor: getCSSVariable('--ant-bg-color-container'),
-    outline: getCSSVariable('--ant-primary-color-outline'),
+    error: getCSSVariable('--ant-error-color')
   };
 };
 
@@ -197,16 +191,7 @@ const initSalesChart = async () => {
   const option = {
     animation: !prefersReducedMotion(),
     tooltip: {
-      trigger: 'axis',
-      backgroundColor: colors.bgColor,
-      textStyle: { color: colors.textColor },
-      borderColor: colors.borderColor,
-      axisPointer: {
-        type: 'cross',
-        label: {
-          backgroundColor: colors.textSecondary
-        }
-      }
+      trigger: 'axis'
     },
     grid: {
       left: '3%',
@@ -218,20 +203,15 @@ const initSalesChart = async () => {
       {
         type: 'category',
         boundaryGap: false,
-        data: dates,
-        axisLabel: { color: colors.textSecondary },
-        axisLine: { lineStyle: { color: colors.borderColor } }
+        data: dates
       }
     ],
     yAxis: [
       {
         type: 'value',
         axisLabel: {
-          formatter: '¥{value}',
-          color: colors.textSecondary
-        },
-        axisLine: { lineStyle: { color: colors.borderColor } },
-        splitLine: { lineStyle: { color: colors.borderColor, opacity: 0.3 } }
+          formatter: '¥{value}'
+        }
       }
     ],
     series: [
@@ -274,15 +254,11 @@ const initOrderStatusChart = async () => {
   const option = {
     animation: !prefersReducedMotion(),
     tooltip: {
-      trigger: 'item',
-      backgroundColor: colors.bgColor,
-      textStyle: { color: colors.textColor },
-      borderColor: colors.borderColor
+      trigger: 'item'
     },
     legend: {
       top: '5%',
-      left: 'center',
-      textStyle: { color: colors.textSecondary }
+      left: 'center'
     },
     series: [
       {
@@ -291,9 +267,7 @@ const initOrderStatusChart = async () => {
         radius: ['40%', '70%'],
         avoidLabelOverlap: false,
         itemStyle: {
-          borderRadius: 10,
-          borderColor: colors.bgColor,
-          borderWidth: 2
+          borderRadius: 10
         },
         label: { show: false, position: 'center' },
         emphasis: {
@@ -336,14 +310,10 @@ const initUserGrowthChart = async () => {
     animation: !prefersReducedMotion(),
     tooltip: {
       trigger: 'axis',
-      backgroundColor: colors.bgColor,
-      textStyle: { color: colors.textColor },
-      borderColor: colors.borderColor,
       axisPointer: { type: 'shadow' }
     },
     legend: {
-      data: ['新用户', '活跃用户'],
-      textStyle: { color: colors.textSecondary }
+      data: ['新用户', '活跃用户']
     },
     grid: {
       left: '3%',
@@ -353,15 +323,10 @@ const initUserGrowthChart = async () => {
     },
     xAxis: {
       type: 'category',
-      data: months,
-      axisLabel: { color: colors.textSecondary },
-      axisLine: { lineStyle: { color: colors.borderColor } }
+      data: months
     },
     yAxis: {
-      type: 'value',
-      axisLabel: { color: colors.textSecondary },
-      axisLine: { lineStyle: { color: colors.borderColor } },
-      splitLine: { lineStyle: { color: colors.borderColor, opacity: 0.3 } }
+      type: 'value'
     },
     series: [
       {

@@ -1,31 +1,19 @@
 <template>
-  <div
-    class="flex flex-col h-screen w-full border-r transition-colors duration-200"
-    :style="{
-      backgroundColor: 'var(--ant-bg-color)',
-      borderColor: 'var(--ant-border-color)'
-    }"
-  >
-    <div
-      class="flex-shrink-0 h-18 border-b transition-colors duration-200"
-      :style="{ borderColor: 'var(--ant-border-color)' }"
-    >
+  <div class="flex flex-col h-screen w-full border-r">
+    <div class="flex-shrink-0 h-18 border-b">
       <div
         class="flex items-center h-full gap-4 transition-all duration-300"
         :class="sidebarState.collapsed ? 'px-2 justify-center' : 'px-6'"
       >
         <div
           class="flex items-center justify-center w-10 h-10 rounded-md text-white flex-shrink-0"
-          :style="{ background: 'linear-gradient(135deg, var(--ant-primary-color) 0%, var(--ant-primary-color-hover) 100%)' }"
+          style="background: linear-gradient(135deg, var(--ant-primary-color) 0%, var(--ant-primary-color-hover) 100%)"
         >
-          <HomeOutlined :style="{ fontSize: '24px' }" />
+          <HomeOutlined style="font-size: 24px" />
         </div>
-        <span
-          v-if="!sidebarState.collapsed"
-          class="text-lg font-bold whitespace-nowrap"
-          :style="{ color: 'var(--ant-text-color)' }"
-          >Vue3 Admin</span
-        >
+        <span v-if="!sidebarState.collapsed" class="text-lg font-bold whitespace-nowrap">
+          Vue3 Admin
+        </span>
       </div>
     </div>
 

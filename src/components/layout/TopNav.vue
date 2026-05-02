@@ -1,16 +1,9 @@
 <template>
-  <div
-    class="flex items-center justify-between h-16 px-6 border-b"
-    :style="{
-      backgroundColor: 'var(--ant-bg-color-container)',
-      borderColor: 'var(--ant-border-color)'
-    }"
-  >
+  <div class="flex items-center justify-between h-16 px-6 border-b">
     <div class="flex items-center gap-4 flex-1 min-w-0">
       <a-button
         :type="sidebarState.collapsed ? 'default' : 'text'"
         class="w-10 h-10 flex items-center justify-center"
-        :style="{ color: 'var(--ant-text-color-secondary)' }"
         :aria-label="sidebarState.collapsed ? '展开侧边栏' : '折叠侧边栏'"
         @click="sidebarState.toggleSidebar"
       >
@@ -33,7 +26,7 @@
         autocomplete="search"
       >
         <template #prefix>
-          <SearchOutlined :style="{ color: 'var(--ant-text-color-secondary)' }" />
+          <SearchOutlined />
         </template>
       </a-input>
     </div>
@@ -41,34 +34,22 @@
     <div class="flex items-center gap-1 flex-shrink-0">
       <a-dropdown :trigger="['click']">
         <a-badge :count="notificationCount" :offset="[-5, 5]">
-          <a-button
-            type="text"
-            class="w-10 h-10 flex items-center justify-center"
-            :style="{ color: 'var(--ant-text-color-secondary)' }"
-            aria-label="通知"
-          >
+          <a-button type="text" class="w-10 h-10 flex items-center justify-center" aria-label="通知">
             <template #icon><BellOutlined /></template>
           </a-button>
         </a-badge>
         <template #overlay>
-          <a-menu class="p-1 rounded-md">
-            <a-menu-item
-              key="1"
-              class="flex items-start gap-2 p-2 m-1 rounded-sm"
-            >
+          <a-menu class="p-1">
+            <a-menu-item key="1" class="flex items-start gap-2 p-2">
               <div class="flex items-center justify-center w-6 h-6 flex-shrink-0 mt-0.5">
-                <CheckCircleOutlined :style="{ color: 'var(--ant-success-color)' }" />
+                <CheckCircleOutlined style="color: var(--ant-success-color)" />
               </div>
               <div class="flex-1 min-w-0">
-                <div class="text-sm leading-relaxed" :style="{ color: 'var(--ant-text-color)' }">任务完成</div>
-                <div class="text-xs" :style="{ color: 'var(--ant-text-color-secondary)' }">5分钟前</div>
+                <div class="text-sm leading-relaxed">任务完成</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">5分钟前</div>
               </div>
             </a-menu-item>
-            <a-menu-item
-              key="2"
-              class="flex justify-center p-2 m-1 rounded-sm font-medium"
-              :style="{ color: 'var(--ant-primary-color)' }"
-            >
+            <a-menu-item key="2" class="flex justify-center p-2 font-medium" style="color: var(--ant-primary-color)">
               查看全部通知
             </a-menu-item>
           </a-menu>
@@ -76,40 +57,22 @@
       </a-dropdown>
 
       <a-dropdown :trigger="['click']">
-        <a-button
-          type="text"
-          class="w-10 h-10 flex items-center justify-center"
-          :style="{ color: 'var(--ant-text-color-secondary)' }"
-          aria-label="设置"
-        >
+        <a-button type="text" class="w-10 h-10 flex items-center justify-center" aria-label="设置">
           <template #icon><SettingOutlined /></template>
         </a-button>
         <template #overlay>
-          <a-menu class="p-1 rounded-md">
-            <a-menu-item
-              key="theme"
-              class="flex items-center gap-2 p-2 m-1 rounded-sm"
-              :style="{ color: 'var(--ant-text-color)' }"
-              @click="toggleTheme"
-            >
+          <a-menu class="p-1">
+            <a-menu-item key="theme" class="flex items-center gap-2 p-2" @click="toggleTheme">
               <span class="text-lg">{{ themeStore.isDark ? '☀️' : '🌙' }}</span>
               <span>{{ themeStore.isDark ? '浅色模式' : '深色模式' }}</span>
             </a-menu-item>
             <a-menu-divider />
-            <a-menu-item
-              key="1"
-              class="flex items-center gap-2 p-2 m-1 rounded-sm"
-              :style="{ color: 'var(--ant-text-color)' }"
-            >
-              <MonitorOutlined :style="{ color: 'var(--ant-text-color-secondary)' }" />
+            <a-menu-item key="1" class="flex items-center gap-2 p-2">
+              <MonitorOutlined />
               显示设置
             </a-menu-item>
-            <a-menu-item
-              key="2"
-              class="flex items-center gap-2 p-2 m-1 rounded-sm"
-              :style="{ color: 'var(--ant-text-color)' }"
-            >
-              <SettingOutlined :style="{ color: 'var(--ant-text-color-secondary)' }" />
+            <a-menu-item key="2" class="flex items-center gap-2 p-2">
+              <SettingOutlined />
               系统设置
             </a-menu-item>
           </a-menu>
@@ -117,50 +80,30 @@
       </a-dropdown>
 
       <a-dropdown :trigger="['click']">
-        <button
-          class="flex items-center gap-2 px-2 py-1 rounded-md cursor-pointer transition-all duration-150"
-          aria-label="用户菜单"
-        >
+        <button class="flex items-center gap-2 px-2 py-1 rounded-md cursor-pointer transition-all duration-150" aria-label="用户菜单">
           <a-avatar :size="36" :src="userAvatar">
             <template #icon><UserOutlined /></template>
           </a-avatar>
-          <span class="text-sm font-medium hidden sm:inline" :style="{ color: 'var(--ant-text-color)' }">{{ userName }}</span>
-          <DownOutlined class="text-sm" :style="{ color: 'var(--ant-text-color-secondary)' }" />
+          <span class="text-sm font-medium hidden sm:inline">{{ userName }}</span>
+          <DownOutlined class="text-sm" />
         </button>
         <template #overlay>
-          <a-menu class="p-1 rounded-md">
-            <a-menu-item
-              key="1"
-              class="flex items-center gap-2 p-2 m-1 rounded-sm"
-              :style="{ color: 'var(--ant-text-color)' }"
-            >
-              <UserOutlined :style="{ color: 'var(--ant-text-color-secondary)' }" />
+          <a-menu class="p-1">
+            <a-menu-item key="1" class="flex items-center gap-2 p-2">
+              <UserOutlined />
               个人中心
             </a-menu-item>
-            <a-menu-item
-              key="2"
-              class="flex items-center gap-2 p-2 m-1 rounded-sm"
-              :style="{ color: 'var(--ant-text-color)' }"
-            >
-              <FileTextOutlined :style="{ color: 'var(--ant-text-color-secondary)' }" />
+            <a-menu-item key="2" class="flex items-center gap-2 p-2">
+              <FileTextOutlined />
               个人资料
             </a-menu-item>
-            <a-menu-item
-              key="3"
-              class="flex items-center gap-2 p-2 m-1 rounded-sm"
-              :style="{ color: 'var(--ant-text-color)' }"
-            >
-              <LockOutlined :style="{ color: 'var(--ant-text-color-secondary)' }" />
+            <a-menu-item key="3" class="flex items-center gap-2 p-2">
+              <LockOutlined />
               修改密码
             </a-menu-item>
             <a-menu-divider />
-            <a-menu-item
-              key="4"
-              class="flex items-center gap-2 p-2 m-1 rounded-sm"
-              :style="{ color: 'var(--ant-text-color)' }"
-              @click="handleLogout"
-            >
-              <LogoutOutlined :style="{ color: 'var(--ant-text-color-secondary)' }" />
+            <a-menu-item key="4" class="flex items-center gap-2 p-2" @click="handleLogout">
+              <LogoutOutlined />
               退出登录
             </a-menu-item>
           </a-menu>
