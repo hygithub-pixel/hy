@@ -21,7 +21,6 @@ import { setupGlobalErrorHandler } from './utils/errorHandler';
 import { performanceMonitor } from './utils/performance';
 import { registerServices, provideServices } from './services';
 import { componentManager } from './components/registry';
-import StatusEditor from './components/common/StatusEditor.vue';
 import { configManager } from './config/schema/config-manager';
 import { moduleConfigs } from './config/modules';
 
@@ -35,8 +34,6 @@ document.title = import.meta.env.VITE_APP_TITLE || 'Vue3 Admin';
 for (const [key, component] of Object.entries(AntdIconsVue)) {
   app.component(key, component);
 }
-
-componentManager.register('StatusEditor', StatusEditor);
 
 app.use(pinia);
 app.use(router);

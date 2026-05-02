@@ -5,11 +5,8 @@ export { default as TopNav } from './layout/TopNav.vue';
 export { default as Breadcrumb } from './layout/Breadcrumb.vue';
 
 // 导出通用组件
-export { default as Card } from './common/Card.vue';
 export { default as StatCard } from './common/StatCard.vue';
-export { default as PageHeader } from './common/PageHeader.vue';
 export { default as EmptyState } from './common/EmptyState.vue';
-export { default as ChartCard } from './common/ChartCard.vue';
 
 // 导出图表组件
 export { default as SalesChart } from './charts/SalesChart.vue';
