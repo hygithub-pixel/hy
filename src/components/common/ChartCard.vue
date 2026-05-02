@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-container rounded-lg shadow-md p-6 border border-main">
+  <div class="bg-white rounded-lg shadow-md p-6 border border-border">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-lg font-bold text-base-color">{{ title }}</h3>
+      <h3 class="text-lg font-bold text-text-primary">{{ title }}</h3>
       <slot name="actions"></slot>
     </div>
     <slot></slot>

@@ -2,21 +2,24 @@
   <div class="module-page">
     <a-row :gutter="20">
       <a-col :span="24">
-        <PageHeader
-          :title="config?.title || '数据管理'"
-          :subtitle="config?.description || '管理和维护系统数据'"
-        >
-          <template #actions>
-            <a-button
-              v-if="canCreate"
-              type="primary"
-              @click="handleAdd"
-            >
-              <template #icon><PlusOutlined /></template>
-              新增数据
-            </a-button>
+        <a-card class="mb-4">
+          <template #title>
+            <div class="flex justify-between items-center">
+              <div>
+                <div class="text-xl font-bold">{{ config?.title || '数据管理' }}</div>
+                <div class="text-gray-500 text-sm mt-1">{{ config?.description || '管理和维护系统数据' }}</div>
+              </div>
+              <a-button
+                v-if="canCreate"
+                type="primary"
+                @click="handleAdd"
+              >
+                <template #icon><PlusOutlined /></template>
+                新增数据
+              </a-button>
+            </div>
           </template>
-        </PageHeader>
+        </a-card>
       </a-col>
     </a-row>
 
@@ -102,7 +105,6 @@ import { useModuleConfig } from '../composables/useModuleConfig';
 import { useModuleActions } from '../composables/useModuleActions';
 import FormComponent from '../components/form/FormComponent.vue';
 import TableComponent from '../components/table/TableComponent.vue';
-import PageHeader from '../components/common/PageHeader.vue';
 
 const {
   config,
