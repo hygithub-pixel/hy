@@ -79,6 +79,15 @@
         <template #overlay>
           <a-menu class="p-1 rounded-md shadow-lg border border-border">
             <a-menu-item
+              key="theme"
+              class="flex items-center gap-2 p-2 m-1 rounded-sm text-text-primary transition-all duration-150 hover:bg-bg-muted"
+              @click="toggleTheme"
+            >
+              <span class="text-text-secondary text-lg">{{ isDark ? '☀️' : '🌙' }}</span>
+              <span>{{ isDark ? '浅色模式' : '深色模式' }}</span>
+            </a-menu-item>
+            <a-menu-divider />
+            <a-menu-item
               key="1"
               class="flex items-center gap-2 p-2 m-1 rounded-sm text-text-primary transition-all duration-150 hover:bg-bg-muted"
             >
@@ -173,6 +182,39 @@ const userName = computed(() => user.value?.username || '管理员');
 const userAvatar = computed(() => user.value?.avatar || '');
 const searchQuery = ref('');
 const notificationCount = ref(3);
+
+const isDark = ref(false);
+
+const toggleTheme = () => {
+  isDark.value = !isDark.value;
+  if (isDark.value) {
+    document.documentElement.classList.add('dark');
+    localStorage.setItem('theme', 'dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+    localStorage.setItem('theme', 'light');
+  }
+};
+
+const initTheme = () => {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    isDark.value = true;
+    document.documentElement.classList.add('dark');
+  } else if (savedTheme === 'light') {
+    isDark.value = false;
+    document.documentElement.classList.remove('dark');
+  } else {
+    isDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (isDark.value) {
+      document.documentElement.classList.add('dark');
+    }
+  }
+};
+
+onMounted(() => {
+  initTheme();
+});
 
 const handleLogout = async () => {
   try {

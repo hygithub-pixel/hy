@@ -91,6 +91,106 @@
   --transition: var(--transition-base);
 }
 
+// 深色模式变量
+.dark {
+  // 品牌色彩
+  --color-primary: #818cf8;
+  --color-primary-light: #a5b4fc;
+  --color-primary-dark: #5e6ad2;
+
+  // 状态色
+  --color-success: #34d399;
+  --color-success-light: #6ee7b7;
+  --color-warning: #fbbf24;
+  --color-warning-light: #fcd34d;
+  --color-danger: #f87171;
+  --color-danger-light: #fca5a5;
+
+  // 文字色
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-disabled: #64748b;
+
+  // 背景色
+  --color-bg-page: #0f172a;
+  --color-bg-surface: #1e293b;
+  --color-bg-muted: #334155;
+
+  // 边框色
+  --color-border: #475569;
+  --color-border-light: #64748b;
+
+  // 阴影系统 - 深色模式更深
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+
+  // 更新兼容变量
+  --primary: var(--color-primary);
+  --primary-hover: var(--color-primary-dark);
+  --success: var(--color-success);
+  --warning: var(--color-warning);
+  --danger: var(--color-danger);
+  --bg: var(--color-bg-page);
+  --bg-surface: var(--color-bg-surface);
+  --bg-muted: var(--color-bg-muted);
+  --text: var(--color-text-primary);
+  --text-muted: var(--color-text-secondary);
+  --text-disabled: var(--color-text-disabled);
+  --border: var(--color-border);
+}
+
+// 系统深色模式偏好检测
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    // 品牌色彩
+    --color-primary: #818cf8;
+    --color-primary-light: #a5b4fc;
+    --color-primary-dark: #5e6ad2;
+
+    // 状态色
+    --color-success: #34d399;
+    --color-success-light: #6ee7b7;
+    --color-warning: #fbbf24;
+    --color-warning-light: #fcd34d;
+    --color-danger: #f87171;
+    --color-danger-light: #fca5a5;
+
+    // 文字色
+    --color-text-primary: #f1f5f9;
+    --color-text-secondary: #94a3b8;
+    --color-text-disabled: #64748b;
+
+    // 背景色
+    --color-bg-page: #0f172a;
+    --color-bg-surface: #1e293b;
+    --color-bg-muted: #334155;
+
+    // 边框色
+    --color-border: #475569;
+    --color-border-light: #64748b;
+
+    // 阴影系统
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+
+    // 更新兼容变量
+    --primary: var(--color-primary);
+    --primary-hover: var(--color-primary-dark);
+    --success: var(--color-success);
+    --warning: var(--color-warning);
+    --danger: var(--color-danger);
+    --bg: var(--color-bg-page);
+    --bg-surface: var(--color-bg-surface);
+    --bg-muted: var(--color-bg-muted);
+    --text: var(--color-text-primary);
+    --text-muted: var(--color-text-secondary);
+    --text-disabled: var(--color-text-disabled);
+    --border: var(--color-border);
+  }
+}
+
 // 为了向后兼容，保留SCSS变量
 $primary: #5e6ad2 !default;
 $primary-hover: #4c51bf !default;

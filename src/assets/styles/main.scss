@@ -23,10 +23,23 @@
   background: var(--text-muted);
 }
 
+// 深色模式滚动条
+.dark ::-webkit-scrollbar-track {
+  background: var(--bg-muted);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--border);
+}
+
 // 选择文本样式
 ::selection {
   background-color: rgba(99, 102, 241, 0.2);
   color: var(--text);
+}
+
+.dark ::selection {
+  background-color: rgba(99, 102, 241, 0.4);
 }
 
 // 触摸交互优化
@@ -51,6 +64,20 @@ input, textarea, [contenteditable] {
   overscroll-behavior: contain;
 }
 
+// Ant Design Modal 深色模式
+.dark .ant-modal-content {
+  background-color: var(--bg-surface);
+}
+
+.dark .ant-modal-header {
+  background-color: var(--bg-surface);
+  border-bottom-color: var(--border);
+}
+
+.dark .ant-modal-footer {
+  border-top-color: var(--border);
+}
+
 // 页面滚动行为 - 移除body滚动条，让MainLayout内部处理滚动
 body {
   overscroll-behavior: none;
@@ -61,6 +88,10 @@ body {
 // 确保弹窗遮罩层可以滚动
 .el-overlay {
   overscroll-behavior: contain;
+}
+
+.dark .ant-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 // 焦点样式
@@ -86,6 +117,133 @@ el-input:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
+}
+
+// 深色模式 Ant Design 输入框
+.dark .ant-input,
+.dark .ant-input-affix-wrapper {
+  background-color: var(--bg-surface);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.dark .ant-input:hover,
+.dark .ant-input-affix-wrapper:hover {
+  border-color: var(--primary);
+}
+
+.dark .ant-input:focus,
+.dark .ant-input-affix-wrapper-focused {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+// 深色模式 Ant Design 按钮
+.dark .ant-btn-default {
+  background-color: var(--bg-surface);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.dark .ant-btn-default:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+// 深色模式 Ant Design 菜单
+.dark .ant-menu,
+.dark .ant-dropdown-menu {
+  background-color: var(--bg-surface);
+}
+
+.dark .ant-menu-item,
+.dark .ant-dropdown-menu-item {
+  color: var(--text);
+}
+
+.dark .ant-menu-item:hover,
+.dark .ant-dropdown-menu-item:hover {
+  background-color: var(--bg-muted);
+}
+
+// 深色模式 Ant Design 表格
+.dark .ant-table {
+  background-color: var(--bg-surface);
+  color: var(--text);
+}
+
+.dark .ant-table-thead > tr > th {
+  background-color: var(--bg-muted);
+  border-color: var(--border);
+}
+
+.dark .ant-table-tbody > tr > td {
+  border-color: var(--border);
+}
+
+.dark .ant-table-tbody > tr:hover > td {
+  background-color: var(--bg-muted);
+}
+
+// 深色模式 Ant Design 表单
+.dark .ant-form-item-label > label {
+  color: var(--text);
+}
+
+// 深色模式 Ant Design 分页
+.dark .ant-pagination {
+  color: var(--text);
+}
+
+.dark .ant-pagination-item {
+  background-color: var(--bg-surface);
+  border-color: var(--border);
+}
+
+.dark .ant-pagination-item a {
+  color: var(--text);
+}
+
+.dark .ant-pagination-item-active {
+  border-color: var(--primary);
+}
+
+.dark .ant-pagination-item-active a {
+  color: var(--primary);
+}
+
+// 深色模式 Ant Design 骨架屏
+.dark .ant-skeleton-content .ant-skeleton-title,
+.dark .ant-skeleton-content .ant-skeleton-paragraph > li {
+  background: linear-gradient(90deg, var(--bg-muted) 25%, var(--bg-surface) 50%, var(--bg-muted) 75%);
+  background-size: 400% 100%;
+  color: transparent;
+}
+
+// 深色模式 Ant Design 头像
+.dark .ant-avatar {
+  background-color: var(--bg-muted);
+}
+
+// 深色模式 Ant Design 徽章
+.dark .ant-badge-count {
+  box-shadow: 0 0 0 2px var(--bg-surface);
+}
+
+// 深色模式 Ant Design 复选框
+.dark .ant-checkbox-inner {
+  background-color: var(--bg-surface);
+  border-color: var(--border);
+}
+
+.dark .ant-checkbox-checked .ant-checkbox-inner {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+// 深色模式 Ant Design 模态框
+.dark .ant-modal-mask {
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 // 响应式断点
