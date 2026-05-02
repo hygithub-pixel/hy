@@ -18,7 +18,12 @@
         <TopNav />
       </header>
 
-      <main id="main-content" class="flex-1 overflow-y-auto bg-bg-page p-6 sm:p-8" tabindex="-1">
+      <main
+        id="main-content"
+        class="flex-1 overflow-y-auto p-6 sm:p-8"
+        :style="{ backgroundColor: 'var(--ant-bg-color-page)' }"
+        tabindex="-1"
+      >
         <router-view v-slot="{ Component, route }">
           <transition name="page-fade" mode="out-in">
             <keep-alive :include="cachedRoutes">
@@ -98,8 +103,8 @@ onUnmounted(() => {
   .page-fade-enter-active,
   .page-fade-leave-active {
     transition:
-      opacity var(--transition-slow),
-      transform var(--transition-slow);
+      opacity 300ms ease-out,
+      transform 300ms ease-out;
   }
 
   .page-fade-enter-from,
@@ -149,11 +154,11 @@ onUnmounted(() => {
 }
 
 .main-content::-webkit-scrollbar-thumb {
-  background: var(--color-border);
+  background: var(--ant-border-color);
   border-radius: 9999px;
 }
 
 .main-content::-webkit-scrollbar-thumb:hover {
-  background: var(--color-border-light);
+  background: var(--ant-text-color-secondary);
 }
 </style>
