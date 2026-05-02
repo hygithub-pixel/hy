@@ -4,6 +4,10 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
 import * as AntdIconsVue from '@ant-design/icons-vue';
+import {
+  theme,
+  ConfigProvider,
+} from 'ant-design-vue';
 import router from './router';
 import i18n, { initI18n } from './locales';
 import App from './App.vue';
@@ -32,7 +36,6 @@ for (const [key, component] of Object.entries(AntdIconsVue)) {
   app.component(key, component);
 }
 
-// 注册自定义组件
 componentManager.register('StatusEditor', StatusEditor);
 
 app.use(pinia);

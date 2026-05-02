@@ -1,296 +1,558 @@
+@import './antd-tokens.scss';
 @import './variables.scss';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-// 滚动条样式
+/* Base Layer Styles */
+html {
+  color-scheme: light;
+}
+
+.dark html {
+  color-scheme: dark;
+}
+
+/* Scrollbar Styles */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-muted);
+  background: var(--ant-bg-color-page);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: var(--ant-border-color);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+  background: var(--ant-text-color-secondary);
 }
 
-// 深色模式滚动条
-.dark ::-webkit-scrollbar-track {
-  background: var(--bg-muted);
-}
-
-.dark ::-webkit-scrollbar-thumb {
-  background: var(--border);
-}
-
-// 选择文本样式
+/* Selection Styles */
 ::selection {
-  background-color: rgba(99, 102, 241, 0.2);
-  color: var(--text);
+  background-color: var(--ant-primary-color-outline);
+  color: var(--ant-text-color);
 }
 
-.dark ::selection {
-  background-color: rgba(99, 102, 241, 0.4);
-}
-
-// 触摸交互优化
+/* Touch Interaction Optimization */
 * {
-  // 防止双击缩放延迟
   touch-action: manipulation;
-  // 移除点击高亮
   -webkit-tap-highlight-color: transparent;
-  // 防止文本选择干扰
-  -webkit-user-select: none;
-  user-select: none;
 }
 
-// 允许文本输入区域选择
-input, textarea, [contenteditable] {
+input,
+textarea,
+[contenteditable] {
   -webkit-user-select: text;
   user-select: text;
 }
 
-// 模态框和抽屉的滚动行为
-.modal, .drawer, .el-dialog {
+/* Modal and Drawer Scroll Behavior */
+.modal,
+.drawer,
+.ant-modal,
+.ant-drawer {
   overscroll-behavior: contain;
 }
 
-// Ant Design Modal 深色模式
-.dark .ant-modal-content {
-  background-color: var(--bg-surface);
+/* Focus Styles */
+*:focus-visible {
+  outline: 2px solid var(--ant-primary-color);
+  outline-offset: 2px;
+  border-radius: var(--ant-border-radius);
 }
 
-.dark .ant-modal-header {
-  background-color: var(--bg-surface);
-  border-bottom-color: var(--border);
-}
-
-.dark .ant-modal-footer {
-  border-top-color: var(--border);
-}
-
-// 页面滚动行为 - 移除body滚动条，让MainLayout内部处理滚动
+/* Page Scroll Behavior */
 body {
   overscroll-behavior: none;
   overflow: hidden;
   height: 100%;
 }
 
-// 确保弹窗遮罩层可以滚动
-.el-overlay {
+/* Overlay Styles */
+.ant-overlay {
   overscroll-behavior: contain;
 }
 
-.dark .ant-overlay {
-  background-color: rgba(0, 0, 0, 0.7);
+/* Utility Classes for Ant Design Integration */
+.text-primary {
+  color: var(--ant-text-color);
 }
 
-// 焦点样式
-*:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
+.text-secondary {
+  color: var(--ant-text-color-secondary);
 }
 
-// 按钮焦点样式
-button:focus-visible,
-el-button:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
+.text-disabled {
+  color: var(--ant-text-color-disabled);
 }
 
-// 输入框焦点样式
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible,
-el-input:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
+.bg-page {
+  background-color: var(--ant-bg-color-page);
 }
 
-// 深色模式 Ant Design 输入框
-.dark .ant-input,
-.dark .ant-input-affix-wrapper {
-  background-color: var(--bg-surface);
-  border-color: var(--border);
-  color: var(--text);
+.bg-surface {
+  background-color: var(--ant-bg-color);
 }
 
-.dark .ant-input:hover,
-.dark .ant-input-affix-wrapper:hover {
-  border-color: var(--primary);
+.bg-muted {
+  background-color: var(--ant-item-hover-bg);
 }
 
-.dark .ant-input:focus,
-.dark .ant-input-affix-wrapper-focused {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+.border-default {
+  border-color: var(--ant-border-color);
 }
 
-// 深色模式 Ant Design 按钮
-.dark .ant-btn-default {
-  background-color: var(--bg-surface);
-  border-color: var(--border);
-  color: var(--text);
+.text-primary-color {
+  color: var(--ant-primary-color);
 }
 
-.dark .ant-btn-default:hover {
-  border-color: var(--primary);
-  color: var(--primary);
+.bg-primary-color {
+  background-color: var(--ant-primary-color);
 }
 
-// 深色模式 Ant Design 菜单
-.dark .ant-menu,
-.dark .ant-dropdown-menu {
-  background-color: var(--bg-surface);
+.text-success-color {
+  color: var(--ant-success-color);
 }
 
-.dark .ant-menu-item,
-.dark .ant-dropdown-menu-item {
-  color: var(--text);
+.bg-success-color {
+  background-color: var(--ant-success-color);
 }
 
-.dark .ant-menu-item:hover,
-.dark .ant-dropdown-menu-item:hover {
-  background-color: var(--bg-muted);
+.text-warning-color {
+  color: var(--ant-warning-color);
 }
 
-// 深色模式 Ant Design 表格
-.dark .ant-table {
-  background-color: var(--bg-surface);
-  color: var(--text);
+.bg-warning-color {
+  background-color: var(--ant-warning-color);
 }
 
-.dark .ant-table-thead > tr > th {
-  background-color: var(--bg-muted);
-  border-color: var(--border);
+.text-danger-color {
+  color: var(--ant-error-color);
 }
 
-.dark .ant-table-tbody > tr > td {
-  border-color: var(--border);
+.bg-danger-color {
+  background-color: var(--ant-error-color);
 }
 
-.dark .ant-table-tbody > tr:hover > td {
-  background-color: var(--bg-muted);
-}
+/* Ant Design Component Deep Overrides */
+.dark {
+  /* Menu Dark Mode */
+  .ant-menu.ant-menu-root {
+    background-color: transparent;
+  }
 
-// 深色模式 Ant Design 表单
-.dark .ant-form-item-label > label {
-  color: var(--text);
-}
+  .ant-menu.ant-menu-inline,
+  .ant-menu.ant-menu-vertical {
+    background-color: transparent;
+  }
 
-// 深色模式 Ant Design 分页
-.dark .ant-pagination {
-  color: var(--text);
-}
+  .ant-menu-item,
+  .ant-menu-submenu-title {
+    color: var(--ant-text-color-secondary);
+  }
 
-.dark .ant-pagination-item {
-  background-color: var(--bg-surface);
-  border-color: var(--border);
-}
+  .ant-menu-item:hover,
+  .ant-menu-submenu-title:hover {
+    color: var(--ant-text-color);
+    background-color: var(--ant-item-hover-bg);
+  }
 
-.dark .ant-pagination-item a {
-  color: var(--text);
-}
+  .ant-menu-item-selected {
+    color: var(--ant-primary-color);
+    background-color: var(--ant-primary-color-outline);
+  }
 
-.dark .ant-pagination-item-active {
-  border-color: var(--primary);
-}
+  /* Card Dark Mode */
+  .ant-card {
+    background-color: var(--ant-bg-color-container);
+    border-color: var(--ant-border-color);
+  }
 
-.dark .ant-pagination-item-active a {
-  color: var(--primary);
-}
+  .ant-card-head {
+    border-color: var(--ant-border-color);
+  }
 
-// 深色模式 Ant Design 骨架屏
-.dark .ant-skeleton-content .ant-skeleton-title,
-.dark .ant-skeleton-content .ant-skeleton-paragraph > li {
-  background: linear-gradient(90deg, var(--bg-muted) 25%, var(--bg-surface) 50%, var(--bg-muted) 75%);
-  background-size: 400% 100%;
-  color: transparent;
-}
+  .ant-card-body {
+    color: var(--ant-text-color);
+  }
 
-// 深色模式 Ant Design 头像
-.dark .ant-avatar {
-  background-color: var(--bg-muted);
-}
+  /* Table Dark Mode */
+  .ant-table {
+    background-color: var(--ant-bg-color-container);
+    color: var(--ant-text-color);
+  }
 
-// 深色模式 Ant Design 徽章
-.dark .ant-badge-count {
-  box-shadow: 0 0 0 2px var(--bg-surface);
-}
+  .ant-table-thead > tr > th {
+    background-color: var(--ant-bg-color-page);
+    color: var(--ant-text-color);
+    border-color: var(--ant-border-color);
+  }
 
-// 深色模式 Ant Design 复选框
-.dark .ant-checkbox-inner {
-  background-color: var(--bg-surface);
-  border-color: var(--border);
-}
+  .ant-table-tbody > tr > td {
+    border-color: var(--ant-border-color);
+  }
 
-.dark .ant-checkbox-checked .ant-checkbox-inner {
-  background-color: var(--primary);
-  border-color: var(--primary);
-}
+  .ant-table-tbody > tr:hover > td {
+    background-color: var(--ant-item-hover-bg);
+  }
 
-// 深色模式 Ant Design 模态框
-.dark .ant-modal-mask {
-  background-color: rgba(0, 0, 0, 0.7);
-}
+  .ant-table-wrapper .ant-table-pagination {
+    background: transparent;
+  }
 
-// 响应式断点
-// 超小屏幕 (手机)
-@media (max-width: var(--breakpoint-xs)) {
-  :root {
-    --font-size-sm: 12px;
-    --space-md: 12px;
+  /* Dropdown Dark Mode */
+  .ant-dropdown-menu {
+    background-color: var(--ant-bg-color-elevated);
+    border-color: var(--ant-border-color);
+    box-shadow: var(--ant-box-shadow);
+  }
+
+  .ant-dropdown-menu-item {
+    color: var(--ant-text-color);
+  }
+
+  .ant-dropdown-menu-item:hover {
+    background-color: var(--ant-item-hover-bg);
+  }
+
+  /* Form Dark Mode */
+  .ant-form-item-label > label {
+    color: var(--ant-text-color);
+  }
+
+  /* Breadcrumb Dark Mode */
+  .ant-breadcrumb {
+    color: var(--ant-text-color-secondary);
+  }
+
+  .ant-breadcrumb a {
+    color: var(--ant-text-color-secondary);
+  }
+
+  .ant-breadcrumb a:hover {
+    color: var(--ant-primary-color);
+  }
+
+  .ant-breadcrumb-separator {
+    color: var(--ant-border-color);
+  }
+
+  /* Avatar Dark Mode */
+  .ant-avatar {
+    background-color: var(--ant-item-hover-bg);
+  }
+
+  /* Badge Dark Mode */
+  .ant-badge-count {
+    box-shadow: 0 0 0 2px var(--ant-bg-color-container);
+  }
+
+  /* Checkbox Dark Mode */
+  .ant-checkbox-inner {
+    background-color: var(--ant-bg-color);
+    border-color: var(--ant-border-color);
+  }
+
+  .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: var(--ant-primary-color);
+    border-color: var(--ant-primary-color);
+  }
+
+  /* Pagination Dark Mode */
+  .ant-pagination-item {
+    background-color: var(--ant-bg-color-container);
+    border-color: var(--ant-border-color);
+  }
+
+  .ant-pagination-item a {
+    color: var(--ant-text-color);
+  }
+
+  .ant-pagination-item-active {
+    border-color: var(--ant-primary-color);
+  }
+
+  .ant-pagination-item-active a {
+    color: var(--ant-primary-color);
+  }
+
+  /* Skeleton Dark Mode */
+  .ant-skeleton-content .ant-skeleton-title,
+  .ant-skeleton-content .ant-skeleton-paragraph > li {
+    background: linear-gradient(90deg, var(--ant-item-hover-bg) 25%, var(--ant-bg-color-container) 50%, var(--ant-item-hover-bg) 75%);
+    background-size: 400% 100%;
+  }
+
+  /* Tabs Dark Mode */
+  .ant-tabs-nav::before {
+    border-color: var(--ant-border-color);
+  }
+
+  .ant-tabs-tab {
+    color: var(--ant-text-color-secondary);
+  }
+
+  .ant-tabs-tab:hover {
+    color: var(--ant-text-color);
+  }
+
+  .ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: var(--ant-primary-color);
+  }
+
+  /* Modal Dark Mode */
+  .ant-modal-content {
+    background-color: var(--ant-bg-color-container);
+  }
+
+  .ant-modal-header {
+    background-color: var(--ant-bg-color-container);
+    border-color: var(--ant-border-color);
+  }
+
+  .ant-modal-title {
+    color: var(--ant-text-color);
+  }
+
+  .ant-modal-footer {
+    border-color: var(--ant-border-color);
+  }
+
+  .ant-modal-close-x {
+    color: var(--ant-text-color-secondary);
+  }
+
+  /* Tag Dark Mode */
+  .ant-tag {
+    background-color: var(--ant-item-hover-bg);
+    border-color: var(--ant-border-color);
+    color: var(--ant-text-color);
+  }
+
+  /* Popover Dark Mode */
+  .ant-popover-inner {
+    background-color: var(--ant-bg-color-elevated);
+  }
+
+  .ant-popover-title {
+    color: var(--ant-text-color);
+    border-color: var(--ant-border-color);
+  }
+
+  .ant-popover-inner-content {
+    color: var(--ant-text-color);
+  }
+
+  /* Tooltip Dark Mode */
+  .ant-tooltip-inner {
+    background-color: var(--ant-bg-color-spotlight);
+    color: var(--ant-bg-color);
+  }
+
+  .ant-tooltip-arrow::before,
+  .ant-tooltip-arrow::after {
+    background-color: var(--ant-bg-color-spotlight);
+  }
+
+  /* Drawer Dark Mode */
+  .ant-drawer-content {
+    background-color: var(--ant-bg-color-container);
+  }
+
+  .ant-drawer-header {
+    background-color: var(--ant-bg-color-container);
+    border-color: var(--ant-border-color);
+  }
+
+  .ant-drawer-title {
+    color: var(--ant-text-color);
+  }
+
+  .ant-drawer-close {
+    color: var(--ant-text-color-secondary);
+  }
+
+  /* Select Dropdown Dark Mode */
+  .ant-select-dropdown {
+    background-color: var(--ant-bg-color-elevated);
+  }
+
+  .ant-select-item {
+    color: var(--ant-text-color);
+  }
+
+  .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+    background-color: var(--ant-item-hover-bg);
+  }
+
+  .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+    background-color: var(--ant-item-hover-bg);
+  }
+
+  /* DatePicker Dark Mode */
+  .ant-picker-panel-container {
+    background-color: var(--ant-bg-color-elevated);
+  }
+
+  .ant-picker-header {
+    color: var(--ant-text-color);
+    border-color: var(--ant-border-color);
+  }
+
+  .ant-picker-header button {
+    color: var(--ant-text-color-secondary);
+  }
+
+  .ant-picker-content th,
+  .ant-picker-content td {
+    color: var(--ant-text-color);
+  }
+
+  .ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner {
+    background-color: var(--ant-primary-color);
+  }
+
+  /* Message Dark Mode */
+  .ant-message-notice-content {
+    background-color: var(--ant-bg-color-elevated);
+    color: var(--ant-text-color);
+  }
+
+  /* Notification Dark Mode */
+  .ant-notification-notice {
+    background-color: var(--ant-bg-color-elevated);
+  }
+
+  .ant-notification-notice-message {
+    color: var(--ant-text-color);
+  }
+
+  .ant-notification-notice-description {
+    color: var(--ant-text-color-secondary);
+  }
+
+  /* Steps Dark Mode */
+  .ant-steps-item-process .ant-steps-item-icon {
+    background-color: var(--ant-primary-color);
+    border-color: var(--ant-primary-color);
+  }
+
+  .ant-steps-item-finish .ant-steps-item-icon {
+    border-color: var(--ant-primary-color);
+  }
+
+  .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
+    color: var(--ant-primary-color);
+  }
+
+  .ant-steps-item-title {
+    color: var(--ant-text-color);
+  }
+
+  .ant-steps-item-description {
+    color: var(--ant-text-color-secondary);
+  }
+
+  /* Tree Dark Mode */
+  .ant-tree {
+    background-color: transparent;
+    color: var(--ant-text-color);
+  }
+
+  .ant-tree-treenode:hover .ant-tree-node-content-wrapper {
+    background-color: var(--ant-item-hover-bg);
+  }
+
+  .ant-tree-node-content-wrapper.ant-tree-node-selected {
+    background-color: var(--ant-primary-color-outline);
+  }
+
+  /* Transfer Dark Mode */
+  .ant-transfer-list {
+    background-color: var(--ant-bg-color-container);
+    border-color: var(--ant-border-color);
+  }
+
+  .ant-transfer-list-header {
+    background-color: var(--ant-bg-color-page);
+    border-color: var(--ant-border-color);
+  }
+
+  .ant-transfer-list-content-item {
+    color: var(--ant-text-color);
+  }
+
+  .ant-transfer-list-content-item-checked {
+    background-color: var(--ant-primary-color-outline);
+  }
+
+  /* Cascader Dark Mode */
+  .ant-cascader-menus {
+    background-color: var(--ant-bg-color-elevated);
+  }
+
+  .ant-cascader-menu {
+    background-color: var(--ant-bg-color-elevated);
+    border-color: var(--ant-border-color);
+  }
+
+  .ant-cascader-menu-item {
+    color: var(--ant-text-color);
+  }
+
+  /* AutoComplete Dark Mode */
+  .ant-select-auto-complete .ant-select-selector {
+    background-color: var(--ant-bg-color);
+  }
+
+  /* Descriptions Dark Mode */
+  .ant-descriptions-title {
+    color: var(--ant-text-color);
+  }
+
+  .ant-descriptions-item-label {
+    color: var(--ant-text-color-secondary);
+  }
+
+  .ant-descriptions-item-content {
+    color: var(--ant-text-color);
+  }
+
+  /* Timeline Dark Mode */
+  .ant-timeline-item-tail {
+    border-color: var(--ant-border-color);
+  }
+
+  .ant-timeline-item-head {
+    background-color: var(--ant-bg-color-container);
+  }
+
+  .ant-timeline-item-content {
+    color: var(--ant-text-color);
   }
 }
 
-// 小屏幕 (平板)
-@media (max-width: var(--breakpoint-sm)) {
+/* Responsive Breakpoints */
+@media (max-width: 768px) {
   :root {
-    --font-size-sm: 13px;
-    --space-md: 14px;
+    --ant-font-size: 13px;
   }
 }
 
-// 中等屏幕
-@media (max-width: var(--breakpoint-md)) {
+@media (min-width: 1200px) {
   :root {
-    --font-size-sm: 14px;
-    --space-md: 16px;
+    --ant-font-size: 14px;
   }
 }
 
-// 大屏幕
-@media (min-width: var(--breakpoint-lg)) {
+@media (min-width: 1600px) {
   :root {
-    --font-size-sm: 15px;
-    --space-md: 18px;
-  }
-}
-
-// 超大屏幕
-@media (min-width: var(--breakpoint-xl)) {
-  :root {
-    --font-size-sm: 16px;
-    --space-md: 20px;
-  }
-}
-
-// 特超大屏幕
-@media (min-width: var(--breakpoint-2xl)) {
-  :root {
-    --font-size-sm: 17px;
-    --space-md: 24px;
+    --ant-font-size: 15px;
   }
 }

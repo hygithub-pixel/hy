@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div :style="{ backgroundColor: 'var(--ant-bg-color-page)', minHeight: '100%', padding: '24px' }">
     <a-row :gutter="20" class="mb-6">
       <a-col :span="24">
         <div class="mb-5">
-          <h1 class="m-0 mb-2 text-[28px] font-semibold text-gray-800">仪表盘</h1>
-          <p class="m-0 text-gray-500 text-base">系统运行状态概览</p>
+          <h1 class="m-0 mb-2 text-[28px] font-semibold" :style="{ color: 'var(--ant-text-color)' }">仪表盘</h1>
+          <p class="m-0 text-base" :style="{ color: 'var(--ant-text-color-secondary)' }">系统运行状态概览</p>
         </div>
       </a-col>
     </a-row>
@@ -17,13 +17,13 @@
               <component :is="metric.icon" :style="{ color: metric.iconColor, fontSize: '24px' }" />
             </div>
             <div class="flex-1">
-              <p class="text-sm text-gray-500 mb-1">{{ metric.title }}</p>
-              <p class="text-2xl font-bold text-gray-800 m-0">
+              <p class="text-sm mb-1" :style="{ color: 'var(--ant-text-color-secondary)' }">{{ metric.title }}</p>
+              <p class="text-2xl font-bold m-0" :style="{ color: 'var(--ant-text-color)' }">
                 <span v-if="metric.prefix">{{ metric.prefix }}</span>
                 {{ metric.value }}
                 <span v-if="metric.suffix">{{ metric.suffix }}</span>
               </p>
-              <p v-if="metric.trend" class="text-sm mt-1" :class="metric.trend > 0 ? 'text-green-500' : 'text-red-500'">
+              <p v-if="metric.trend" class="text-sm mt-1" :style="{ color: metric.trend > 0 ? 'var(--ant-success-color)' : 'var(--ant-error-color)' }">
                 <component :is="metric.trend > 0 ? CaretUpOutlined : CaretDownOutlined" />
                 {{ Math.abs(metric.trend) }}%
               </p>
@@ -38,7 +38,7 @@
         <a-card hoverable>
           <template #title>
             <div class="flex justify-between items-center">
-              <span class="text-lg font-semibold">销售额趋势</span>
+              <span class="text-lg font-semibold" :style="{ color: 'var(--ant-text-color)' }">销售额趋势</span>
               <a-select v-model:value="timeRange" size="small" style="width: 120px">
                 <a-select-option value="7">近7天</a-select-option>
                 <a-select-option value="30">近30天</a-select-option>
@@ -53,7 +53,7 @@
         <a-card hoverable>
           <template #title>
             <div class="flex justify-between items-center">
-              <span class="text-lg font-semibold">订单状态分布</span>
+              <span class="text-lg font-semibold" :style="{ color: 'var(--ant-text-color)' }">订单状态分布</span>
               <a-button type="link" class="p-0">查看详情</a-button>
             </div>
           </template>
@@ -67,7 +67,7 @@
         <a-card hoverable>
           <template #title>
             <div class="flex justify-between items-center">
-              <span class="text-lg font-semibold">用户增长趋势</span>
+              <span class="text-lg font-semibold" :style="{ color: 'var(--ant-text-color)' }">用户增长趋势</span>
               <a-button type="link" class="p-0">查看详情</a-button>
             </div>
           </template>
@@ -81,7 +81,7 @@
         <a-card hoverable>
           <template #title>
             <div class="flex justify-between items-center">
-              <span class="text-lg font-semibold">最近订单</span>
+              <span class="text-lg font-semibold" :style="{ color: 'var(--ant-text-color)' }">最近订单</span>
               <a-button type="link" class="p-0">查看全部</a-button>
             </div>
           </template>
@@ -95,7 +95,7 @@
             </a-table-column>
             <a-table-column key="amount" title="金额" dataIndex="amount" align="right">
               <template #default="{ record }">
-                <span class="font-semibold numeric">¥{{ record.amount.toFixed(2) }}</span>
+                <span class="font-semibold numeric" :style="{ color: 'var(--ant-text-color)' }">¥{{ record.amount.toFixed(2) }}</span>
               </template>
             </a-table-column>
           </a-table>
@@ -108,8 +108,10 @@
 <script setup lang="ts">
 import { UserOutlined, ShoppingOutlined, ShoppingCartOutlined, DollarOutlined, CaretUpOutlined, CaretDownOutlined } from '@ant-design/icons-vue';
 import { loadECharts } from '../utils/lazyLoad';
+import { useThemeStore } from '../stores/themeStore';
 
 let echarts: any = null;
+const themeStore = useThemeStore();
 
 const salesChartRef = ref<HTMLElement | null>(null);
 const orderStatusChartRef = ref<HTMLElement | null>(null);
@@ -131,7 +133,7 @@ const metrics = [
     prefix: '',
     suffix: '',
     icon: UserOutlined,
-    iconColor: '#3b82f6',
+    iconColor: 'var(--ant-info-color)',
     trend: 12
   },
   {
@@ -140,7 +142,7 @@ const metrics = [
     prefix: '',
     suffix: '',
     icon: ShoppingOutlined,
-    iconColor: '#10b981',
+    iconColor: 'var(--ant-success-color)',
     trend: 8
   },
   {
@@ -149,7 +151,7 @@ const metrics = [
     prefix: '',
     suffix: '',
     icon: ShoppingCartOutlined,
-    iconColor: '#f59e0b',
+    iconColor: 'var(--ant-warning-color)',
     trend: 15
   },
   {
@@ -158,7 +160,7 @@ const metrics = [
     prefix: '¥',
     suffix: '',
     icon: DollarOutlined,
-    iconColor: '#ef4444',
+    iconColor: 'var(--ant-error-color)',
     trend: 20
   }
 ];
@@ -181,34 +183,54 @@ const getTagColor = (status: string) => {
   return colorMap[status] || 'default';
 };
 
+const getChartColors = () => {
+  return {
+    primary: themeStore.isDark ? '#818cf8' : '#5e6ad2',
+    success: themeStore.isDark ? '#34d399' : '#10b981',
+    warning: themeStore.isDark ? '#fbbf24' : '#f59e0b',
+    error: themeStore.isDark ? '#f87171' : '#ef4444',
+    info: themeStore.isDark ? '#818cf8' : '#3b82f6',
+    textColor: themeStore.isDark ? '#f1f5f9' : '#1e293b',
+    textSecondary: themeStore.isDark ? '#94a3b8' : '#64748b',
+    borderColor: themeStore.isDark ? '#475569' : '#e2e8f0',
+    bgColor: themeStore.isDark ? '#1e293b' : '#ffffff',
+  };
+};
+
 const initSalesChart = async () => {
   if (!salesChartRef.value) return;
-  
+
   if (!echarts) {
     echarts = await loadECharts();
   }
-  
+
+  if (salesChart) {
+    salesChart.dispose();
+  }
   salesChart = echarts.init(salesChartRef.value);
-  
+
+  const colors = getChartColors();
   const days = parseInt(timeRange.value);
   const dates = [];
   const sales = [];
-  
+
   for (let i = days - 1; i >= 0; i--) {
     const date = new Date();
     date.setDate(date.getDate() - i);
     dates.push(`${date.getMonth() + 1}/${date.getDate()}`);
     sales.push(Math.floor(Math.random() * 5000) + 5000);
   }
-  
+
   const option = {
     animation: !prefersReducedMotion(),
     tooltip: {
       trigger: 'axis',
+      backgroundColor: colors.bgColor,
+      textStyle: { color: colors.textColor },
       axisPointer: {
         type: 'cross',
         label: {
-          backgroundColor: '#6a7985'
+          backgroundColor: colors.textSecondary
         }
       }
     },
@@ -222,15 +244,20 @@ const initSalesChart = async () => {
       {
         type: 'category',
         boundaryGap: false,
-        data: dates
+        data: dates,
+        axisLabel: { color: colors.textSecondary },
+        axisLine: { lineStyle: { color: colors.borderColor } }
       }
     ],
     yAxis: [
       {
         type: 'value',
         axisLabel: {
-          formatter: '¥{value}'
-        }
+          formatter: '¥{value}',
+          color: colors.textSecondary
+        },
+        axisLine: { lineStyle: { color: colors.borderColor } },
+        splitLine: { lineStyle: { color: colors.borderColor, opacity: 0.3 } }
       }
     ],
     series: [
@@ -242,22 +269,23 @@ const initSalesChart = async () => {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             {
               offset: 0,
-              color: 'rgba(59, 130, 246, 0.5)'
+              color: colors.info + '80'
             },
             {
               offset: 1,
-              color: 'rgba(59, 130, 246, 0.1)'
+              color: colors.info + '1a'
             }
           ])
         },
         emphasis: {
           focus: 'series'
         },
+        itemStyle: { color: colors.info },
         data: sales
       }
     ]
   };
-  
+
   if (salesChart) {
     salesChart.setOption(option);
   }
@@ -265,21 +293,29 @@ const initSalesChart = async () => {
 
 const initOrderStatusChart = async () => {
   if (!orderStatusChartRef.value) return;
-  
+
   if (!echarts) {
     echarts = await loadECharts();
   }
-  
+
+  if (orderStatusChart) {
+    orderStatusChart.dispose();
+  }
   orderStatusChart = echarts.init(orderStatusChartRef.value);
-  
+
+  const colors = getChartColors();
+
   const option = {
     animation: !prefersReducedMotion(),
     tooltip: {
-      trigger: 'item'
+      trigger: 'item',
+      backgroundColor: colors.bgColor,
+      textStyle: { color: colors.textColor }
     },
     legend: {
       top: '5%',
-      left: 'center'
+      left: 'center',
+      textStyle: { color: colors.textSecondary }
     },
     series: [
       {
@@ -289,7 +325,7 @@ const initOrderStatusChart = async () => {
         avoidLabelOverlap: false,
         itemStyle: {
           borderRadius: 10,
-          borderColor: '#fff',
+          borderColor: colors.bgColor,
           borderWidth: 2
         },
         label: {
@@ -307,15 +343,15 @@ const initOrderStatusChart = async () => {
           show: false
         },
         data: [
-          { value: 35, name: '进行中', itemStyle: { color: '#3b82f6' } },
-          { value: 45, name: '已完成', itemStyle: { color: '#10b981' } },
-          { value: 15, name: '待处理', itemStyle: { color: '#f59e0b' } },
-          { value: 5, name: '已取消', itemStyle: { color: '#ef4444' } }
+          { value: 35, name: '进行中', itemStyle: { color: colors.info } },
+          { value: 45, name: '已完成', itemStyle: { color: colors.success } },
+          { value: 15, name: '待处理', itemStyle: { color: colors.warning } },
+          { value: 5, name: '已取消', itemStyle: { color: colors.error } }
         ]
       }
     ]
   };
-  
+
   if (orderStatusChart) {
     orderStatusChart.setOption(option);
   }
@@ -323,27 +359,34 @@ const initOrderStatusChart = async () => {
 
 const initUserGrowthChart = async () => {
   if (!userGrowthChartRef.value) return;
-  
+
   if (!echarts) {
     echarts = await loadECharts();
   }
-  
+
+  if (userGrowthChart) {
+    userGrowthChart.dispose();
+  }
   userGrowthChart = echarts.init(userGrowthChartRef.value);
-  
+
+  const colors = getChartColors();
   const months = ['1月', '2月', '3月', '4月', '5月', '6月'];
   const newUsers = [120, 190, 300, 450, 620, 880];
   const activeUsers = [200, 350, 500, 700, 900, 1200];
-  
+
   const option = {
     animation: !prefersReducedMotion(),
     tooltip: {
       trigger: 'axis',
+      backgroundColor: colors.bgColor,
+      textStyle: { color: colors.textColor },
       axisPointer: {
         type: 'shadow'
       }
     },
     legend: {
-      data: ['新用户', '活跃用户']
+      data: ['新用户', '活跃用户'],
+      textStyle: { color: colors.textSecondary }
     },
     grid: {
       left: '3%',
@@ -353,10 +396,15 @@ const initUserGrowthChart = async () => {
     },
     xAxis: {
       type: 'category',
-      data: months
+      data: months,
+      axisLabel: { color: colors.textSecondary },
+      axisLine: { lineStyle: { color: colors.borderColor } }
     },
     yAxis: {
-      type: 'value'
+      type: 'value',
+      axisLabel: { color: colors.textSecondary },
+      axisLine: { lineStyle: { color: colors.borderColor } },
+      splitLine: { lineStyle: { color: colors.borderColor, opacity: 0.3 } }
     },
     series: [
       {
@@ -367,9 +415,7 @@ const initUserGrowthChart = async () => {
           focus: 'series'
         },
         data: newUsers,
-        itemStyle: {
-          color: '#3b82f6'
-        }
+        itemStyle: { color: colors.info }
       },
       {
         name: '活跃用户',
@@ -379,13 +425,11 @@ const initUserGrowthChart = async () => {
           focus: 'series'
         },
         data: activeUsers,
-        itemStyle: {
-          color: '#10b981'
-        }
+        itemStyle: { color: colors.success }
       }
     ]
   };
-  
+
   if (userGrowthChart) {
     userGrowthChart.setOption(option);
   }
@@ -397,8 +441,18 @@ const handleResize = () => {
   userGrowthChart?.resize();
 };
 
+const updateChartTheme = () => {
+  initSalesChart();
+  initOrderStatusChart();
+  initUserGrowthChart();
+};
+
 watch(timeRange, async () => {
   await initSalesChart();
+});
+
+watch(() => themeStore.isDark, () => {
+  updateChartTheme();
 });
 
 onMounted(async () => {

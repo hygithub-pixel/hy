@@ -1,11 +1,17 @@
 <template>
-  <div id="live-region" aria-live="polite" class="sr-only-live-region"></div>
-  <router-view v-slot="{ Component }">
-    <component :is="Component" />
-  </router-view>
+  <a-config-provider :theme="themeStore.antTheme">
+    <div id="live-region" aria-live="polite" class="sr-only-live-region"></div>
+    <router-view v-slot="{ Component }">
+      <component :is="Component" />
+    </router-view>
+  </a-config-provider>
 </template>
 
 <script setup lang="ts">
+import { useThemeStore } from './stores/themeStore';
+
+const themeStore = useThemeStore();
+
 const liveRegion = ref<HTMLElement | null>(null);
 
 const updateLiveRegion = (message: string) => {
@@ -20,6 +26,7 @@ const updateLiveRegion = (message: string) => {
 };
 
 onMounted(() => {
+  themeStore.init();
   liveRegion.value = document.getElementById('live-region');
   window.announceToScreenReader = updateLiveRegion;
 });
