@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="flex justify-end mb-4">
-      <el-select v-model="timeRange" size="small" class="w-32">
-        <el-option label="近7天" value="7" />
-        <el-option label="近30天" value="30" />
-        <el-option label="近90天" value="90" />
-      </el-select>
+      <a-select v-model:value="timeRange" size="small" style="width: 120px">
+        <a-select-option value="7">近7天</a-select-option>
+        <a-select-option value="30">近30天</a-select-option>
+        <a-select-option value="90">近90天</a-select-option>
+      </a-select>
     </div>
     <div ref="chartRef" class="w-full h-64 sm:h-72 lg:h-80"></div>
   </div>

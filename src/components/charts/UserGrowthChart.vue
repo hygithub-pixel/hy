@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex justify-end mb-4">
-      <el-button type="primary" text @click="$emit('viewDetails')">查看详情</el-button>
+      <a-button type="link" @click="$emit('viewDetails')">查看详情</a-button>
     </div>
     <div ref="chartRef" class="w-full h-72"></div>
   </div>
