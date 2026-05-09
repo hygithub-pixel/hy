@@ -4,36 +4,11 @@
   "description": "对系统角色进行管理，包括角色的增删改查、权限分配等操作",
   
   "apis": {
-    "list": { "path": "/api/roles", "method": "GET" },
-    "get": { "path": "/api/roles/{id}", "method": "GET" },
-    "create": { "path": "/api/roles", "method": "POST" },
-    "update": { "path": "/api/roles/{id}", "method": "PUT" },
-    "delete": { "path": "/api/roles/{id}", "method": "DELETE" },
-    "batchDelete": { "path": "/api/roles/batch", "method": "DELETE" },
-    "export": { "path": "/api/roles/export", "method": "POST" }
-  },
-
-  "mock": {
-    "list": {
-      "count": 20,
-      "fields": {
-        "id": { "type": "increment", "start": 1 },
-        "roleName": { "type": "pick", "options": ["超级管理员", "系统管理员", "运营总监", "产品经理", "财务主管", "普通用户", "访客", "测试工程师", "开发工程师", "运维工程师", "安全管理员", "数据分析师"] },
-        "roleCode": { "type": "word", "min": 4, "max": 8, "prefix": "ROLE_", "uppercase": true },
-        "description": { "type": "sentence", "min": 10, "max": 50 },
-        "status": { "type": "pick", "options": [1, 1, 1, 0] },
-        "userCount": { "type": "number", "min": 0, "max": 100 },
-        "createTime": { "type": "datetime", "minDate": "2023-01-01", "maxDate": "2025-12-31" }
-      }
-    },
-    "create": { "return": { "code": 0, "message": "创建成功" } },
-    "update": { "return": { "code": 0, "message": "更新成功" } },
-    "delete": { "return": { "code": 0, "message": "删除成功" } },
-    "batchDelete": { "return": { "code": 0, "message": "批量删除成功" } }
-  },
-
-  "hooks": {
-    "beforeLoad": "transformDateRange"
+    "list": { "path": "/roles", "method": "GET" },
+    "get": { "path": "/roles/{id}", "method": "GET" },
+    "create": { "path": "/roles", "method": "POST" },
+    "update": { "path": "/roles/{id}", "method": "PUT" },
+    "delete": { "path": "/roles/{id}", "method": "DELETE" }
   },
 
   "columns": [
@@ -49,65 +24,10 @@
     {
       "group": "基本信息",
       "items": [
-        { 
-          "component": "a-input",
-          "label": "角色名称",
-          "name": "roleName",
-          "required": true,
-          "placeholder": "请输入角色名称",
-          "rules": [
-            { "required": true, "message": "请输入角色名称" }
-          ]
-        },
-        { 
-          "component": "a-input",
-          "label": "角色编码",
-          "name": "roleCode",
-          "required": true,
-          "placeholder": "请输入角色编码",
-          "rules": [
-            { "required": true, "message": "请输入角色编码" },
-            { "pattern": "^[A-Z_]+$", "message": "角色编码只能包含大写字母和下划线" }
-          ]
-        },
-        { 
-          "component": "a-input",
-          "label": "描述",
-          "name": "description",
-          "placeholder": "请输入角色描述"
-        },
-        { 
-          "component": "a-radio-group",
-          "label": "状态",
-          "name": "status",
-          "optionType": "button",
-          "options": [
-            { "label": "启用", "value": 1 },
-            { "label": "禁用", "value": 0 }
-          ]
-        }
-      ]
-    },
-    {
-      "group": "权限配置",
-      "items": [
-        { 
-          "component": "a-tree-select",
-          "label": "菜单权限",
-          "name": "menuIds",
-          "placeholder": "请选择菜单权限",
-          "treeData": []
-        },
-        { 
-          "component": "a-checkbox-group",
-          "label": "数据权限",
-          "name": "dataPermissions",
-          "options": [
-            { "label": "全部数据", "value": "all" },
-            { "label": "本部门数据", "value": "dept" },
-            { "label": "本人数据", "value": "self" }
-          ]
-        }
+        { "component": "a-input", "label": "角色名称", "name": "roleName", "required": true, "placeholder": "请输入角色名称" },
+        { "component": "a-input", "label": "角色编码", "name": "roleCode", "required": true, "placeholder": "请输入角色编码" },
+        { "component": "a-input", "label": "描述", "name": "description", "placeholder": "请输入角色描述" },
+        { "component": "a-radio-group", "label": "状态", "name": "status", "optionType": "button", "options": [{ "label": "启用", "value": 1 }, { "label": "禁用", "value": 0 }] }
       ]
     }
   ],
@@ -115,41 +35,18 @@
   "buttons": {
     "toolbar": [
       { "component": "a-button", "type": "primary", "text": "新增", "action": "create" },
-      { "component": "a-button", "text": "批量删除", "action": "batchDelete", "disabledWhen": "noSelection" },
-      { "component": "a-button", "text": "导出", "action": "export" }
+      { "component": "a-button", "text": "批量删除", "action": "batchDelete", "disabledWhen": "noSelection" }
     ],
     "rowActions": [
       { "component": "a-button", "text": "编辑", "action": "edit", "size": "small" },
-      { "component": "a-button", "text": "删除", "action": "delete", "size": "small", "danger": true },
-      { "component": "a-button", "text": "分配权限", "action": "permission", "size": "small" }
+      { "component": "a-button", "text": "删除", "action": "delete", "size": "small", "danger": true }
     ]
   },
 
   "search": {
     "fields": [
-      { 
-        "component": "a-input", 
-        "name": "roleName", 
-        "placeholder": "请输入角色名称",
-        "allowClear": true
-      },
-      { 
-        "component": "a-input", 
-        "name": "roleCode", 
-        "placeholder": "请输入角色编码",
-        "allowClear": true
-      },
-      { 
-        "component": "a-select", 
-        "name": "status", 
-        "placeholder": "请选择状态",
-        "allowClear": true,
-        "options": [
-          { "label": "全部", "value": "" },
-          { "label": "启用", "value": 1 },
-          { "label": "禁用", "value": 0 }
-        ]
-      }
+      { "component": "a-input", "name": "roleName", "placeholder": "请输入角色名称", "allowClear": true },
+      { "component": "a-select", "name": "status", "placeholder": "请选择状态", "allowClear": true, "options": [{ "label": "全部", "value": "" }, { "label": "启用", "value": 1 }, { "label": "禁用", "value": 0 }] }
     ],
     "actions": [
       { "component": "a-button", "type": "primary", "text": "查询", "action": "search" },

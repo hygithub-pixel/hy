@@ -49,33 +49,21 @@ export default [
     url: '/api/users',
     method: 'post',
     response: ({ body }) => {
-      return {
-        code: 200,
-        message: '新增成功',
-        data: { id: Date.now(), ...body },
-      }
+      return { code: 200, message: '新增成功', data: { id: Date.now(), ...body } }
     },
   },
   {
     url: '/api/users/:id',
     method: 'put',
     response: ({ body }) => {
-      return {
-        code: 200,
-        message: '更新成功',
-        data: body,
-      }
+      return { code: 200, message: '更新成功', data: body }
     },
   },
   {
     url: '/api/users/:id',
     method: 'delete',
     response: () => {
-      return {
-        code: 200,
-        message: '删除成功',
-        data: null,
-      }
+      return { code: 200, message: '删除成功', data: null }
     },
   },
 ]
