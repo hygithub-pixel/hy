@@ -14,72 +14,32 @@
         mode="inline"
         :selected-keys="[activeMenu]"
         :open-keys="openKeys"
+        @openChange="handleOpenChange"
         class="bg-transparent border-none"
         :style="{ color: '#bfcbd9' }"
       >
-        <a-menu-item key="/dashboard">
-          <template #icon>
-            <HomeOutlined />
-          </template>
-          <span>首页</span>
-        </a-menu-item>
-
-        <a-menu-item key="/dashboard">
-          <template #icon>
-            <DashboardOutlined />
-          </template>
-          <span>仪表盘</span>
-        </a-menu-item>
-
-        <a-sub-menu key="system">
-          <template #icon>
-            <SettingOutlined />
-          </template>
-          <template #title>系统管理</template>
-          <a-menu-item key="/users">
-            <router-link to="/users">用户管理</router-link>
+        <template v-for="menu in menus" :key="menu.key">
+          <a-sub-menu v-if="menu.children && menu.children.length > 0" :key="menu.key">
+            <template #icon>
+              <component :is="getIcon(menu.icon)" />
+            </template>
+            <template #title>{{ menu.title }}</template>
+            <template v-for="child in menu.children" :key="child.key">
+              <a-menu-item v-if="child.path">
+                <template #icon>
+                  <component :is="getIcon(child.icon)" />
+                </template>
+                <router-link :to="child.path">{{ child.title }}</router-link>
+              </a-menu-item>
+            </template>
+          </a-sub-menu>
+          <a-menu-item v-else-if="menu.path" :key="menu.key">
+            <template #icon>
+              <component :is="getIcon(menu.icon)" />
+            </template>
+            <router-link :to="menu.path">{{ menu.title }}</router-link>
           </a-menu-item>
-          <a-menu-item key="/roles">
-            <router-link to="/roles">角色管理</router-link>
-          </a-menu-item>
-          <a-menu-item key="/departments">
-            <router-link to="/departments">部门管理</router-link>
-          </a-menu-item>
-        </a-sub-menu>
-
-        <a-sub-menu key="business">
-          <template #icon>
-            <ShoppingCartOutlined />
-          </template>
-          <template #title>业务管理</template>
-          <a-menu-item key="/products">
-            <router-link to="/products">商品管理</router-link>
-          </a-menu-item>
-          <a-menu-item key="/orders">
-            <router-link to="/orders">订单管理</router-link>
-          </a-menu-item>
-        </a-sub-menu>
-
-        <a-sub-menu key="data">
-          <template #icon>
-            <BarChartOutlined />
-          </template>
-          <template #title>数据管理</template>
-        </a-sub-menu>
-
-        <a-sub-menu key="monitor">
-          <template #icon>
-            <ClockCircleOutlined />
-          </template>
-          <template #title>系统监控</template>
-        </a-sub-menu>
-
-        <a-menu-item key="/settings">
-          <template #icon>
-            <ToolOutlined />
-          </template>
-          <span>设置</span>
-        </a-menu-item>
+        </template>
       </a-menu>
     </div>
 
@@ -98,26 +58,66 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import * as icons from '@ant-design/icons-vue';
+import type { MenuItem } from '../../types/menu';
+
+const route = useRoute();
+const menus = ref<MenuItem[]>([]);
+const openKeys = ref<string[]>([]);
+
+const activeMenu = computed(() => {
+  const currentPath = route.path;
+  const findMenuKey = (items: MenuItem[]): string | null => {
+    for (const item of items) {
+      if (item.path === currentPath) return item.key;
+      if (item.children) {
+        const found = findMenuKey(item.children);
+        if (found) return found;
+      }
+    }
+    return null;
+  };
+  const key = findMenuKey(menus.value);
+  return key || currentPath;
+});
+
+const getIcon = (iconName?: string) => {
+  if (!iconName) return MenuOutlined;
+  return (icons as any)[iconName] || MenuOutlined;
+};
+
+const handleOpenChange = (keys: string[]) => {
+  openKeys.value = keys;
+};
+
+onMounted(async () => {
+  const menuConfig = await import('../../config/menu.json');
+  menus.value = menuConfig.default?.menus || menuConfig.menus || [];
+  
+  const firstOpenMenu = menus.value.find(m => m.children && m.children.length > 0);
+  if (firstOpenMenu) {
+    openKeys.value = [firstOpenMenu.key];
+  }
+});
+</script>
+
+<script lang="ts">
 import {
   AntDesignOutlined,
-  HomeOutlined,
-  DashboardOutlined,
-  SettingOutlined,
-  ShoppingCartOutlined,
-  BarChartOutlined,
-  ToolOutlined,
   MenuOutlined,
   BellOutlined,
   FullscreenOutlined,
-  ClockCircleOutlined,
 } from '@ant-design/icons-vue';
-
-const route = useRoute();
-const openKeys = ref(['system']);
-
-const activeMenu = computed(() => route.path);
+export default {
+  components: {
+    AntDesignOutlined,
+    MenuOutlined,
+    BellOutlined,
+    FullscreenOutlined,
+  },
+};
 </script>
 
 <style lang="scss" scoped>
