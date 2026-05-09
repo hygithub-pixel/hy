@@ -1,9 +1,9 @@
 <template>
-  <div class="h-screen bg-[#0a1628] text-white flex flex-col">
+  <div class="h-screen bg-[#0a1628] text-white flex flex-col w-64">
     <div class="h-16 flex items-center px-4 border-b border-[#1e2f4a]">
       <div class="flex items-center gap-3">
         <div class="w-9 h-9 rounded bg-gradient-to-br from-[#1890ff] to-[#096dd9] flex items-center justify-center">
-          <component :is="componentMap['AntDesignOutlined']" class="text-white text-xl" />
+          <AntDesignOutlined class="text-white text-xl" />
         </div>
         <span class="text-lg font-bold">Ant Design Vue</span>
       </div>
@@ -19,21 +19,21 @@
       >
         <a-menu-item key="/dashboard">
           <template #icon>
-            <component :is="componentMap['HomeOutlined']" />
+            <HomeOutlined />
           </template>
           <span>首页</span>
         </a-menu-item>
 
         <a-menu-item key="/dashboard">
           <template #icon>
-            <component :is="componentMap['DashboardOutlined']" />
+            <DashboardOutlined />
           </template>
           <span>仪表盘</span>
         </a-menu-item>
 
         <a-sub-menu key="system">
           <template #icon>
-            <component :is="componentMap['SettingOutlined']" />
+            <SettingOutlined />
           </template>
           <template #title>系统管理</template>
           <a-menu-item key="/users">
@@ -52,28 +52,28 @@
 
         <a-sub-menu key="business">
           <template #icon>
-            <component :is="componentMap['ShoppingCartOutlined']" />
+            <ShoppingCartOutlined />
           </template>
           <template #title>业务管理</template>
         </a-sub-menu>
 
         <a-sub-menu key="data">
           <template #icon>
-            <component :is="componentMap['BarChartOutlined']" />
+            <BarChartOutlined />
           </template>
           <template #title>数据管理</template>
         </a-sub-menu>
 
         <a-sub-menu key="monitor">
           <template #icon>
-            <component :is="componentMap['ActivityOutlined']" />
+            <ClockCircleOutlined />
           </template>
           <template #title>系统监控</template>
         </a-sub-menu>
 
         <a-menu-item key="/settings">
           <template #icon>
-            <component :is="componentMap['ToolOutlined']" />
+            <ToolOutlined />
           </template>
           <span>设置</span>
         </a-menu-item>
@@ -82,13 +82,13 @@
 
     <div class="h-12 flex items-center justify-around border-t border-[#1e2f4a]">
       <button class="p-2 hover:bg-[#1e2f4a] rounded transition-colors" aria-label="菜单">
-        <component :is="componentMap['MenuOutlined']" />
+        <MenuOutlined />
       </button>
       <button class="p-2 hover:bg-[#1e2f4a] rounded transition-colors" aria-label="通知">
-        <component :is="componentMap['BellOutlined']" />
+        <BellOutlined />
       </button>
       <button class="p-2 hover:bg-[#1e2f4a] rounded transition-colors" aria-label="全屏">
-        <component :is="componentMap['FullscreenOutlined']" />
+        <FullscreenOutlined />
       </button>
     </div>
   </div>
@@ -97,17 +97,27 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
-import * as icons from '@ant-design/icons-vue';
+import {
+  AntDesignOutlined,
+  HomeOutlined,
+  DashboardOutlined,
+  SettingOutlined,
+  ShoppingCartOutlined,
+  BarChartOutlined,
+  ToolOutlined,
+  MenuOutlined,
+  BellOutlined,
+  FullscreenOutlined,
+  ClockCircleOutlined,
+} from '@ant-design/icons-vue';
 
 const route = useRoute();
 const openKeys = ref(['system']);
 
-const componentMap: Record<string, any> = icons;
-
 const activeMenu = computed(() => route.path);
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 :deep(.ant-menu-inline .ant-menu-item) {
   margin: 0 !important;
   height: 42px !important;

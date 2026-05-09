@@ -1,21 +1,28 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { routes } from './routes';
-import { beforeEachGuard, afterEachGuard } from './guards';
+import type { RouteRecordRaw } from 'vue-router';
+
+const routes: RouteRecordRaw[] = [
+  {
+    path: '/',
+    redirect: '/users',
+  },
+  {
+    path: '/users',
+    name: 'UserList',
+    component: () => import('../views/UserList.vue'),
+    meta: { title: '用户管理' },
+  },
+  {
+    path: '/users/add',
+    name: 'UserAdd',
+    component: () => import('../views/UserAdd.vue'),
+    meta: { title: '新增用户' },
+  },
+];
 
 const router = createRouter({
-  history: createWebHistory('/mgmt-cli-ebank/'),
-  routes: routes as any,
-  scrollBehavior(_to, _from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition;
-    } else {
-      return { top: 0 };
-    }
-  },
+  history: createWebHistory(),
+  routes,
 });
-
-// 注册路由守卫
-router.beforeEach(beforeEachGuard);
-router.afterEach(afterEachGuard);
 
 export default router;
