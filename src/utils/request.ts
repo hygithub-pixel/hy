@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios from 'axios';
 
 export interface ApiResponse<T = any> {
   code: number;
@@ -33,7 +33,7 @@ instance.interceptors.request.use(
 );
 
 instance.interceptors.response.use(
-  (response: AxiosResponse<ApiResponse>) => {
+  (response) => {
     return response.data;
   },
   (error) => {
