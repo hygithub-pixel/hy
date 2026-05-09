@@ -157,11 +157,13 @@ const loadData = async () => {
 
     const apiConfig = props.config.apis?.list;
     if (apiConfig) {
-      const response = await get<{ list: any[]; total: number }>(apiConfig.path, params);
-      tableData.value = response.data.list;
-      pagination.total = response.data.total;
+      const res = await get<{ list: any[]; total: number }>(apiConfig.path, params);
+      const data = res.data || {};
+      tableData.value = data.list || [];
+      pagination.total = data.total || 0;
     }
   } catch (error: any) {
+    console.error('Load data error:', error);
     message.error(error.message || '加载数据失败');
   } finally {
     loading.value = false;
