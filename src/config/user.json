@@ -1,0 +1,247 @@
+{
+  "module": "user",
+  "title": "用户管理",
+  "description": "对系统中用户进行管理，包括新增、编辑、删除、查看等操作",
+  
+  "apis": {
+    "list": { "path": "/api/users", "method": "GET" },
+    "create": { "path": "/api/users", "method": "POST" },
+    "update": { "path": "/api/users/{id}", "method": "PUT" },
+    "delete": { "path": "/api/users/{id}", "method": "DELETE" }
+  },
+
+  "hooks": {
+    "beforeLoad": "transformDateRange",
+    "afterSubmit": "backToList"
+  },
+
+  "columns": [
+    { "dataIndex": "username", "title": "用户名", "width": 150 },
+    { "dataIndex": "nickname", "title": "昵称", "width": 100 },
+    { "dataIndex": "email", "title": "邮箱", "width": 200 },
+    { "dataIndex": "department", "title": "部门", "width": 100 },
+    { "dataIndex": "role", "title": "角色", "width": 120 },
+    { "dataIndex": "status", "title": "状态", "width": 80 },
+    { "dataIndex": "createTime", "title": "创建时间", "width": 160 },
+    { "key": "action", "title": "操作", "width": 150 }
+  ],
+
+  "fields": [
+    {
+      "group": "基本信息",
+      "items": [
+        { 
+          "component": "a-input",
+          "label": "用户名",
+          "name": "username",
+          "required": true,
+          "placeholder": "请输入用户名",
+          "rules": [
+            { "required": true, "message": "请输入用户名" },
+            { "pattern": "^[a-zA-Z0-9_]+$", "message": "只能包含字母、数字和下划线" }
+          ]
+        },
+        { 
+          "component": "a-input",
+          "label": "昵称",
+          "name": "nickname",
+          "required": true,
+          "placeholder": "请输入昵称",
+          "rules": [
+            { "required": true, "message": "请输入昵称" }
+          ]
+        },
+        { 
+          "component": "a-input",
+          "label": "邮箱",
+          "name": "email",
+          "required": true,
+          "placeholder": "请输入邮箱地址",
+          "rules": [
+            { "required": true, "message": "请输入邮箱" },
+            { "type": "email", "message": "邮箱格式不正确" }
+          ]
+        },
+        { 
+          "component": "a-input",
+          "label": "手机号码",
+          "name": "phone",
+          "placeholder": "请输入手机号码",
+          "rules": [
+            { "pattern": "^1[3-9]\\d{9}$", "message": "请输入正确的手机号码" }
+          ]
+        },
+        { 
+          "component": "a-select",
+          "label": "所属部门",
+          "name": "department",
+          "placeholder": "请选择所属部门",
+          "options": [
+            { "label": "技术部", "value": "技术部" },
+            { "label": "产品部", "value": "产品部" },
+            { "label": "设计部", "value": "设计部" },
+            { "label": "运营部", "value": "运营部" },
+            { "label": "测试部", "value": "测试部" }
+          ]
+        },
+        { 
+          "component": "a-select",
+          "label": "角色",
+          "name": "role",
+          "required": true,
+          "placeholder": "请选择角色",
+          "options": [
+            { "label": "超级管理员", "value": "超级管理员" },
+            { "label": "产品经理", "value": "产品经理" },
+            { "label": "设计师", "value": "设计师" },
+            { "label": "运营专员", "value": "运营专员" },
+            { "label": "开发工程师", "value": "开发工程师" },
+            { "label": "测试工程师", "value": "测试工程师" }
+          ]
+        },
+        { 
+          "component": "a-radio-group",
+          "label": "状态",
+          "name": "status",
+          "optionType": "button",
+          "options": [
+            { "label": "启用", "value": 1 },
+            { "label": "禁用", "value": 0 }
+          ]
+        },
+        { 
+          "component": "a-radio-group",
+          "label": "性别",
+          "name": "gender",
+          "optionType": "button",
+          "options": [
+            { "label": "男", "value": "男" },
+            { "label": "女", "value": "女" }
+          ]
+        },
+        { 
+          "component": "a-date-picker",
+          "label": "生日",
+          "name": "birthday",
+          "placeholder": "请选择日期",
+          "picker": "date"
+        },
+        { 
+          "component": "a-date-picker",
+          "label": "入职日期",
+          "name": "entryDate",
+          "placeholder": "请选择日期",
+          "picker": "date"
+        }
+      ]
+    },
+    {
+      "group": "账号信息",
+      "items": [
+        { 
+          "component": "a-input-password",
+          "label": "密码",
+          "name": "password",
+          "required": true,
+          "placeholder": "请输入密码",
+          "rules": [
+            { "required": true, "message": "请输入密码" },
+            { "min": 6, "message": "密码至少6位" },
+            { "max": 20, "message": "密码最多20位" }
+          ]
+        },
+        { 
+          "component": "a-input-password",
+          "label": "确认密码",
+          "name": "confirmPassword",
+          "required": true,
+          "placeholder": "请再次输入密码",
+          "rules": [
+            { "required": true, "message": "请再次输入密码" }
+          ]
+        },
+        { 
+          "component": "a-checkbox-group",
+          "label": "登录方式",
+          "name": "loginType",
+          "options": [
+            { "label": "账号密码", "value": "username" },
+            { "label": "手机号登录", "value": "phone" },
+            { "label": "邮箱登录", "value": "email" }
+          ]
+        },
+        { 
+          "component": "a-textarea",
+          "label": "备注",
+          "name": "remark",
+          "placeholder": "请输入备注信息",
+          "rows": 4,
+          "maxlength": 200,
+          "showCount": true
+        }
+      ]
+    },
+    {
+      "group": "其他信息",
+      "items": [
+        { 
+          "component": "a-upload",
+          "label": "头像",
+          "name": "avatar",
+          "action": "/api/upload",
+          "listType": "picture-card",
+          "maxCount": 1
+        }
+      ]
+    }
+  ],
+
+  "buttons": {
+    "toolbar": [
+      { "component": "a-button", "type": "primary", "text": "新增", "action": "create" },
+      { "component": "a-button", "text": "批量删除", "action": "batchDelete", "disabledWhen": "noSelection" },
+      { "component": "a-button", "text": "导出", "action": "export" }
+    ],
+    "rowActions": [
+      { "component": "a-button", "text": "编辑", "action": "edit", "size": "small" },
+      { "component": "a-button", "text": "删除", "action": "delete", "size": "small", "danger": true },
+      { "component": "a-button", "text": "查看", "action": "view", "size": "small" }
+    ]
+  },
+
+  "search": {
+    "fields": [
+      { 
+        "component": "a-input", 
+        "name": "username", 
+        "placeholder": "请输入用户名",
+        "allowClear": true
+      },
+      { 
+        "component": "a-select", 
+        "name": "status", 
+        "placeholder": "请选择状态",
+        "allowClear": true,
+        "options": [
+          { "label": "全部", "value": "" },
+          { "label": "启用", "value": 1 },
+          { "label": "禁用", "value": 0 }
+        ]
+      },
+      { 
+        "component": "a-range-picker", 
+        "name": "dateRange",
+        "picker": "date"
+      }
+    ],
+    "actions": [
+      { "component": "a-button", "type": "primary", "text": "查询", "action": "search" },
+      { "component": "a-button", "text": "重置", "action": "reset" }
+    ]
+  },
+
+  "renders": {
+    "renderStatus": "renderStatus",
+    "renderRole": "renderRole"
+  }
+}

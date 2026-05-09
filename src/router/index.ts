@@ -9,14 +9,20 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/users',
     name: 'UserList',
-    component: () => import('../views/UserList.vue'),
+    component: () => import('../views/ModulePage.vue'),
     meta: { title: '用户管理' },
   },
   {
     path: '/users/add',
     name: 'UserAdd',
-    component: () => import('../views/UserAdd.vue'),
+    component: () => import('../views/UserForm.vue'),
     meta: { title: '新增用户' },
+  },
+  {
+    path: '/users/edit/:id',
+    name: 'UserEdit',
+    component: () => import('../views/UserForm.vue'),
+    meta: { title: '编辑用户' },
   },
 ];
 
