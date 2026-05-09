@@ -5,26 +5,35 @@
   
   "apis": {
     "list": { "path": "/api/users", "method": "GET" },
+    "get": { "path": "/api/users/{id}", "method": "GET" },
     "create": { "path": "/api/users", "method": "POST" },
     "update": { "path": "/api/users/{id}", "method": "PUT" },
-    "delete": { "path": "/api/users/{id}", "method": "DELETE" }
+    "delete": { "path": "/api/users/{id}", "method": "DELETE" },
+    "batchDelete": { "path": "/api/users/batch", "method": "DELETE" },
+    "export": { "path": "/api/users/export", "method": "POST" }
   },
 
   "mock": {
-    "count": 50,
-    "fields": {
-      "id": { "type": "increment" },
-      "username": { "type": "word", "min": 3, "max": 10 },
-      "nickname": { "type": "cname" },
-      "email": { "type": "email" },
-      "phone": { "type": "phone" },
-      "department": { "type": "pick", "options": ["技术部", "产品部", "设计部", "运营部", "测试部"] },
-      "role": { "type": "pick", "options": ["超级管理员", "产品经理", "设计师", "运营专员", "开发工程师", "测试工程师"] },
-      "status": { "type": "pick", "options": [1, 1, 1, 0] },
-      "gender": { "type": "pick", "options": ["男", "女"] },
-      "createTime": { "type": "datetime" },
-      "avatar": { "type": "image" }
-    }
+    "list": {
+      "count": 50,
+      "fields": {
+        "id": { "type": "increment", "start": 1 },
+        "username": { "type": "word", "min": 3, "max": 10 },
+        "nickname": { "type": "cname" },
+        "email": { "type": "email" },
+        "phone": { "type": "phone" },
+        "department": { "type": "pick", "options": ["技术部", "产品部", "设计部", "运营部", "测试部"] },
+        "role": { "type": "pick", "options": ["超级管理员", "产品经理", "设计师", "运营专员", "开发工程师", "测试工程师"] },
+        "status": { "type": "pick", "options": [1, 1, 1, 0] },
+        "gender": { "type": "pick", "options": ["男", "女"] },
+        "createTime": { "type": "datetime", "minDate": "2023-01-01", "maxDate": "2025-12-31" },
+        "avatar": { "type": "avatar" }
+      }
+    },
+    "create": { "return": { "code": 0, "message": "创建成功" } },
+    "update": { "return": { "code": 0, "message": "更新成功" } },
+    "delete": { "return": { "code": 0, "message": "删除成功" } },
+    "batchDelete": { "return": { "code": 0, "message": "批量删除成功" } }
   },
 
   "fields": [

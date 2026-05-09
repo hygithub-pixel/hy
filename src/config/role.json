@@ -5,9 +5,31 @@
   
   "apis": {
     "list": { "path": "/api/roles", "method": "GET" },
+    "get": { "path": "/api/roles/{id}", "method": "GET" },
     "create": { "path": "/api/roles", "method": "POST" },
     "update": { "path": "/api/roles/{id}", "method": "PUT" },
-    "delete": { "path": "/api/roles/{id}", "method": "DELETE" }
+    "delete": { "path": "/api/roles/{id}", "method": "DELETE" },
+    "batchDelete": { "path": "/api/roles/batch", "method": "DELETE" },
+    "export": { "path": "/api/roles/export", "method": "POST" }
+  },
+
+  "mock": {
+    "list": {
+      "count": 20,
+      "fields": {
+        "id": { "type": "increment", "start": 1 },
+        "roleName": { "type": "pick", "options": ["超级管理员", "系统管理员", "运营总监", "产品经理", "财务主管", "普通用户", "访客", "测试工程师", "开发工程师", "运维工程师", "安全管理员", "数据分析师"] },
+        "roleCode": { "type": "word", "min": 4, "max": 8, "prefix": "ROLE_", "uppercase": true },
+        "description": { "type": "sentence", "min": 10, "max": 50 },
+        "status": { "type": "pick", "options": [1, 1, 1, 0] },
+        "userCount": { "type": "number", "min": 0, "max": 100 },
+        "createTime": { "type": "datetime", "minDate": "2023-01-01", "maxDate": "2025-12-31" }
+      }
+    },
+    "create": { "return": { "code": 0, "message": "创建成功" } },
+    "update": { "return": { "code": 0, "message": "更新成功" } },
+    "delete": { "return": { "code": 0, "message": "删除成功" } },
+    "batchDelete": { "return": { "code": 0, "message": "批量删除成功" } }
   },
 
   "hooks": {
