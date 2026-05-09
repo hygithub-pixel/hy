@@ -12,7 +12,7 @@ const staticRoutes: RouteRecordRaw[] = [
 
 const generateRoutesFromConfigs = (modules: Awaited<ReturnType<typeof scanModuleConfigs>>): RouteRecordRaw[] => {
   return modules.map(m => ({
-    path: `${m.name}s`,
+    path: `/${m.name}s`,
     name: `${m.name}s`,
     component: () => import('../views/ModulePage.vue'),
     meta: {
