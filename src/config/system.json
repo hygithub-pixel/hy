@@ -3,6 +3,13 @@
     "name": "Ant Design Vue",
     "logo": "AntDesignOutlined"
   },
+  "mock": {
+    "enabled": true,
+    "delay": 300
+  },
+  "api": {
+    "baseURL": "/api"
+  },
   "iconMap": {
     "user": "UserOutlined",
     "role": "SafetyCertificateOutlined",
@@ -21,7 +28,7 @@
     "system": {
       "title": "系统管理",
       "icon": "setting",
-      "modules": ["user", "role", "department", "menu"]
+      "modules": ["user", "role", "department"]
     },
     "business": {
       "title": "业务管理",
