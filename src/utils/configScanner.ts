@@ -1,4 +1,5 @@
 import type { MenuItem } from '../types/menu';
+import type { SystemConfig } from '../types/system';
 
 export interface ModuleConfigInfo {
   name: string;
@@ -7,26 +8,22 @@ export interface ModuleConfigInfo {
   description?: string;
 }
 
-const iconMap: Record<string, string> = {
-  user: 'UserOutlined',
-  role: 'SafetyCertificateOutlined',
-  department: 'ApartmentOutlined',
-  menu: 'MenuOutlined',
-  product: 'AppstoreOutlined',
-  order: 'FileTextOutlined',
-};
+let systemConfig: SystemConfig | null = null;
 
-export const getIconByModule = (moduleName: string): string => {
-  return iconMap[moduleName] || 'FileOutlined';
+export const loadSystemConfig = async (): Promise<SystemConfig> => {
+  if (!systemConfig) {
+    const config = await import('../config/system.json');
+    systemConfig = config.default || config;
+  }
+  return systemConfig;
 };
 
 export const scanModuleConfigs = async (): Promise<ModuleConfigInfo[]> => {
   const modules: ModuleConfigInfo[] = [];
-  
   const configFiles = import.meta.glob('../config/*.json', { eager: true });
   
   for (const path in configFiles) {
-    if (path === '../config/menu.json') continue;
+    if (path.includes('menu.json') || path.includes('system.json')) continue;
     
     const config = configFiles[path] as any;
     if (config?.module) {
@@ -43,55 +40,43 @@ export const scanModuleConfigs = async (): Promise<ModuleConfigInfo[]> => {
   return modules;
 };
 
-export const getModuleConfigNames = async (): Promise<string[]> => {
-  const configs = await scanModuleConfigs();
-  return configs.map(c => c.name);
+export const getIconByModule = async (moduleName: string): Promise<string> => {
+  const system = await loadSystemConfig();
+  return system.iconMap[moduleName] || 'FileOutlined';
 };
 
-export const getModuleConfigByName = async (name: string): Promise<ModuleConfigInfo | undefined> => {
-  const configs = await scanModuleConfigs();
-  return configs.find(c => c.name === name);
+export const getIcon = async (iconKey: string): Promise<string> => {
+  const system = await loadSystemConfig();
+  return system.iconMap[iconKey] || 'FileOutlined';
 };
 
 export const generateMenusFromConfigs = async (): Promise<MenuItem[]> => {
+  const system = await loadSystemConfig();
   const modules = await scanModuleConfigs();
   const menus: MenuItem[] = [];
 
-  const systemModules = modules.filter(c => 
-    ['user', 'role', 'department', 'menu'].includes(c.name)
-  );
-  if (systemModules.length > 0) {
-    menus.push({
-      key: 'system',
-      title: '系统管理',
-      icon: 'SettingOutlined',
-      children: systemModules.map(m => ({
-        key: `/${m.name}s`,
-        title: m.title,
-        icon: getIconByModule(m.name),
-        path: `/${m.name}s`,
-        config: m.name,
-      })),
-    });
-  }
-
-  const businessModules = modules.filter(c =>
-    ['product', 'order'].includes(c.name)
-  );
-  if (businessModules.length > 0) {
-    menus.push({
-      key: 'business',
-      title: '业务管理',
-      icon: 'ShoppingCartOutlined',
-      children: businessModules.map(m => ({
-        key: `/${m.name}s`,
-        title: m.title,
-        icon: getIconByModule(m.name),
-        path: `/${m.name}s`,
-        config: m.name,
-      })),
-    });
+  for (const [categoryKey, category] of Object.entries(system.menuCategories)) {
+    const categoryModules = modules.filter(m => category.modules.includes(m.name));
+    if (categoryModules.length > 0) {
+      menus.push({
+        key: categoryKey,
+        title: category.title,
+        icon: system.iconMap[category.icon] || 'SettingOutlined',
+        children: categoryModules.map(m => ({
+          key: `/${m.name}s`,
+          title: m.title,
+          icon: system.iconMap[m.name] || 'FileOutlined',
+          path: `/${m.name}s`,
+          config: m.name,
+        })),
+      });
+    }
   }
 
   return menus;
+};
+
+export const getHomeRoute = async (): Promise<string> => {
+  const system = await loadSystemConfig();
+  return system.routes.home;
 };

@@ -1,0 +1,70 @@
+{
+  "app": {
+    "name": "Ant Design Vue",
+    "logo": "AntDesignOutlined"
+  },
+  "iconMap": {
+    "user": "UserOutlined",
+    "role": "SafetyCertificateOutlined",
+    "department": "ApartmentOutlined",
+    "menu": "MenuOutlined",
+    "product": "AppstoreOutlined",
+    "order": "FileTextOutlined",
+    "setting": "SettingOutlined",
+    "business": "ShoppingCartOutlined",
+    "data": "BarChartOutlined",
+    "monitor": "ClockCircleOutlined",
+    "home": "HomeOutlined",
+    "dashboard": "DashboardOutlined"
+  },
+  "menuCategories": {
+    "system": {
+      "title": "系统管理",
+      "icon": "setting",
+      "modules": ["user", "role", "department", "menu"]
+    },
+    "business": {
+      "title": "业务管理",
+      "icon": "business",
+      "modules": ["product", "order"]
+    }
+  },
+  "hooks": {
+    "transformDateRange": {
+      "type": "transform",
+      "description": "转换日期范围参数"
+    },
+    "backToList": {
+      "type": "navigation",
+      "action": "back"
+    },
+    "refreshList": {
+      "type": "callback",
+      "description": "刷新列表"
+    }
+  },
+  "renderers": {
+    "status": {
+      "type": "badge",
+      "mapping": {
+        "1": { "status": "success", "text": "启用" },
+        "0": { "status": "default", "text": "禁用" }
+      }
+    },
+    "role": {
+      "type": "tag",
+      "mapping": {
+        "超级管理员": "purple",
+        "产品经理": "cyan",
+        "设计师": "green",
+        "运营专员": "blue",
+        "开发工程师": "orange",
+        "测试工程师": "geekblue"
+      }
+    }
+  },
+  "routes": {
+    "home": "/users",
+    "notFound": "/404"
+  }
+}

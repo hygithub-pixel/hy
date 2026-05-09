@@ -1,12 +1,7 @@
 import type { RouteRecordRaw } from 'vue-router';
-import type { MenuItem } from '../types/menu';
-import { scanModuleConfigs } from './configScanner';
+import { scanModuleConfigs, getHomeRoute } from './configScanner';
 
 const staticRoutes: RouteRecordRaw[] = [
-  {
-    path: '/',
-    redirect: '/users',
-  },
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
@@ -28,7 +23,14 @@ const generateRoutesFromConfigs = (modules: Awaited<ReturnType<typeof scanModule
 };
 
 export const generateRoutes = async (): Promise<RouteRecordRaw[]> => {
+  const homeRoute = await getHomeRoute();
   const modules = await scanModuleConfigs();
   const dynamicRoutes = generateRoutesFromConfigs(modules);
-  return [...staticRoutes, ...dynamicRoutes];
+  
+  const redirectRoute: RouteRecordRaw = {
+    path: '/',
+    redirect: homeRoute,
+  };
+  
+  return [redirectRoute, ...staticRoutes, ...dynamicRoutes];
 };

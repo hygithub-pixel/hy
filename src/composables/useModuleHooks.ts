@@ -1,65 +1,47 @@
 import { useRouter } from 'vue-router';
-
-type HookFn = (data?: any) => any;
+import { loadSystemConfig } from '../utils/configScanner';
 
 export const useModuleHooks = () => {
   const router = useRouter();
 
-  const hooks: Record<string, HookFn> = {
-    transformDateRange: (params: any) => {
-      if (params?.dateRange && params.dateRange.length === 2) {
-        return {
-          ...params,
-          startDate: params.dateRange[0],
-          endDate: params.dateRange[1],
-        };
-      }
-      return params;
-    },
+  const executeHook = async (hookName: string, params?: any): Promise<any> => {
+    const system = await loadSystemConfig();
+    const hookConfig = system.hooks[hookName];
+    
+    if (!hookConfig) return params;
 
-    backToList: () => {
-      router.back();
-    },
+    switch (hookConfig.type) {
+      case 'transform':
+        return transformDateRange(params);
+      case 'navigation':
+        return navigate(hookConfig.action);
+      case 'callback':
+        return params;
+      default:
+        return params;
+    }
+  };
 
-    refreshList: () => {
-      return true;
-    },
-
-    showErrorMessage: (error: any) => {
-      console.error('Error:', error);
-    },
-
-    renderStatus: (status: number) => {
-      return status === 1
-        ? { type: 'success', text: '启用' }
-        : { type: 'default', text: '禁用' };
-    },
-
-    renderRole: (role: string) => {
-      const colorMap: Record<string, string> = {
-        '超级管理员': 'purple',
-        '产品经理': 'cyan',
-        '设计师': 'green',
-        '运营专员': 'blue',
-        '开发工程师': 'orange',
-        '测试工程师': 'geekblue',
+  const transformDateRange = (params: any) => {
+    if (params?.dateRange && params.dateRange.length === 2) {
+      return {
+        ...params,
+        startDate: params.dateRange[0],
+        endDate: params.dateRange[1],
       };
-      return { color: colorMap[role] || 'default', text: role };
-    },
+    }
+    return params;
   };
 
-  const executeHook = (hookName: string, params?: any): any => {
-    const fn = hooks[hookName];
-    return fn ? fn(params) : params;
-  };
-
-  const registerHook = (name: string, fn: HookFn) => {
-    hooks[name] = fn;
+  const navigate = (action: string) => {
+    if (action === 'back') {
+      router.back();
+    }
   };
 
   return {
-    hooks,
     executeHook,
-    registerHook,
+    transformDateRange,
+    navigate,
   };
 };
