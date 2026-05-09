@@ -1,158 +1,56 @@
 <template>
-  <div class="flex items-center justify-between h-16 px-6 border-b border-main bg-container">
-    <div class="flex items-center gap-4 flex-1 min-w-0">
-      <a-button
-        :type="sidebarState.collapsed ? 'default' : 'text'"
-        class="w-10 h-10 flex items-center justify-center"
-        :aria-label="sidebarState.collapsed ? '展开侧边栏' : '折叠侧边栏'"
-        @click="sidebarState.toggleSidebar"
-      >
-        <template #icon>
-          <component :is="sidebarState.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined" />
-        </template>
+  <div class="h-14 bg-white border-b border-[#e8e8e8] flex items-center justify-between px-6">
+    <div class="flex items-center gap-4">
+      <a-button type="text" class="text-gray-600 hover:text-gray-900">
+        <component :is="componentMap['MenuFoldOutlined']" />
       </a-button>
-      <a-breadcrumb separator="/" class="text-sm hidden sm:flex">
-        <a-breadcrumb-item :href="'/'">首页</a-breadcrumb-item>
-        <a-breadcrumb-item v-if="route.name">{{ route.meta.title }}</a-breadcrumb-item>
+      <a-breadcrumb separator="/" class="text-sm">
+        <a-breadcrumb-item>
+          <router-link to="/">首页</router-link>
+        </a-breadcrumb-item>
+        <a-breadcrumb-item v-if="currentPath.includes('system')">系统管理</a-breadcrumb-item>
+        <a-breadcrumb-item v-if="currentPath.includes('users')">用户管理</a-breadcrumb-item>
+        <a-breadcrumb-item v-if="currentPath.includes('add')">新增用户</a-breadcrumb-item>
       </a-breadcrumb>
     </div>
 
-    <div class="hidden lg:block flex-0 w-80 max-w-400px">
+    <div class="flex items-center gap-4">
       <a-input
         v-model:value="searchQuery"
-        placeholder="搜索..."
-        class="h-10"
-        aria-label="搜索"
-        autocomplete="search"
+        placeholder="搜索"
+        class="w-64 h-8"
       >
         <template #prefix>
-          <SearchOutlined />
+          <component :is="componentMap['SearchOutlined']" class="text-gray-400" />
         </template>
       </a-input>
-    </div>
 
-    <div class="flex items-center gap-1 flex-shrink-0">
-      <a-dropdown :trigger="['click']">
-        <a-badge :count="notificationCount" :offset="[-5, 5]">
-          <a-button type="text" class="w-10 h-10 flex items-center justify-center" aria-label="通知">
-            <template #icon><BellOutlined /></template>
-          </a-button>
-        </a-badge>
-        <template #overlay>
-          <a-menu class="p-1">
-            <a-menu-item key="1" class="flex items-start gap-2 p-2">
-              <div class="flex items-center justify-center w-6 h-6 flex-shrink-0 mt-0.5">
-                <CheckCircleOutlined style="color: var(--ant-success-color)" />
-              </div>
-              <div class="flex-1 min-w-0">
-                <div class="text-sm leading-relaxed">任务完成</div>
-                <div class="text-xs text-secondary">5分钟前</div>
-              </div>
-            </a-menu-item>
-            <a-menu-item key="2" class="flex justify-center p-2 font-medium" style="color: var(--ant-primary-color)">
-              查看全部通知
-            </a-menu-item>
-          </a-menu>
-        </template>
-      </a-dropdown>
+      <a-badge :count="12" class="cursor-pointer">
+        <component :is="componentMap['BellOutlined']" class="text-gray-600 text-xl" />
+      </a-badge>
 
-      <a-dropdown :trigger="['click']">
-        <a-button type="text" class="w-10 h-10 flex items-center justify-center" aria-label="设置">
-          <template #icon><SettingOutlined /></template>
-        </a-button>
-        <template #overlay>
-          <a-menu class="p-1">
-            <a-menu-item key="theme" class="flex items-center gap-2 p-2" @click="toggleTheme">
-              <span class="text-lg">{{ themeStore.isDark ? '☀️' : '🌙' }}</span>
-              <span>{{ themeStore.isDark ? '浅色模式' : '深色模式' }}</span>
-            </a-menu-item>
-            <a-menu-divider />
-            <a-menu-item key="1" class="flex items-center gap-2 p-2">
-              <MonitorOutlined />
-              显示设置
-            </a-menu-item>
-            <a-menu-item key="2" class="flex items-center gap-2 p-2">
-              <SettingOutlined />
-              系统设置
-            </a-menu-item>
-          </a-menu>
-        </template>
-      </a-dropdown>
-
-      <a-dropdown :trigger="['click']">
-        <button class="flex items-center gap-2 px-2 py-1 rounded-md cursor-pointer transition-all duration-150 bg-container hover:bg-elevated" aria-label="用户菜单">
-          <a-avatar :size="36" :src="userAvatar">
-            <template #icon><UserOutlined /></template>
-          </a-avatar>
-          <span class="text-sm font-medium hidden sm:inline text-base-color">{{ userName }}</span>
-          <DownOutlined class="text-sm text-secondary" />
-        </button>
-        <template #overlay>
-          <a-menu class="p-1">
-            <a-menu-item key="1" class="flex items-center gap-2 p-2">
-              <UserOutlined />
-              个人中心
-            </a-menu-item>
-            <a-menu-item key="2" class="flex items-center gap-2 p-2">
-              <FileTextOutlined />
-              个人资料
-            </a-menu-item>
-            <a-menu-item key="3" class="flex items-center gap-2 p-2">
-              <LockOutlined />
-              修改密码
-            </a-menu-item>
-            <a-menu-divider />
-            <a-menu-item key="4" class="flex items-center gap-2 p-2" @click="handleLogout">
-              <LogoutOutlined />
-              退出登录
-            </a-menu-item>
-          </a-menu>
-        </template>
-      </a-dropdown>
+      <div class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 px-2 py-1 rounded transition-colors">
+        <a-avatar size="small" :src="userAvatar">
+          <template #icon>
+            <component :is="componentMap['UserOutlined']" />
+          </template>
+        </a-avatar>
+        <span class="text-sm font-medium">管理员</span>
+        <component :is="componentMap['DownOutlined']" class="text-xs" />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  SearchOutlined,
-  BellOutlined,
-  CheckCircleOutlined,
-  SettingOutlined,
-  MonitorOutlined,
-  UserOutlined,
-  FileTextOutlined,
-  LockOutlined,
-  LogoutOutlined,
-  DownOutlined,
-} from '@ant-design/icons-vue';
-import { useUser } from '@/composables/useUser';
-import { useThemeStore } from '@/stores/themeStore';
-import { notificationService } from '@/services/notificationService';
-
-const sidebarState = inject('sidebarState', { collapsed: false, toggleSidebar: () => {} });
-const themeStore = useThemeStore();
+import { ref, computed } from 'vue';
+import { useRoute } from 'vue-router';
+import * as icons from '@ant-design/icons-vue';
 
 const route = useRoute();
-const { user, logout } = useUser();
-
-const userName = computed(() => user.value?.username || '管理员');
-const userAvatar = computed(() => user.value?.avatar || '');
+const componentMap: Record<string, any> = icons;
 const searchQuery = ref('');
-const notificationCount = ref(3);
 
-const toggleTheme = () => {
-  themeStore.toggle();
-};
-
-const handleLogout = async () => {
-  try {
-    await logout();
-    notificationService.success('退出成功');
-  } catch (error) {
-    notificationService.error('退出失败');
-  }
-};
+const currentPath = computed(() => route.path);
+const userAvatar = ref('');
 </script>
