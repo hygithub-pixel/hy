@@ -1,5 +1,4 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { loadSystemConfig } from './configScanner';
 
 export interface ApiResponse<T = any> {
   code: number;
@@ -14,57 +13,36 @@ export interface RequestConfig {
   data?: Record<string, any>;
 }
 
-const createRequest = async () => {
-  const system = await loadSystemConfig();
-  
-  const instance = axios.create({
-    baseURL: system.api.baseURL,
-    timeout: 10000,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+const instance = axios.create({
+  baseURL: '/api',
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-  instance.interceptors.request.use(
-    (config) => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-      return config;
-    },
-    (error) => Promise.reject(error)
-  );
-
-  instance.interceptors.response.use(
-    (response: AxiosResponse<ApiResponse>) => {
-      const { code, message } = response.data;
-      if (code !== 200) {
-        console.error('API Error:', message);
-        return Promise.reject(new Error(message));
-      }
-      return response.data;
-    },
-    (error) => {
-      console.error('Request Error:', error);
-      return Promise.reject(error);
+instance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
-  );
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
-  return instance;
-};
-
-let requestInstance: ReturnType<typeof createRequest> | null = null;
-
-export const getRequest = async () => {
-  if (!requestInstance) {
-    requestInstance = createRequest();
+instance.interceptors.response.use(
+  (response: AxiosResponse<ApiResponse>) => {
+    return response.data;
+  },
+  (error) => {
+    console.error('Request Error:', error);
+    return Promise.reject(error);
   }
-  return requestInstance;
-};
+);
 
 export const request = async <T = any>(config: RequestConfig): Promise<ApiResponse<T>> => {
-  const instance = await getRequest();
   return instance.request(config) as Promise<ApiResponse<T>>;
 };
 

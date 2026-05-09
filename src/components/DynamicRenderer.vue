@@ -83,8 +83,10 @@
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { message } from 'ant-design-vue';
 import type { ModuleConfig } from '../types/moduleConfig';
 import { useModuleHooks } from '../composables/useModuleHooks';
+import { get } from '../utils/request';
 
 interface Props {
   config: ModuleConfig;
@@ -140,44 +142,27 @@ const getButtonDisabled = (btn: any) => {
   return false;
 };
 
-const generateMockData = () => {
-  const module = props.config.module;
-  const templates: Record<string, any[]> = {
-    user: [
-      { id: 1, username: 'admin', nickname: '管理员', email: 'admin@example.com', department: '技术部', role: '超级管理员', status: 1, createTime: '2024-05-20 10:30:00' },
-      { id: 2, username: 'zhangsan', nickname: '张三', email: 'zhangsan@example.com', department: '产品部', role: '产品经理', status: 1, createTime: '2024-05-19 09:15:00' },
-      { id: 3, username: 'lisi', nickname: '李四', email: 'lisi@example.com', department: '设计部', role: '设计师', status: 1, createTime: '2024-05-18 14:22:00' },
-    ],
-    role: [
-      { id: 1, roleName: '超级管理员', roleCode: 'SUPER_ADMIN', description: '拥有系统所有权限', status: 1, userCount: 2, createTime: '2024-05-01 10:00:00' },
-      { id: 2, roleName: '产品经理', roleCode: 'PRODUCT_MANAGER', description: '负责产品规划', status: 1, userCount: 5, createTime: '2024-05-02 10:00:00' },
-    ],
-    department: [
-      { id: 1, deptName: '技术部', deptCode: 'TECH', leader: '张三', phone: '13800138000', userCount: 10, status: 1, sort: 1 },
-      { id: 2, deptName: '产品部', deptCode: 'PRODUCT', leader: '李四', phone: '13800138001', userCount: 5, status: 1, sort: 2 },
-    ],
-    product: [
-      { id: 1, productName: 'iPhone 15', productCode: 'SKU001', category: '电子产品', price: 6999, stock: 100, status: 1, sales: 500 },
-      { id: 2, productName: 'MacBook Pro', productCode: 'SKU002', category: '电子产品', price: 12999, stock: 50, status: 1, sales: 200 },
-    ],
-    order: [
-      { id: 1, orderNo: 'ORD202405010001', userName: '张三', productName: 'iPhone 15', totalAmount: 6999, orderStatus: '已完成', payStatus: '已支付', createTime: '2024-05-01 10:00:00' },
-      { id: 2, orderNo: 'ORD202405010002', userName: '李四', productName: 'MacBook Pro', totalAmount: 12999, orderStatus: '待支付', payStatus: '未支付', createTime: '2024-05-01 11:00:00' },
-    ],
-  };
-  return templates[module] || templates.user;
-};
-
 const loadData = async () => {
   loading.value = true;
   try {
-    let params = { ...searchData };
+    let params: Record<string, any> = {
+      ...searchData,
+      current: pagination.current,
+      pageSize: pagination.pageSize,
+    };
+
     if (props.config.hooks?.beforeLoad) {
       params = await executeHook(props.config.hooks.beforeLoad, params) || params;
     }
-    await new Promise(resolve => setTimeout(resolve, 300));
-    tableData.value = generateMockData();
-    pagination.total = tableData.value.length;
+
+    const apiConfig = props.config.apis?.list;
+    if (apiConfig) {
+      const response = await get<{ list: any[]; total: number }>(apiConfig.path, params);
+      tableData.value = response.data.list;
+      pagination.total = response.data.total;
+    }
+  } catch (error: any) {
+    message.error(error.message || '加载数据失败');
   } finally {
     loading.value = false;
   }
@@ -210,13 +195,42 @@ const handleAction = async (action: string, record?: any) => {
       if (record) router.push({ path: `/${props.config.module}s/edit/${record.id}` });
       break;
     case 'delete':
-      if (record) console.log('Delete:', record);
+      if (record) {
+        const apiConfig = props.config.apis?.delete;
+        if (apiConfig) {
+          const url = apiConfig.path.replace('{id}', record.id);
+          const { del } = await import('../utils/request');
+          try {
+            await del(url);
+            message.success('删除成功');
+            loadData();
+          } catch (error: any) {
+            message.error(error.message || '删除失败');
+          }
+        }
+      }
       break;
     case 'view':
       if (record) router.push({ path: `/${props.config.module}s/view/${record.id}` });
       break;
     case 'batchDelete':
-      console.log('Batch delete:', selectedRowKeys.value);
+      if (selectedRowKeys.value.length > 0) {
+        const apiConfig = props.config.apis?.delete;
+        if (apiConfig) {
+          const { del } = await import('../utils/request');
+          try {
+            for (const id of selectedRowKeys.value) {
+              const url = apiConfig.path.replace('{id}', id);
+              await del(url);
+            }
+            message.success('批量删除成功');
+            selectedRowKeys.value = [];
+            loadData();
+          } catch (error: any) {
+            message.error(error.message || '批量删除失败');
+          }
+        }
+      }
       break;
     case 'search':
       handleSearch();

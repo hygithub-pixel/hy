@@ -61,7 +61,7 @@
           <a-space>
             <a-button @click="handleBack">取消</a-button>
             <a-button @click="handleReset">重置</a-button>
-            <a-button type="primary" @click="handleSubmit">保存</a-button>
+            <a-button type="primary" :loading="submitting" @click="handleSubmit">保存</a-button>
           </a-space>
         </a-form-item>
         
@@ -79,6 +79,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { ArrowLeftOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 import { useConfigLoader } from '../composables/useConfigLoader';
+import { get, post, put } from '../utils/request';
 import type { ModuleConfig } from '../types/moduleConfig';
 
 const route = useRoute();
@@ -87,6 +88,8 @@ const { loadConfig } = useConfigLoader();
 
 const config = ref<ModuleConfig>({} as ModuleConfig);
 const formRef = ref();
+const submitting = ref(false);
+const loading = ref(false);
 
 const isEditMode = computed(() => route.params.id && route.meta.mode !== 'view');
 const isViewMode = computed(() => route.meta.mode === 'view');
@@ -118,36 +121,51 @@ const getFieldProps = (field: any) => {
   return rest;
 };
 
-const mockEditData: Record<string, any> = {
-  user: { id: 1, username: 'admin', nickname: '管理员', email: 'admin@example.com', department: '技术部', role: '超级管理员', status: 1, gender: '男' },
-  role: { id: 1, roleName: '超级管理员', roleCode: 'SUPER_ADMIN', description: '拥有系统所有权限', status: 1 },
-  department: { id: 1, deptName: '技术部', deptCode: 'TECH', leader: '张三', phone: '13800138000', status: 1, sort: 1 },
-  product: { id: 1, productName: 'iPhone 15', productCode: 'SKU001', category: '电子产品', price: 6999, stock: 100, status: 1 },
-  order: { id: 1, orderNo: 'ORD202405010001', userName: '张三', productName: 'iPhone 15', totalAmount: 6999, orderStatus: '已完成', payStatus: '已支付' },
-};
+const loadDetail = async () => {
+  if (!route.params.id) return;
+  
+  const apiConfig = config.value.apis?.list;
+  if (!apiConfig) return;
 
-onMounted(async () => {
-  const configName = route.meta.config as string;
-  if (configName) {
-    config.value = await loadConfig(configName);
-    
-    if (route.params.id) {
-      const moduleKey = configName;
-      const editData = mockEditData[moduleKey];
-      if (editData) {
-        Object.assign(formData, editData);
-      }
+  loading.value = true;
+  try {
+    const response = await get<any>(apiConfig.path, { id: route.params.id });
+    if (response.data) {
+      Object.assign(formData, response.data);
     }
+  } catch (error: any) {
+    message.error(error.message || '加载数据失败');
+  } finally {
+    loading.value = false;
   }
-});
+};
 
 const handleSubmit = async () => {
   try {
     await formRef.value?.validate();
-    message.success('保存成功');
+    submitting.value = true;
+
+    const apiConfig = config.value.apis;
+    if (!apiConfig) {
+      message.error('未配置API');
+      return;
+    }
+
+    if (isEditMode.value) {
+      const url = apiConfig.update?.path.replace('{id}', route.params.id as string);
+      await put(url!, formData);
+      message.success('更新成功');
+    } else {
+      await post(apiConfig.create?.path!, formData);
+      message.success('新增成功');
+    }
     handleBack();
-  } catch (error) {
-    console.error('Validation failed:', error);
+  } catch (error: any) {
+    if (error.message) {
+      message.error(error.message);
+    }
+  } finally {
+    submitting.value = false;
   }
 };
 
@@ -158,4 +176,15 @@ const handleReset = () => {
 const handleBack = () => {
   router.back();
 };
+
+onMounted(async () => {
+  const configName = route.meta.config as string;
+  if (configName) {
+    config.value = await loadConfig(configName);
+    
+    if (route.params.id) {
+      await loadDetail();
+    }
+  }
+});
 </script>
