@@ -19,51 +19,42 @@ export default [
         status: i % 4 === 0 ? 0 : 1,
         gender: i % 2 === 0 ? '男' : '女',
         createTime: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${i + 1}`,
+        remark: `用户${i + 1}的备注信息`,
       }))
 
       let filtered = list
-      if (username) {
-        filtered = filtered.filter(item => item.username.includes(username) || item.nickname.includes(username))
-      }
-      if (status !== undefined && status !== '') {
-        filtered = filtered.filter(item => item.status === parseInt(status as string))
-      }
+      if (username) filtered = filtered.filter(item => item.username.includes(username) || item.nickname.includes(username))
+      if (status !== undefined && status !== '') filtered = filtered.filter(item => item.status === parseInt(status as string))
 
       const start = (current - 1) * pageSize
-      const end = start + pageSize
-
       return {
         code: 200,
         message: 'success',
-        data: {
-          list: filtered.slice(start, end),
-          total: filtered.length,
-          current,
-          pageSize,
-        },
+        data: { list: filtered.slice(start, start + pageSize), total: filtered.length, current, pageSize },
       }
     },
   },
   {
     url: '/api/users',
     method: 'post',
-    response: ({ body }) => {
-      return { code: 200, message: '新增成功', data: { id: Date.now(), ...body } }
+    response: ({ body }) => ({ code: 200, message: '新增成功', data: { id: Date.now(), ...body } }),
+  },
+  {
+    url: '/api/users/:id',
+    method: 'get',
+    response: ({ url }) => {
+      const id = url.split('/').pop()
+      return { code: 200, message: 'success', data: { id, username: `user_${id}`, nickname: '张三', email: `user${id}@example.com`, phone: '13800000001', department: '技术部', role: '开发工程师', status: 1, gender: '男', createTime: '2024-01-01' } }
     },
   },
   {
     url: '/api/users/:id',
     method: 'put',
-    response: ({ body }) => {
-      return { code: 200, message: '更新成功', data: body }
-    },
+    response: ({ body }) => ({ code: 200, message: '更新成功', data: body }),
   },
   {
     url: '/api/users/:id',
     method: 'delete',
-    response: () => {
-      return { code: 200, message: '删除成功', data: null }
-    },
+    response: () => ({ code: 200, message: '删除成功', data: null }),
   },
 ]

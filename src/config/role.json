@@ -5,21 +5,20 @@
   
   "apis": {
     "list": { "path": "/roles", "method": "GET" },
-    "get": { "path": "/roles/{id}", "method": "GET" },
+    "get": { "path": "/roles/:id", "method": "GET" },
     "create": { "path": "/roles", "method": "POST" },
-    "update": { "path": "/roles/{id}", "method": "PUT" },
-    "delete": { "path": "/roles/{id}", "method": "DELETE" }
+    "update": { "path": "/roles/:id", "method": "PUT" },
+    "delete": { "path": "/roles/:id", "method": "DELETE" }
   },
-
   "columns": [
     { "dataIndex": "roleName", "title": "角色名称", "width": 150 },
     { "dataIndex": "roleCode", "title": "角色编码", "width": 150 },
     { "dataIndex": "description", "title": "描述", "width": 200 },
     { "dataIndex": "status", "title": "状态", "width": 80 },
     { "dataIndex": "userCount", "title": "用户数量", "width": 100 },
+    { "dataIndex": "dataPermissions", "title": "数据权限", "width": 100 },
     { "dataIndex": "createTime", "title": "创建时间", "width": 160 }
   ],
-
   "fields": [
     {
       "group": "基本信息",
@@ -27,11 +26,11 @@
         { "component": "a-input", "label": "角色名称", "name": "roleName", "required": true, "placeholder": "请输入角色名称" },
         { "component": "a-input", "label": "角色编码", "name": "roleCode", "required": true, "placeholder": "请输入角色编码" },
         { "component": "a-input", "label": "描述", "name": "description", "placeholder": "请输入角色描述" },
-        { "component": "a-radio-group", "label": "状态", "name": "status", "optionType": "button", "options": [{ "label": "启用", "value": 1 }, { "label": "禁用", "value": 0 }] }
+        { "component": "a-radio-group", "label": "状态", "name": "status", "optionType": "button", "options": [{ "label": "启用", "value": 1 }, { "label": "禁用", "value": 0 }] },
+        { "component": "a-checkbox-group", "label": "数据权限", "name": "dataPermissions", "options": [{ "label": "全部数据", "value": "all" }, { "label": "本部门数据", "value": "dept" }, { "label": "本人数据", "value": "self" }] }
       ]
     }
   ],
-
   "buttons": {
     "toolbar": [
       { "component": "a-button", "type": "primary", "text": "新增", "action": "create" },
@@ -42,7 +41,6 @@
       { "component": "a-button", "text": "删除", "action": "delete", "size": "small", "danger": true }
     ]
   },
-
   "search": {
     "fields": [
       { "component": "a-input", "name": "roleName", "placeholder": "请输入角色名称", "allowClear": true },

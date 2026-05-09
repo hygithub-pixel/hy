@@ -6,6 +6,7 @@ export default [
       const current = parseInt(query.current as string) || 1
       const pageSize = parseInt(query.pageSize as string) || 10
       const productName = query.productName as string || ''
+      const category = query.category as string || ''
       const status = query.status as string
 
       const list = [
@@ -23,29 +24,15 @@ export default [
 
       let filtered = list
       if (productName) filtered = filtered.filter(item => item.productName.includes(productName))
+      if (category) filtered = filtered.filter(item => item.category === category)
       if (status !== undefined && status !== '') filtered = filtered.filter(item => item.status === parseInt(status as string))
 
       const start = (current - 1) * pageSize
-      return {
-        code: 200,
-        message: 'success',
-        data: { list: filtered.slice(start, start + pageSize), total: filtered.length, current, pageSize },
-      }
+      return { code: 200, message: 'success', data: { list: filtered.slice(start, start + pageSize), total: filtered.length, current, pageSize } }
     },
   },
-  {
-    url: '/api/products',
-    method: 'post',
-    response: ({ body }) => ({ code: 200, message: '新增成功', data: { id: Date.now(), ...body } }),
-  },
-  {
-    url: '/api/products/:id',
-    method: 'put',
-    response: ({ body }) => ({ code: 200, message: '更新成功', data: body }),
-  },
-  {
-    url: '/api/products/:id',
-    method: 'delete',
-    response: () => ({ code: 200, message: '删除成功', data: null }),
-  },
+  { url: '/api/products', method: 'post', response: ({ body }) => ({ code: 200, message: '新增成功', data: { id: Date.now(), ...body } }) },
+  { url: '/api/products/:id', method: 'get', response: ({ url }) => ({ code: 200, message: 'success', data: { id: url.split('/').pop(), productName: 'iPhone 15 Pro', productCode: 'PHONE001', category: '电子产品', price: 8999.00, stock: 100, status: 1 } }) },
+  { url: '/api/products/:id', method: 'put', response: ({ body }) => ({ code: 200, message: '更新成功', data: body }) },
+  { url: '/api/products/:id', method: 'delete', response: () => ({ code: 200, message: '删除成功', data: null }) },
 ]

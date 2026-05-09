@@ -5,45 +5,53 @@
   
   "apis": {
     "list": { "path": "/orders", "method": "GET" },
-    "get": { "path": "/orders/{id}", "method": "GET" },
+    "get": { "path": "/orders/:id", "method": "GET" },
     "create": { "path": "/orders", "method": "POST" },
-    "update": { "path": "/orders/{id}", "method": "PUT" },
-    "delete": { "path": "/orders/{id}", "method": "DELETE" }
+    "update": { "path": "/orders/:id", "method": "PUT" },
+    "delete": { "path": "/orders/:id", "method": "DELETE" }
   },
-
   "columns": [
     { "dataIndex": "orderNo", "title": "订单编号", "width": 180 },
-    { "dataIndex": "userName", "title": "用户名称", "width": 120 },
+    { "dataIndex": "userName", "title": "用户名称", "width": 100 },
     { "dataIndex": "productName", "title": "商品名称", "width": 150 },
+    { "dataIndex": "quantity", "title": "数量", "width": 80 },
     { "dataIndex": "totalAmount", "title": "订单金额", "width": 100 },
     { "dataIndex": "orderStatus", "title": "订单状态", "width": 100 },
     { "dataIndex": "payStatus", "title": "支付状态", "width": 100 },
+    { "dataIndex": "receiver", "title": "收货人", "width": 100 },
+    { "dataIndex": "phone", "title": "联系电话", "width": 130 },
     { "dataIndex": "createTime", "title": "下单时间", "width": 160 }
   ],
-
   "fields": [
     {
       "group": "订单信息",
       "items": [
         { "component": "a-input", "label": "订单编号", "name": "orderNo", "required": true, "placeholder": "请输入订单编号" },
         { "component": "a-input", "label": "用户名称", "name": "userName", "required": true, "placeholder": "请输入用户名称" },
+        { "component": "a-input", "label": "商品名称", "name": "productName", "required": true, "placeholder": "请输入商品名称" },
         { "component": "a-input-number", "label": "数量", "name": "quantity", "required": true, "min": 1 },
         { "component": "a-input-number", "label": "订单金额", "name": "totalAmount", "required": true, "min": 0, "precision": 2 }
       ]
     },
     {
+      "group": "收货信息",
+      "items": [
+        { "component": "a-input", "label": "收货人", "name": "receiver", "placeholder": "请输入收货人" },
+        { "component": "a-input", "label": "联系电话", "name": "phone", "placeholder": "请输入联系电话" },
+        { "component": "a-input", "label": "收货地址", "name": "address", "placeholder": "请输入收货地址" }
+      ]
+    },
+    {
       "group": "状态信息",
       "items": [
-        { "component": "a-select", "label": "订单状态", "name": "orderStatus", "required": true, "options": [{ "label": "待支付", "value": "pending" }, { "label": "已支付", "value": "paid" }, { "label": "已完成", "value": "completed" }, { "label": "已取消", "value": "cancelled" }] },
-        { "component": "a-select", "label": "支付状态", "name": "payStatus", "options": [{ "label": "未支付", "value": "unpaid" }, { "label": "已支付", "value": "paid" }, { "label": "已退款", "value": "refunded" }] }
+        { "component": "a-select", "label": "订单状态", "name": "orderStatus", "required": true, "options": [{ "label": "待支付", "value": "待支付" }, { "label": "已支付", "value": "已支付" }, { "label": "已完成", "value": "已完成" }, { "label": "已取消", "value": "已取消" }] },
+        { "component": "a-select", "label": "支付状态", "name": "payStatus", "options": [{ "label": "未支付", "value": "未支付" }, { "label": "已支付", "value": "已支付" }, { "label": "已退款", "value": "已退款" }] }
       ]
     }
   ],
-
   "buttons": {
     "toolbar": [
-      { "component": "a-button", "type": "primary", "text": "新增订单", "action": "create" },
-      { "component": "a-button", "text": "批量处理", "action": "batchProcess", "disabledWhen": "noSelection" }
+      { "component": "a-button", "type": "primary", "text": "新增订单", "action": "create" }
     ],
     "rowActions": [
       { "component": "a-button", "text": "查看详情", "action": "view", "size": "small" },
@@ -51,13 +59,12 @@
       { "component": "a-button", "text": "退款", "action": "refund", "size": "small", "danger": true }
     ]
   },
-
   "search": {
     "fields": [
       { "component": "a-input", "name": "orderNo", "placeholder": "请输入订单编号", "allowClear": true },
       { "component": "a-input", "name": "userName", "placeholder": "请输入用户名称", "allowClear": true },
-      { "component": "a-select", "name": "orderStatus", "placeholder": "请选择订单状态", "allowClear": true, "options": [{ "label": "全部", "value": "" }, { "label": "待支付", "value": "pending" }, { "label": "已支付", "value": "paid" }, { "label": "已完成", "value": "completed" }, { "label": "已取消", "value": "cancelled" }] },
-      { "component": "a-select", "name": "payStatus", "placeholder": "请选择支付状态", "allowClear": true, "options": [{ "label": "全部", "value": "" }, { "label": "未支付", "value": "unpaid" }, { "label": "已支付", "value": "paid" }, { "label": "已退款", "value": "refunded" }] }
+      { "component": "a-select", "name": "orderStatus", "placeholder": "请选择订单状态", "allowClear": true, "options": [{ "label": "全部", "value": "" }, { "label": "待支付", "value": "待支付" }, { "label": "已支付", "value": "已支付" }, { "label": "已完成", "value": "已完成" }] },
+      { "component": "a-select", "name": "payStatus", "placeholder": "请选择支付状态", "allowClear": true, "options": [{ "label": "全部", "value": "" }, { "label": "未支付", "value": "未支付" }, { "label": "已支付", "value": "已支付" }, { "label": "已退款", "value": "已退款" }] }
     ],
     "actions": [
       { "component": "a-button", "type": "primary", "text": "查询", "action": "search" },

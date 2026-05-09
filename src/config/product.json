@@ -5,55 +5,47 @@
   
   "apis": {
     "list": { "path": "/products", "method": "GET" },
-    "get": { "path": "/products/{id}", "method": "GET" },
+    "get": { "path": "/products/:id", "method": "GET" },
     "create": { "path": "/products", "method": "POST" },
-    "update": { "path": "/products/{id}", "method": "PUT" },
-    "delete": { "path": "/products/{id}", "method": "DELETE" }
+    "update": { "path": "/products/:id", "method": "PUT" },
+    "delete": { "path": "/products/:id", "method": "DELETE" }
   },
-
   "columns": [
-    { "dataIndex": "productName", "title": "商品名称", "width": 200 },
-    { "dataIndex": "productCode", "title": "商品编码", "width": 150 },
-    { "dataIndex": "category", "title": "商品分类", "width": 120 },
+    { "dataIndex": "productName", "title": "商品名称", "width": 180 },
+    { "dataIndex": "productCode", "title": "商品编码", "width": 120 },
+    { "dataIndex": "category", "title": "商品分类", "width": 100 },
     { "dataIndex": "price", "title": "价格", "width": 100 },
     { "dataIndex": "stock", "title": "库存", "width": 80 },
-    { "dataIndex": "status", "title": "状态", "width": 80 },
     { "dataIndex": "sales", "title": "销量", "width": 80 },
+    { "dataIndex": "status", "title": "状态", "width": 80 },
     { "dataIndex": "createTime", "title": "创建时间", "width": 160 }
   ],
-
   "fields": [
     {
       "group": "基本信息",
       "items": [
         { "component": "a-input", "label": "商品名称", "name": "productName", "required": true, "placeholder": "请输入商品名称" },
         { "component": "a-input", "label": "商品编码", "name": "productCode", "required": true, "placeholder": "请输入商品编码" },
-        { "component": "a-select", "label": "商品分类", "name": "category", "required": true, "placeholder": "请选择商品分类", "options": [{ "label": "电子产品", "value": "electronics" }, { "label": "服装", "value": "clothing" }, { "label": "食品", "value": "food" }, { "label": "图书", "value": "books" }, { "label": "家居", "value": "home" }] },
+        { "component": "a-select", "label": "商品分类", "name": "category", "required": true, "placeholder": "请选择商品分类", "options": [{ "label": "电子产品", "value": "电子产品" }, { "label": "服装", "value": "服装" }, { "label": "食品", "value": "食品" }, { "label": "图书", "value": "图书" }, { "label": "家居", "value": "家居" }] },
         { "component": "a-input-number", "label": "价格", "name": "price", "required": true, "min": 0, "precision": 2 },
         { "component": "a-input-number", "label": "库存", "name": "stock", "required": true, "min": 0 },
         { "component": "a-radio-group", "label": "状态", "name": "status", "optionType": "button", "options": [{ "label": "上架", "value": 1 }, { "label": "下架", "value": 0 }] }
       ]
     }
   ],
-
   "buttons": {
     "toolbar": [
-      { "component": "a-button", "type": "primary", "text": "新增", "action": "create" },
-      { "component": "a-button", "text": "批量上架", "action": "batchOnSale", "disabledWhen": "noSelection" },
-      { "component": "a-button", "text": "批量下架", "action": "batchOffSale", "disabledWhen": "noSelection" }
+      { "component": "a-button", "type": "primary", "text": "新增", "action": "create" }
     ],
     "rowActions": [
       { "component": "a-button", "text": "编辑", "action": "edit", "size": "small" },
-      { "component": "a-button", "text": "删除", "action": "delete", "size": "small", "danger": true },
-      { "component": "a-button", "text": "查看", "action": "view", "size": "small" }
+      { "component": "a-button", "text": "删除", "action": "delete", "size": "small", "danger": true }
     ]
   },
-
   "search": {
     "fields": [
       { "component": "a-input", "name": "productName", "placeholder": "请输入商品名称", "allowClear": true },
-      { "component": "a-input", "name": "productCode", "placeholder": "请输入商品编码", "allowClear": true },
-      { "component": "a-select", "name": "category", "placeholder": "请选择分类", "allowClear": true, "options": [{ "label": "全部", "value": "" }, { "label": "电子产品", "value": "electronics" }, { "label": "服装", "value": "clothing" }, { "label": "食品", "value": "food" }] },
+      { "component": "a-select", "name": "category", "placeholder": "请选择分类", "allowClear": true, "options": [{ "label": "全部", "value": "" }, { "label": "电子产品", "value": "电子产品" }, { "label": "服装", "value": "服装" }, { "label": "食品", "value": "食品" }] },
       { "component": "a-select", "name": "status", "placeholder": "请选择状态", "allowClear": true, "options": [{ "label": "全部", "value": "" }, { "label": "上架", "value": 1 }, { "label": "下架", "value": 0 }] }
     ],
     "actions": [

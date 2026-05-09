@@ -5,23 +5,22 @@
   
   "apis": {
     "list": { "path": "/departments", "method": "GET" },
-    "get": { "path": "/departments/{id}", "method": "GET" },
+    "get": { "path": "/departments/:id", "method": "GET" },
     "create": { "path": "/departments", "method": "POST" },
-    "update": { "path": "/departments/{id}", "method": "PUT" },
-    "delete": { "path": "/departments/{id}", "method": "DELETE" }
+    "update": { "path": "/departments/:id", "method": "PUT" },
+    "delete": { "path": "/departments/:id", "method": "DELETE" }
   },
-
   "columns": [
-    { "dataIndex": "deptName", "title": "部门名称", "width": 180 },
-    { "dataIndex": "deptCode", "title": "部门编码", "width": 150 },
-    { "dataIndex": "parentName", "title": "上级部门", "width": 150 },
-    { "dataIndex": "leader", "title": "负责人", "width": 120 },
+    { "dataIndex": "deptName", "title": "部门名称", "width": 150 },
+    { "dataIndex": "deptCode", "title": "部门编码", "width": 120 },
+    { "dataIndex": "parentName", "title": "上级部门", "width": 120 },
+    { "dataIndex": "leader", "title": "负责人", "width": 100 },
     { "dataIndex": "phone", "title": "联系电话", "width": 130 },
     { "dataIndex": "userCount", "title": "人员数量", "width": 100 },
     { "dataIndex": "status", "title": "状态", "width": 80 },
-    { "dataIndex": "sort", "title": "排序", "width": 80 }
+    { "dataIndex": "sort", "title": "排序", "width": 80 },
+    { "dataIndex": "remark", "title": "备注", "width": 150 }
   ],
-
   "fields": [
     {
       "group": "基本信息",
@@ -31,24 +30,20 @@
         { "component": "a-input", "label": "负责人", "name": "leader", "placeholder": "请输入负责人" },
         { "component": "a-input", "label": "联系电话", "name": "phone", "placeholder": "请输入联系电话" },
         { "component": "a-input-number", "label": "排序", "name": "sort", "min": 0 },
-        { "component": "a-radio-group", "label": "状态", "name": "status", "optionType": "button", "options": [{ "label": "启用", "value": 1 }, { "label": "禁用", "value": 0 }] }
+        { "component": "a-radio-group", "label": "状态", "name": "status", "optionType": "button", "options": [{ "label": "启用", "value": 1 }, { "label": "禁用", "value": 0 }] },
+        { "component": "a-textarea", "label": "备注", "name": "remark", "placeholder": "请输入备注", "rows": 3 }
       ]
     }
   ],
-
   "buttons": {
     "toolbar": [
-      { "component": "a-button", "type": "primary", "text": "新增", "action": "create" },
-      { "component": "a-button", "text": "展开全部", "action": "expandAll" },
-      { "component": "a-button", "text": "收起全部", "action": "collapseAll" }
+      { "component": "a-button", "type": "primary", "text": "新增", "action": "create" }
     ],
     "rowActions": [
-      { "component": "a-button", "text": "新增子部门", "action": "createChild", "size": "small" },
       { "component": "a-button", "text": "编辑", "action": "edit", "size": "small" },
       { "component": "a-button", "text": "删除", "action": "delete", "size": "small", "danger": true }
     ]
   },
-
   "search": {
     "fields": [
       { "component": "a-input", "name": "deptName", "placeholder": "请输入部门名称", "allowClear": true },
