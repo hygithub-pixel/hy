@@ -62,6 +62,7 @@ import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import * as icons from '@ant-design/icons-vue';
 import type { MenuItem } from '../../types/menu';
+import { generateMenusFromConfigs } from '../../utils/configScanner';
 
 const route = useRoute();
 const menus = ref<MenuItem[]>([]);
@@ -93,8 +94,7 @@ const handleOpenChange = (keys: string[]) => {
 };
 
 onMounted(async () => {
-  const menuConfig = await import('../../config/menu.json');
-  menus.value = menuConfig.default?.menus || menuConfig.menus || [];
+  menus.value = await generateMenusFromConfigs();
   
   const firstOpenMenu = menus.value.find(m => m.children && m.children.length > 0);
   if (firstOpenMenu) {

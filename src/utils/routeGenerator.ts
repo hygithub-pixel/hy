@@ -1,5 +1,6 @@
 import type { RouteRecordRaw } from 'vue-router';
 import type { MenuItem } from '../types/menu';
+import { scanModuleConfigs } from './configScanner';
 
 const staticRoutes: RouteRecordRaw[] = [
   {
@@ -14,37 +15,20 @@ const staticRoutes: RouteRecordRaw[] = [
   },
 ];
 
-const generateRoutesFromMenu = (menus: MenuItem[]): RouteRecordRaw[] => {
-  const routes: RouteRecordRaw[] = [];
-
-  const processMenuItem = (item: MenuItem) => {
-    if (item.path && item.component) {
-      const route: RouteRecordRaw = {
-        path: item.path.replace('/', ''),
-        name: item.path.replace('/', ''),
-        component: () => import('../views/ModulePage.vue'),
-        meta: {
-          title: item.title,
-          config: item.config,
-        },
-      };
-      routes.push(route);
-    }
-
-    if (item.children) {
-      item.children.forEach(processMenuItem);
-    }
-  };
-
-  menus.forEach(processMenuItem);
-  return routes;
+const generateRoutesFromConfigs = (modules: Awaited<ReturnType<typeof scanModuleConfigs>>): RouteRecordRaw[] => {
+  return modules.map(m => ({
+    path: `${m.name}s`,
+    name: `${m.name}s`,
+    component: () => import('../views/ModulePage.vue'),
+    meta: {
+      title: m.title,
+      config: m.name,
+    },
+  }));
 };
 
 export const generateRoutes = async (): Promise<RouteRecordRaw[]> => {
-  const menuConfig = await import('../config/menu.json');
-  const menus = menuConfig.default?.menus || menuConfig.menus || [];
-  const dynamicRoutes = generateRoutesFromMenu(menus);
+  const modules = await scanModuleConfigs();
+  const dynamicRoutes = generateRoutesFromConfigs(modules);
   return [...staticRoutes, ...dynamicRoutes];
 };
-
-export type { MenuItem };
