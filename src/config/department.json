@@ -1,0 +1,151 @@
+{
+  "module": "department",
+  "title": "部门管理",
+  "description": "对系统部门进行管理，包括部门的增删改查、组织架构设置等操作",
+  
+  "apis": {
+    "list": { "path": "/api/departments", "method": "GET" },
+    "create": { "path": "/api/departments", "method": "POST" },
+    "update": { "path": "/api/departments/{id}", "method": "PUT" },
+    "delete": { "path": "/api/departments/{id}", "method": "DELETE" }
+  },
+
+  "hooks": {},
+
+  "columns": [
+    { "dataIndex": "deptName", "title": "部门名称", "width": 180 },
+    { "dataIndex": "deptCode", "title": "部门编码", "width": 150 },
+    { "dataIndex": "parentName", "title": "上级部门", "width": 150 },
+    { "dataIndex": "leader", "title": "负责人", "width": 120 },
+    { "dataIndex": "phone", "title": "联系电话", "width": 130 },
+    { "dataIndex": "userCount", "title": "人员数量", "width": 100 },
+    { "dataIndex": "status", "title": "状态", "width": 80 },
+    { "dataIndex": "sort", "title": "排序", "width": 80 }
+  ],
+
+  "fields": [
+    {
+      "group": "基本信息",
+      "items": [
+        { 
+          "component": "a-input",
+          "label": "部门名称",
+          "name": "deptName",
+          "required": true,
+          "placeholder": "请输入部门名称",
+          "rules": [
+            { "required": true, "message": "请输入部门名称" }
+          ]
+        },
+        { 
+          "component": "a-input",
+          "label": "部门编码",
+          "name": "deptCode",
+          "required": true,
+          "placeholder": "请输入部门编码",
+          "rules": [
+            { "required": true, "message": "请输入部门编码" }
+          ]
+        },
+        { 
+          "component": "a-tree-select",
+          "label": "上级部门",
+          "name": "parentId",
+          "placeholder": "请选择上级部门",
+          "treeData": []
+        },
+        { 
+          "component": "a-input",
+          "label": "负责人",
+          "name": "leader",
+          "placeholder": "请输入负责人"
+        },
+        { 
+          "component": "a-input",
+          "label": "联系电话",
+          "name": "phone",
+          "placeholder": "请输入联系电话",
+          "rules": [
+            { "pattern": "^1[3-9]\\d{9}$", "message": "请输入正确的手机号码" }
+          ]
+        },
+        { 
+          "component": "a-input-number",
+          "label": "排序",
+          "name": "sort",
+          "min": 0,
+          "max": 9999
+        },
+        { 
+          "component": "a-radio-group",
+          "label": "状态",
+          "name": "status",
+          "optionType": "button",
+          "options": [
+            { "label": "启用", "value": 1 },
+            { "label": "禁用", "value": 0 }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "其他信息",
+      "items": [
+        { 
+          "component": "a-textarea",
+          "label": "备注",
+          "name": "remark",
+          "placeholder": "请输入备注信息",
+          "rows": 3,
+          "maxlength": 200,
+          "showCount": true
+        }
+      ]
+    }
+  ],
+
+  "buttons": {
+    "toolbar": [
+      { "component": "a-button", "type": "primary", "text": "新增", "action": "create" },
+      { "component": "a-button", "text": "展开全部", "action": "expandAll" },
+      { "component": "a-button", "text": "收起全部", "action": "collapseAll" }
+    ],
+    "rowActions": [
+      { "component": "a-button", "text": "新增子部门", "action": "createChild", "size": "small" },
+      { "component": "a-button", "text": "编辑", "action": "edit", "size": "small" },
+      { "component": "a-button", "text": "删除", "action": "delete", "size": "small", "danger": true }
+    ]
+  },
+
+  "search": {
+    "fields": [
+      { 
+        "component": "a-input", 
+        "name": "deptName", 
+        "placeholder": "请输入部门名称",
+        "allowClear": true
+      },
+      { 
+        "component": "a-input", 
+        "name": "deptCode", 
+        "placeholder": "请输入部门编码",
+        "allowClear": true
+      },
+      { 
+        "component": "a-select", 
+        "name": "status", 
+        "placeholder": "请选择状态",
+        "allowClear": true,
+        "options": [
+          { "label": "全部", "value": "" },
+          { "label": "启用", "value": 1 },
+          { "label": "禁用", "value": 0 }
+        ]
+      }
+    ],
+    "actions": [
+      { "component": "a-button", "type": "primary", "text": "查询", "action": "search" },
+      { "component": "a-button", "text": "重置", "action": "reset" }
+    ]
+  }
+}

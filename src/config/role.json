@@ -1,0 +1,137 @@
+{
+  "module": "role",
+  "title": "角色管理",
+  "description": "对系统角色进行管理，包括角色的增删改查、权限分配等操作",
+  
+  "apis": {
+    "list": { "path": "/api/roles", "method": "GET" },
+    "create": { "path": "/api/roles", "method": "POST" },
+    "update": { "path": "/api/roles/{id}", "method": "PUT" },
+    "delete": { "path": "/api/roles/{id}", "method": "DELETE" }
+  },
+
+  "hooks": {
+    "beforeLoad": "transformDateRange"
+  },
+
+  "columns": [
+    { "dataIndex": "roleName", "title": "角色名称", "width": 150 },
+    { "dataIndex": "roleCode", "title": "角色编码", "width": 150 },
+    { "dataIndex": "description", "title": "描述", "width": 200 },
+    { "dataIndex": "status", "title": "状态", "width": 80 },
+    { "dataIndex": "userCount", "title": "用户数量", "width": 100 },
+    { "dataIndex": "createTime", "title": "创建时间", "width": 160 }
+  ],
+
+  "fields": [
+    {
+      "group": "基本信息",
+      "items": [
+        { 
+          "component": "a-input",
+          "label": "角色名称",
+          "name": "roleName",
+          "required": true,
+          "placeholder": "请输入角色名称",
+          "rules": [
+            { "required": true, "message": "请输入角色名称" }
+          ]
+        },
+        { 
+          "component": "a-input",
+          "label": "角色编码",
+          "name": "roleCode",
+          "required": true,
+          "placeholder": "请输入角色编码",
+          "rules": [
+            { "required": true, "message": "请输入角色编码" },
+            { "pattern": "^[A-Z_]+$", "message": "角色编码只能包含大写字母和下划线" }
+          ]
+        },
+        { 
+          "component": "a-input",
+          "label": "描述",
+          "name": "description",
+          "placeholder": "请输入角色描述"
+        },
+        { 
+          "component": "a-radio-group",
+          "label": "状态",
+          "name": "status",
+          "optionType": "button",
+          "options": [
+            { "label": "启用", "value": 1 },
+            { "label": "禁用", "value": 0 }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "权限配置",
+      "items": [
+        { 
+          "component": "a-tree-select",
+          "label": "菜单权限",
+          "name": "menuIds",
+          "placeholder": "请选择菜单权限",
+          "treeData": []
+        },
+        { 
+          "component": "a-checkbox-group",
+          "label": "数据权限",
+          "name": "dataPermissions",
+          "options": [
+            { "label": "全部数据", "value": "all" },
+            { "label": "本部门数据", "value": "dept" },
+            { "label": "本人数据", "value": "self" }
+          ]
+        }
+      ]
+    }
+  ],
+
+  "buttons": {
+    "toolbar": [
+      { "component": "a-button", "type": "primary", "text": "新增", "action": "create" },
+      { "component": "a-button", "text": "批量删除", "action": "batchDelete", "disabledWhen": "noSelection" },
+      { "component": "a-button", "text": "导出", "action": "export" }
+    ],
+    "rowActions": [
+      { "component": "a-button", "text": "编辑", "action": "edit", "size": "small" },
+      { "component": "a-button", "text": "删除", "action": "delete", "size": "small", "danger": true },
+      { "component": "a-button", "text": "分配权限", "action": "permission", "size": "small" }
+    ]
+  },
+
+  "search": {
+    "fields": [
+      { 
+        "component": "a-input", 
+        "name": "roleName", 
+        "placeholder": "请输入角色名称",
+        "allowClear": true
+      },
+      { 
+        "component": "a-input", 
+        "name": "roleCode", 
+        "placeholder": "请输入角色编码",
+        "allowClear": true
+      },
+      { 
+        "component": "a-select", 
+        "name": "status", 
+        "placeholder": "请选择状态",
+        "allowClear": true,
+        "options": [
+          { "label": "全部", "value": "" },
+          { "label": "启用", "value": 1 },
+          { "label": "禁用", "value": 0 }
+        ]
+      }
+    ],
+    "actions": [
+      { "component": "a-button", "type": "primary", "text": "查询", "action": "search" },
+      { "component": "a-button", "text": "重置", "action": "reset" }
+    ]
+  }
+}

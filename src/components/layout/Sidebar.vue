@@ -42,9 +42,6 @@
           <a-menu-item key="/roles">
             <router-link to="/roles">角色管理</router-link>
           </a-menu-item>
-          <a-menu-item key="/menus">
-            <router-link to="/menus">菜单管理</router-link>
-          </a-menu-item>
           <a-menu-item key="/departments">
             <router-link to="/departments">部门管理</router-link>
           </a-menu-item>
@@ -55,6 +52,12 @@
             <ShoppingCartOutlined />
           </template>
           <template #title>业务管理</template>
+          <a-menu-item key="/products">
+            <router-link to="/products">商品管理</router-link>
+          </a-menu-item>
+          <a-menu-item key="/orders">
+            <router-link to="/orders">订单管理</router-link>
+          </a-menu-item>
         </a-sub-menu>
 
         <a-sub-menu key="data">
