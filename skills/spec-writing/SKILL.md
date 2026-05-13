@@ -56,32 +56,22 @@ Use this skill when you need to:
 
 ## Post-Documentation Workflow
 
-After successfully writing the spec document, follow this flow:
+After successfully writing the spec document, automatically transition to implementation workflow:
 
-**1. Confirmation:**
-- Present the completed document to the user for review
-- Confirm document accuracy and completeness
+**1. Transition to Implementation:**
+- Invoke `writing-plans` skill to create detailed implementation plan
+- Optionally use `using-git-worktrees` skill to create isolated workspace
+- Follow with `test-driven-development` for implementation
 
-**2. User Approval:**
-- Request explicit approval before proceeding to implementation
-- Address any feedback or revisions if needed
-
-**3. Transition to Implementation:**
-- If user approves and wants to proceed with implementation:
-  - Ask: "Ready to set up for implementation?"
-  - Invoke `writing-plans` skill to create detailed implementation plan
-  - Optionally use `using-git-worktrees` skill to create isolated workspace
-  - Follow with `test-driven-development` for implementation
-
-**4. Skill Transition Flow:**
+**2. Skill Transition Flow:**
 ```
-Spec Document Written → User Approval → writing-plans → Implementation Skills
-                                          ↓
-                                   using-git-worktrees (optional)
-                                          ↓
-                                   test-driven-development
-                                          ↓
-                                   verification-before-completion
+Spec Document Written → writing-plans → Implementation Skills
+                          ↓
+                   using-git-worktrees (optional)
+                          ↓
+                   test-driven-development
+                          ↓
+                   verification-before-completion
 ```
 
 ## Key Principles
